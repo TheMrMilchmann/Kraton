@@ -1,0 +1,6 @@
+.gradle
+.idea
+samples/**/*-generated
+
+**/build
+**/out
