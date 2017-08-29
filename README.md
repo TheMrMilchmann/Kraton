@@ -11,3 +11,12 @@ languages).
 *Kraton is a forked version of the code generator previously used in
 [Osmerion](https://github.com/TheMrMilchmann/Osmerion) which itself is a 
 permutation of [LWJGL3](https://github.com/LWJGL/lwjgl3)'s generator.*
+
+Supported Output
+----------------
+Kraton currently provides **just the Java language module**. Further languages
+will be added in future updates.
+
+Check out the [issue tracker](https://github.com/TheMrMilchmann/Kraton/issues)
+to see which languages are being worked on or to suggest a feature, or open a
+pull-request to submit a feature yourself!
