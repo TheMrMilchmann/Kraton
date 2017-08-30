@@ -1,6 +1,9 @@
 .gradle
 .idea
+/build
+modules/*/build
+modules/*/src/*-generated
+samples/build
 samples/**/*-generated
 
-**/build
 **/out
