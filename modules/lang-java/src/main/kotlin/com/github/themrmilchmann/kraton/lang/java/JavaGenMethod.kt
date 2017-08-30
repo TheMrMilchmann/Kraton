@@ -33,20 +33,22 @@ import java.io.*
 import java.util.*
 
 /**
- * A java method.
+ * An object representing a Java method.
  *
- * @property returnType the return type of this method
- * @property name the name of this method
- * @property documentation the documentation of this method
- * @property parameters the parameters of this method
- * @property returnDoc the return documentation of this method
- * @property since the value of this `@since` blocktag for this method
- * @property category the category this method is a part of
- * @property exceptions the checked exceptions that may be thrown by this method
- * @property see the `@see` referenced objects for this method's documentation
- * @property typeParameters the type parameters of this method
- * @property body the body of this method
- * @constructor Creates a new JavaMethod with the given properties.
+ * @property returnType     the return type of the method
+ * @property name           the name of the method
+ * @property documentation  the documentation of the method
+ * @property parameters     the parameters of the method
+ * @property returnDoc      the documentation of the method's `@returnDoc` tag
+ * @property since          the documentation of the method's `@since` tag
+ * @property category       the category under which this method will be
+ *                          generated within it's container
+ * @property exceptions     the exceptions that may be thrown by the method
+ *                          and their respective documentation entries
+ * @property see            the objects to be referenced in the method's
+ *                          documentation
+ * @property typeParameters the type parameters of the method
+ * @property body           the body of the method
  *
  * @since 1.0.0
  */

@@ -33,12 +33,17 @@ import java.io.*
 import java.util.*
 
 /**
- * A java field/block of fields.
+ * An object representing one or multiple Java field/s.
  *
- * @property type the type of this field(s)
- * @property entries the key-value mappings of this field(s)
- * @property documentation the documentation of this field(s)
- * @constructor Creates a new java field/block of fields.
+ * @property type           the type of this field/s
+ * @property entries        the key-value mappings of the field/s (A `null`
+ *                          value will leave the respective field
+ *                          uninitialized. For `null` use `"null"` instead.)
+ * @property documentation  the documentation of the field/s
+ * @property since          the documentation of the field's/fields' `@since`
+ *                          tag
+ * @property see            the references to be in the documentation of the
+ *                          field/s
  *
  * @since 1.0.0
  */

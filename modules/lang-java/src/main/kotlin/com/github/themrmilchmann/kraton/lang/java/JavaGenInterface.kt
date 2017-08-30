@@ -34,18 +34,20 @@ import java.io.*
 import java.util.*
 
 /**
- * Registers a new top-level interface with the given properties.
+ * Creates, registers and returns an object representing a Java interface.
  *
- * @receiver the profile in which the interface will be registered
- * @param fileName the name for the new interface
- * @param packageName the name of the package for the new interface
- * @param srcFolder the name of the source folder for the new interface
- * @param srcSet the name of the source folder for the new interface
- * @param documentation the documentation for the new interface
- * @param superInterfaces the super interfaces for the new interface
- * @param sorted whether or not the content the interface's content will be sorted
- * @param category the category under which this call will be registered in the receiver
- * @return the newly registered interface
+ * @receiver the profile of which the interface will be a member of
+ *
+ * @param fileName          the name for the interface
+ * @param packageName       the name of the package for the interface
+ * @param srcFolder         the name of the source folder for the interface
+ * @param srcSet            the name of the source folder for the interface
+ * @param documentation     the documentation for the interface
+ * @param superInterfaces   the interfaces for the interface to extend
+ * @param sorted            whether or not the interface's content will be
+ *                          sorted
+ *
+ * @return the newly created and registered JavaInterface object
  *
  * @since 1.0.0
  */
@@ -57,23 +59,26 @@ fun Profile.javaInterface(
 	documentation: String? = null,
 	superInterfaces: Array<out IJavaType>?,
 	sorted: Boolean = false,
-	category: String? = null,
     copyrightHeader: String? = null,
 	init: JavaInterface.() -> Unit
-) = JavaInterface(fileName, packageName, documentation, superInterfaces, sorted, category)
+) = JavaInterface(fileName, packageName, documentation, superInterfaces, sorted, null)
 	.also(init)
 	.run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 
 /**
- * Registers a new interface with the given properties as a subinterface of the receiver class.
+ * Creates, registers and returns an object representing a Java interface.
  *
- * @receiver the enclosing class
- * @param className the name for the new interface
- * @param documentation the documentation for the new interface
- * @param superInterfaces the super interfaces for the new interface
- * @param sorted whether or not the content the interface's content will be sorted
- * @param category the category under which this call will be registered in the receiver
- * @return the newly registered interface
+ * @receiver the enclosing type of which the interface will be a member of
+ *
+ * @param className         the name for the interface
+ * @param documentation     the documentation for the interface
+ * @param superInterfaces   the interfaces for the interface to extend
+ * @param sorted            whether or not the interface's content will be
+ *                          sorted
+ * @param category          the category under which this interface will be
+ *                          registered in the enclosing type
+ *
+ * @return the newly created and registered JavaInterface object
  *
  * @since 1.0.0
  */
@@ -89,15 +94,19 @@ fun JavaClass.javaInterface(
 	.also { members.add(it) }
 
 /**
- * Registers a new interface with the given properties as a subinterface of the receiver interface.
+ * Creates, registers and returns an object representing a Java interface.
  *
- * @receiver the enclosing interface
- * @param className the name for the new interface
- * @param documentation the documentation for the new interface
- * @param superInterfaces the super interfaces for the new interface
- * @param sorted whether or not the content the interface's content will be sorted
- * @param category the category under which this call will be registered in the receiver
- * @return the newly registered interface
+ * @receiver the enclosing type of which the interface will be a member of
+ *
+ * @param className         the name for the interface
+ * @param documentation     the documentation for the interface
+ * @param superInterfaces   the interfaces for the interface to extend
+ * @param sorted            whether or not the interface's content will be
+ *                          sorted
+ * @param category          the category under which this interface will be
+ *                          registered in the enclosing type
+ *
+ * @return the newly created and registered JavaInterface object
  *
  * @since 1.0.0
  */
@@ -113,9 +122,9 @@ fun JavaInterface.javaInterface(
 	.also { members.add(it) }
 
 /**
- * A java interface.
+ * An object representing a Java interface.
  *
- * @property superInterfaces the super interfaces of this interface
+ * @property superInterfaces the interfaces extended by this interface
  *
  * @since 1.0.0
  */
@@ -134,14 +143,18 @@ class JavaInterface internal constructor(
 	override val weight: Int = WEIGHT_TOPLEVEL
 
     /**
-     * Creates, registers and returns a new object representing a Java field.
+     * Creates, registers and returns an object representing a Java field.
      *
      * @receiver the type for the field
-     * @param name the names for the field
+     *
+     * @param name          the name for the field
      * @param documentation the documentation for the field
-     * @param since the documentation for the field's `@since` tag
-     * @param category the category under which this field will be generated within the interface
-     * @param see the references in the documentation for the field
+     * @param since         the documentation for the field's `@since` tag
+     * @param category      the category under which the field will be
+     *                      generated within the interface
+     * @param see           the references to be in the documentation of the
+     *                      field
+     *
      * @return the newly created and registered JavaField object
      *
      * @since 1.0.0
@@ -157,14 +170,27 @@ class JavaInterface internal constructor(
         .also { members.add(it) }
 
     /**
-     * Creates, registers and returns a new object representing a Java field.
+     * Creates, registers and returns an object representing one or multiple
+     * Java field/s.
      *
-     * @receiver the type for the set of fields
-     * @param names the names for the fields
-     * @param documentation the documentation for the field
-     * @param since the documentation for the field's `@since` tag
-     * @param category the category under which this field will be generated within the interface
-     * @param see the references in the documentation for the field
+     * This function may be used to generate multiple fields of the same type.
+     * If this is the case the returned JavaField object will also not only
+     * represent one of the fields but all of them.
+     *
+     * All fields registered by this function will be marked to be left
+     * uninitialized.
+     *
+     * @receiver the type for the field/s
+     *
+     * @param names         the name/s for the field/s
+     * @param documentation the documentation for the field/s
+     * @param since         the documentation for the field's/fields' `@since`
+     *                      tag
+     * @param category      the category under which the field/s will be
+     *                      generated within the interface
+     * @param see           the references to be in the documentation of the
+     *                      field/s
+     *
      * @return the newly created and registered JavaField object
      *
      * @since 1.0.0
@@ -179,17 +205,29 @@ class JavaInterface internal constructor(
         .also { members.add(it) }
 
     /**
-     * Creates and registers a set of fields with the given names and values.
+     * Creates, registers and returns an object representing one or multiple
+     * Java field/s.
+     *
+     * This function may be used to generate multiple fields of the same type.
+     * If this is the case the returned JavaField object will also not only
+     * represent one of the fields but all of them.
      *
      * A value may be `null` to leave the field uninitialized.
      *
-     * @receiver the type of this set of fields
-     * @param entries the name and value pairs of the fields
-     * @param documentation the documentation for the field
-     * @param since the documentation for the field's `@since` tag
-     * @param category the category under which this field will be generated within the interface
-     * @param see the references in the documentation for the field
-     * @return the newly registered field
+     * @receiver the type for the field/s
+     *
+     * @param entries       the name and value pairs for the field/s (A `null`
+     *                      value will leave the respective field uninitialized.
+     *                      For `null` use `"null"` instead.)
+     * @param documentation the documentation for the field/s
+     * @param since         the documentation for the field's/fields' `@since`
+     *                      tag
+     * @param category      the category under which the field/s will be
+     *                      generated within the interface
+     * @param see           the references to be in the documentation of the
+     *                      field/s
+     *
+     * @return the newly created and registered JavaField object
      *
      * @since 1.0.0
      */
@@ -203,19 +241,25 @@ class JavaInterface internal constructor(
         .also { members.add(it) }
 
     /**
-     * Creates, registers and returns a new object representing a Java method.
+     * Creates, registers and returns an object representing a Java method.
      *
-     * @receiver the class to which the method will be registered
-     * @param name the name for the method
-     * @param documentation the documentation for the method
-     * @param parameters the parameters for the method
-     * @param returnDoc the documentation for the method's `@returnDoc` tag
-     * @param since the documentation for the method's `@since` tag
-     * @param category the category under which this method will be generated within the interface
-     * @param exceptions the exceptions that may be thrown by the method and their respective documentation entries
-     * @param see the objects to be referenced in the method's documentation
-     * @param typeParameters the type parameters for the method
-     * @param body the body for the method
+     * @receiver the return type for the method
+     *
+     * @param name              the name for the method
+     * @param documentation     the documentation for the method
+     * @param parameters        the parameters for the method
+     * @param returnDoc         the documentation for the method's `@returnDoc`
+     *                          tag
+     * @param since             the documentation for the method's `@since` tag
+     * @param category          the category under which this method will be
+     *                          generated within the interface
+     * @param exceptions        the exceptions that may be thrown by the method
+     *                          and their respective documentation entries
+     * @param see               the objects to be referenced in the method's
+     *                          documentation
+     * @param typeParameters    the type parameters for the method
+     * @param body              the body for the method
+     *
      * @return the newly created and registered JavaMethod object
      *
      * @since 1.0.0
@@ -235,12 +279,15 @@ class JavaInterface internal constructor(
         .also { members.add(it) }
 
     /**
-     * Creates, registers and returns a new type parameter.
+     * Creates, registers and returns an object representing a Java type
+     * parameter.
      *
      * @receiver the name for the type parameter
+     *
      * @param documentation the documentation for the type parameter
      * @param bounds the bounds for the type parameter
-     * @return the newly registered type parameter reference
+     *
+     * @return the newly created and registered JavaGenericType object
      *
      * @since 1.0.0
      */

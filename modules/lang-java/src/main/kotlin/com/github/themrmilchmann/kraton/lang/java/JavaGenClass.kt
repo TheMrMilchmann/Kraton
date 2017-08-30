@@ -34,18 +34,19 @@ import java.io.*
 import java.util.*
 
 /**
- * Registers a new top-level class with the given properties.
+ * Creates, registers and returns an object representing a Java class.
  *
- * @receiver the profile in which the class will be registered
- * @param fileName the name for the new class
- * @param packageName the name of the package for the new class
- * @param srcFolder the name of the source folder for the new class
- * @param srcSet the name of the source folder for the new class
- * @param documentation the documentation for the new interface
- * @param interfaces the interfaces the new class will implement
- * @param sorted whether or not the content the class' content will be sorted
- * @param category the category under which this call will be registered in the receiver
- * @return the newly registered class
+ * @receiver the profile of which the class will be a member of
+ *
+ * @param fileName      the name for the class
+ * @param packageName   the name of the package for the class
+ * @param srcFolder     the name of the source folder for the class
+ * @param srcSet        the name of the source folder for the class
+ * @param documentation the documentation for the class
+ * @param interfaces    the interfaces for the class to implement
+ * @param sorted        whether or not the class' content will be sorted
+ *
+ * @return the newly created and registered JavaClass object
  *
  * @since 1.0.0
  */
@@ -58,24 +59,26 @@ fun Profile.javaClass(
 	superClass: IJavaType? = null,
 	interfaces: Array<out IJavaType>? = null,
 	sorted: Boolean = false,
-	category: String? = null,
     copyrightHeader: String? = null,
 	init: JavaClass.() -> Unit
-) = JavaClass(fileName, packageName, documentation, superClass, interfaces, sorted, category)
+) = JavaClass(fileName, packageName, documentation, superClass, interfaces, sorted, null)
 	.also(init)
 	.run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 
 /**
- * Registers a new class with the given properties as a subclass of the receiver class.
+ * Creates, registers and returns an object representing a Java class.
  *
- * @receiver the enclosing class
- * @param className the name for the new class
- * @param documentation the documentation for the new class
- * @param superClass the parent class for the new class
- * @param interfaces the interfaces the new class will implement
- * @param sorted whether or not the content the class' content will be sorted
- * @param category the category under which this call will be registered in the receiver
- * @return the newly registered class
+ * @receiver the enclosing type of which the class will be a member of
+ *
+ * @param className     the name for the class
+ * @param documentation the documentation for the class
+ * @param superClass    the parent class for the class
+ * @param interfaces    the interfaces for the class to implement
+ * @param sorted        whether or not the class' content will be sorted
+ * @param category      the category under which this class will be registered
+ *                      in the enclosing type
+ *
+ * @return the newly created and registered JavaClass object
  *
  * @since 1.0.0
  */
@@ -92,16 +95,20 @@ fun JavaClass.javaClass(
 	.also { members.add(it) }
 
 /**
- * Registers a new class with the given properties as a subclass of the receiver interface.
+ * Creates, registers and returns an object representing a Java class.
  *
- * @receiver the enclosing interface
- * @param className the name for the new class
- * @param documentation the documentation for the new class
- * @param superClass the parent class for the new class
- * @param interfaces the interfaces the new class will implement
- * @param sorted whether or not the content the class' content will be sorted
- * @param category the category under which this call will be registered in the receiver
- * @return the newly registered class
+ * @receiver the enclosing type of which the class will be a member of
+ *
+ * @param className     the name for the class
+ * @param documentation the documentation for the class
+ * @param superClass    the parent class for the class
+ * @param interfaces    the interfaces for the class to implement
+ * @param sorted        whether or not the content the class' content will be
+ *                      sorted
+ * @param category      the category under which this class will be registered
+ *                      in the enclosing type
+ *
+ * @return the newly created and registered JavaClass object
  *
  * @since 1.0.0
  */
@@ -118,7 +125,7 @@ fun JavaInterface.javaClass(
 	.also { members.add(it) }
 
 /**
- * A java class.
+ * An object representing a Java class.
  *
  * @property superClass the parent class of this class
  * @property interfaces the interfaces implemented by this class
@@ -141,18 +148,25 @@ class JavaClass internal constructor(
 	override val weight: Int = WEIGHT_TOPLEVEL
 
 	/**
-     * Creates a new constructor and registers it in this class.
+     * Creates, registers and returns an object representing a Java constructor.
 	 *
-     * @param documentation the documentation for the constructor
-     * @param parameters the parameters for the constructor
-     * @param returnDoc the return documentation for the constructor
-     * @param since the value of this `@since` blocktag for the constructor
-     * @param category the category this constructor is a part of
-     * @param exceptions the checked exceptions that may be thrown by this constructor
-     * @param see the `@see` referenced objects for this constructor's documentation
-     * @param typeParameters the type parameters of this constructor
-     * @param body the body of this constructor
-     * @return the newly registered constructor
+     * @param documentation     the documentation for the constructor
+     * @param parameters        the parameters for the constructor
+     * @param returnDoc         the documentation for the constructor's
+     *                          `@returnDoc` tag
+     * @param since             the documentation for the constructor's `@since`
+     *                          tag
+     * @param category          the category under which this constructor will
+     *                          be generated within the class
+     * @param exceptions        the exceptions that may be thrown by the
+     *                          constructor and their respective documentation
+     *                          entries
+     * @param see               the objects to be referenced in the
+     *                          constructor's documentation
+     * @param typeParameters    the type parameters for the constructor
+     * @param body              the body for the constructor
+     *
+     * @return the newly created and registered JavaConstructor object
      *
 	 * @since 1.0.0
 	 */
@@ -170,14 +184,18 @@ class JavaClass internal constructor(
 		.also { members.add(it) }
 
 	/**
-     * Creates, registers and returns a new object representing a Java field.
+     * Creates, registers and returns an object representing a Java field.
      *
      * @receiver the type for the field
-     * @param name the names for the field
+     *
+     * @param name          the name for the field
      * @param documentation the documentation for the field
-     * @param since the documentation for the field's `@since` tag
-     * @param category the category under which this field will be generated within the class
-     * @param see the references in the documentation for the field
+     * @param since         the documentation for the field's `@since` tag
+     * @param category      the category under which the field will be
+     *                      generated within the class
+     * @param see           the references to be in the documentation of the
+     *                      field
+     *
      * @return the newly created and registered JavaField object
      *
      * @since 1.0.0
@@ -193,14 +211,27 @@ class JavaClass internal constructor(
         .also { members.add(it) }
 
 	/**
-     * Creates, registers and returns a new object representing a Java field.
+     * Creates, registers and returns an object representing one or multiple
+     * Java field/s.
      *
-     * @receiver the type for the set of fields
-     * @param names the names for the fields
-     * @param documentation the documentation for the field
-     * @param since the documentation for the field's `@since` tag
-     * @param category the category under which this field will be generated within the class
-     * @param see the references in the documentation for the field
+     * This function may be used to generate multiple fields of the same type.
+     * If this is the case the returned JavaField object will also not only
+     * represent one of the fields but all of them.
+     *
+     * All fields registered by this function will be marked to be left
+     * uninitialized.
+     *
+     * @receiver the type for the field/s
+     *
+     * @param names         the name/s for the field/s
+     * @param documentation the documentation for the field/s
+     * @param since         the documentation for the field's/fields' `@since`
+     *                      tag
+     * @param category      the category under which the field/s will be
+     *                      generated within the class
+     * @param see           the references to be in the documentation of the
+     *                      field/s
+     *
      * @return the newly created and registered JavaField object
 	 *
 	 * @since 1.0.0
@@ -215,17 +246,29 @@ class JavaClass internal constructor(
         .also { members.add(it) }
 
 	/**
-	 * Creates and registers a set of fields with the given names and values.
+     * Creates, registers and returns an object representing one or multiple
+     * Java field/s.
 	 *
+     * This function may be used to generate multiple fields of the same type.
+     * If this is the case the returned JavaField object will also not only
+     * represent one of the fields but all of them.
+     *
 	 * A value may be `null` to leave the field uninitialized.
 	 *
-	 * @receiver the type of this set of fields
-	 * @param entries the name and value pairs of the fields
-     * @param documentation the documentation for the field
-     * @param since the documentation for the field's `@since` tag
-     * @param category the category under which this field will be generated within the class
-     * @param see the references in the documentation for the field
-	 * @return the newly registered field
+	 * @receiver the type for the field/s
+     *
+	 * @param entries       the name and value pairs for the field/s (A `null`
+     *                      value will leave the respective field uninitialized.
+     *                      For `null` use `"null"` instead.)
+     * @param documentation the documentation for the field/s
+     * @param since         the documentation for the field's/fields' `@since`
+     *                      tag
+     * @param category      the category under which the field/s will be
+     *                      generated within the class
+     * @param see           the references to be in the documentation of the
+     *                      field/s
+     *
+	 * @return the newly created and registered JavaField object
 	 *
 	 * @since 1.0.0
 	 */
@@ -239,19 +282,25 @@ class JavaClass internal constructor(
 		.also { members.add(it) }
 
 	/**
-     * Creates, registers and returns a new object representing a Java method.
+     * Creates, registers and returns an object representing a Java method.
 	 *
-     * @receiver the class to which the method will be registered
-     * @param name the name for the method
-     * @param documentation the documentation for the method
-     * @param parameters the parameters for the method
-     * @param returnDoc the documentation for the method's `@returnDoc` tag
-     * @param since the documentation for the method's `@since` tag
-     * @param category the category under which this method will be generated within the class
-     * @param exceptions the exceptions that may be thrown by the method and their respective documentation entries
-     * @param see the objects to be referenced in the method's documentation
-     * @param typeParameters the type parameters for the method
-     * @param body the body for the method
+     * @receiver the return type for the method
+     *
+     * @param name              the name for the method
+     * @param documentation     the documentation for the method
+     * @param parameters        the parameters for the method
+     * @param returnDoc         the documentation for the method's `@returnDoc`
+     *                          tag
+     * @param since             the documentation for the method's `@since` tag
+     * @param category          the category under which this method will be
+     *                          generated within the class
+     * @param exceptions        the exceptions that may be thrown by the method
+     *                          and their respective documentation entries
+     * @param see               the objects to be referenced in the method's
+     *                          documentation
+     * @param typeParameters    the type parameters for the method
+     * @param body              the body for the method
+     *
      * @return the newly created and registered JavaMethod object
      *
 	 * @since 1.0.0
@@ -271,12 +320,15 @@ class JavaClass internal constructor(
 		.also { members.add(it) }
 
 	/**
-     * Creates, registers and returns a new type parameter.
+     * Creates, registers and returns an object representing a Java type
+     * parameter.
 	 *
      * @receiver the name for the type parameter
+     *
      * @param documentation the documentation for the type parameter
      * @param bounds the bounds for the type parameter
-     * @return the newly registered type parameter reference
+     *
+     * @return the newly created and registered JavaGenericType object
      *
 	 * @since 1.0.0
 	 */
