@@ -4,6 +4,7 @@
 modules/*/build
 modules/*/src/*-generated
 samples/build
+samples/*/build
 samples/**/*-generated
 
 **/out
