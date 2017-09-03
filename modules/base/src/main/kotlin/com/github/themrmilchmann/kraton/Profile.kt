@@ -45,6 +45,8 @@ class Profile(
     init: Profile.() -> Unit
 ) {
 
+    internal var source: Path? = null
+
     /**
      * The list of targets managed by this profile.
      *
@@ -88,26 +90,6 @@ abstract class GeneratorTarget(
     internal val srcSet: String,
     internal val appendix: String = language
 ) {
-
-	private fun getSourceFileName(): String? {
-		// Nasty hack to retrieve the source file that defines this template, without having to specify it explicitly. This enables incremental builds to work
-		// even with arbitrary file names or when multiple templates are bundled in the same file.
-		try {
-			throw RuntimeException()
-		} catch (t: Throwable) {
-			return t.stackTrace.asSequence()
-				.filter { !it.className.startsWith("com.github.themrmilchmann.kraton.") || it.className.startsWith("com.github.themrmilchmann.kraton.test.") }
-				.mapNotNull { it.className.substring(0, it.className.lastIndexOf('.') + 1).replace('.', '/') + it.fileName }
-				.filter { it.endsWith(".kt") }
-				.firstOrNull()
-		}
-	}
-
-	private val sourceFile = getSourceFileName()
-	internal open fun getLastModified(root: String): Long = Paths.get(root, sourceFile).let {
-		if (Files.isRegularFile(it)) it else
-			throw IllegalStateException("The source file for template $packageName.$fileName does not exist ($it).")
-	}.lastModified
 
     /**
      * Prints this GeneratorTarget.
