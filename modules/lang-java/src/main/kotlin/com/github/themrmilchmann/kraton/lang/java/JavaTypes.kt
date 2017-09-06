@@ -114,7 +114,7 @@ class JavaTypeReference(
  *
  * @since 1.0.0
  */
-fun JavaReferableType.array(dim: Int = 1) = JavaArrayType(this, dim)
+fun IJavaType.array(dim: Int = 1) = JavaArrayType(this, dim)
 
 /**
  * A type representing a java array.
