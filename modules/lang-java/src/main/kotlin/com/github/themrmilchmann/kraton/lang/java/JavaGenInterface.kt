@@ -57,7 +57,7 @@ fun Profile.javaInterface(
 	srcFolder: String,
 	srcSet: String,
 	documentation: String? = null,
-	superInterfaces: Array<out IJavaType>?,
+	superInterfaces: Array<out IJavaType>? = null,
 	sorted: Boolean = false,
     copyrightHeader: String? = null,
 	init: JavaInterface.() -> Unit
@@ -85,7 +85,7 @@ fun Profile.javaInterface(
 fun JavaClass.javaInterface(
 	className: String,
 	documentation: String? = null,
-	superInterfaces: Array<out IJavaType>?,
+	superInterfaces: Array<out IJavaType>? = null,
 	sorted: Boolean = false,
 	category: String? = null,
 	init: JavaInterface.() -> Unit
@@ -113,7 +113,7 @@ fun JavaClass.javaInterface(
 fun JavaInterface.javaInterface(
 	className: String,
 	documentation: String? = null,
-	superInterfaces: Array<out IJavaType>?,
+	superInterfaces: Array<out IJavaType>? = null,
 	sorted: Boolean = false,
 	category: String? = null,
 	init: JavaInterface.() -> Unit
