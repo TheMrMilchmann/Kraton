@@ -99,7 +99,7 @@ open class JavaMethod internal constructor(
         }
 
 		if (body == null) {
-			print(";")
+			println(";")
 		} else {
 			print(" {")
 
