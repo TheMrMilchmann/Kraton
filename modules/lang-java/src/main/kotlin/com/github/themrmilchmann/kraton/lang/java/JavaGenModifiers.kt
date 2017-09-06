@@ -117,6 +117,33 @@ object native : JavaVisibilityModifier("native")
  */
 object strictfp : JavaVisibilityModifier("strictfp")
 
+/**
+ * The `@Deprecated` annotation.
+ *
+ * @since 1.0.0
+ */
+class Deprecated(
+    private val since: String? = null,
+    private val forRemoval: Boolean? = null
+): Annotate(
+    JavaTypeReference("Deprecated", null),
+    if (since != null || forRemoval != null)
+        StringJoiner(", ").run {
+            if (since != null) add("since=$since")
+            if (forRemoval != null) add("forRemoval=$forRemoval")
+
+            toString()
+        }
+    else
+        null
+)
+
+/**
+ * The `@Override` annotation.
+ *
+ * @since 1.0.0
+ */
+val Override = Annotate(JavaTypeReference("Override", null))
 
 /**
  * This modifier may be used to add annotations to an object.
@@ -126,7 +153,7 @@ object strictfp : JavaVisibilityModifier("strictfp")
  *
  * @since 1.0.0
  */
-class Annotate(
+open class Annotate(
 	private val type: IJavaType,
 	private val parameters: String? = null
 ): JavaModifier() {
