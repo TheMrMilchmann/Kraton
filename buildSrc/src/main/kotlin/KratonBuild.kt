@@ -29,7 +29,7 @@
  */
 import org.gradle.api.*
 
-const val kratonNextVersion = "0.1.1"
+const val kratonNextVersion = "0.2.0"
 const val kotlinVersion = "1.1.4"
 const val dokkaVersion = "0.9.15"
 const val gradlePluginPublishVersion = "0.9.7"
