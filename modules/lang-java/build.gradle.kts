@@ -41,6 +41,8 @@ configureKotlinProject()
 
 tasks {
     "generateTests"(Generate::class) {
+        dependsOn("compileTestKotlin")
+
         templatesRoot = File(projectDir, "src/test/kotlin")
         outputRoot = parent.projectDir
 
