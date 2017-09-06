@@ -208,7 +208,11 @@ internal fun String?.toJavaDoc(
  * @since 1.0.0
  */
 internal fun JavaMethod.toJavaDoc(indent: String = ""): String? {
-    if (returnDoc == null && exceptions == null && see == null && since == null && typeParameters == null) {
+    if (returnDoc == null
+        && (exceptions == null || exceptions.none { it.second != null })
+        && see == null
+        && since == null
+        && (typeParameters == null || typeParameters.none { it.second != null })) {
         if (documentation.isEmpty() && parameters.all { it.documentation.isEmpty() })
             return null
 
