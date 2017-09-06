@@ -89,6 +89,15 @@ open class JavaMethod internal constructor(
 
 		print(")")
 
+        if (exceptions != null) {
+            print(" throws ")
+            print(StringJoiner(", ").apply {
+                exceptions.forEach {
+                    add(it.first.toString())
+                }
+            })
+        }
+
 		if (body == null) {
 			print(";")
 		} else {
