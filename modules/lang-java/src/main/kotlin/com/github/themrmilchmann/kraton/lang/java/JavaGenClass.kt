@@ -103,8 +103,7 @@ fun JavaClass.javaClass(
  * @param documentation the documentation for the class
  * @param superClass    the parent class for the class
  * @param interfaces    the interfaces for the class to implement
- * @param sorted        whether or not the content the class' content will be
- *                      sorted
+ * @param sorted        whether or not the class' content will be sorted
  * @param category      the category under which this class will be registered
  *                      in the enclosing type
  *
