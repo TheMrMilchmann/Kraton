@@ -61,7 +61,7 @@ fun Profile.javaInterface(
 	sorted: Boolean = false,
     copyrightHeader: String? = null,
 	init: JavaInterface.() -> Unit
-) = JavaInterface(fileName, packageName, documentation, superInterfaces, sorted, null)
+) = JavaInterface(fileName, packageName, documentation, superInterfaces, sorted, null, null)
 	.also(init)
 	.run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 
@@ -89,7 +89,7 @@ fun JavaClass.javaInterface(
 	sorted: Boolean = false,
 	category: String? = null,
 	init: JavaInterface.() -> Unit
-) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category)
+) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category, this)
 	.apply(init)
 	.also { members.add(it) }
 
@@ -117,7 +117,7 @@ fun JavaInterface.javaInterface(
 	sorted: Boolean = false,
 	category: String? = null,
 	init: JavaInterface.() -> Unit
-) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category)
+) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category, this)
 	.apply(init)
 	.also { members.add(it) }
 
@@ -134,13 +134,19 @@ class JavaInterface internal constructor(
 	documentation: String?,
 	val superInterfaces: Array<out IJavaType>?,
 	sorted: Boolean,
-	override val category: String?
-): JavaTopLevelType(className, packageName, documentation, sorted) {
+	override val category: String?,
+    containerType: JavaTopLevelType?
+): JavaTopLevelType(className, packageName, documentation, sorted, containerType) {
 
 	override val name: String
 		get() = className
 
 	override val weight: Int = WEIGHT_TOPLEVEL
+
+    init {
+        modifiers.forEach { it.value.applyImports.invoke(this) }
+        superInterfaces?.forEach { import(it) }
+    }
 
     /**
      * Creates, registers and returns an object representing a Java field.
@@ -167,7 +173,11 @@ class JavaInterface internal constructor(
         category: String? = null,
         see: Array<out String>? = null
     ) = JavaField(this, arrayOf(name to value), documentation, since, category, see)
-        .also { members.add(it) }
+        .also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
+            import(this)
+            members.add(it)
+        }
 
     /**
      * Creates, registers and returns an object representing one or multiple
@@ -202,7 +212,11 @@ class JavaInterface internal constructor(
         category: String? = null,
         see: Array<out String>? = null
     ) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, category, see)
-        .also { members.add(it) }
+        .also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
+            import(this)
+            members.add(it)
+        }
 
     /**
      * Creates, registers and returns an object representing one or multiple
@@ -238,7 +252,11 @@ class JavaInterface internal constructor(
         category: String? = null,
         see: Array<out String>? = null
     ) = JavaField(this, entries, documentation, since, category, see)
-        .also { members.add(it) }
+        .also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
+            import(this)
+            members.add(it)
+        }
 
     /**
      * Creates, registers and returns an object representing a Java method.
@@ -276,7 +294,14 @@ class JavaInterface internal constructor(
         typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
         body: String? = null
     ) = JavaMethod(this, name, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
-        .also { members.add(it) }
+        .also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
+            import(this)
+            parameters.forEach { import(it.type) }
+            exceptions?.forEach { import(it.first) }
+            typeParameters?.forEach { import(it.first) }
+            members.add(it)
+        }
 
     /**
      * Creates, registers and returns an object representing a Java type
@@ -295,7 +320,10 @@ class JavaInterface internal constructor(
         documentation: String? = null,
         vararg bounds: IJavaType
     ) = JavaGenericType(this, *bounds)
-        .also { typeParameters.add(it to documentation) }
+        .also {
+            bounds.forEach { import(it) }
+            typeParameters.add(it to documentation)
+        }
 
     override fun PrintWriter.printTypeDeclaration() {
 		print("class ")

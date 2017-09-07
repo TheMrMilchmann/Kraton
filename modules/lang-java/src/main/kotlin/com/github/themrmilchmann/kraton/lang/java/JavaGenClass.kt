@@ -61,7 +61,7 @@ fun Profile.javaClass(
 	sorted: Boolean = false,
     copyrightHeader: String? = null,
 	init: JavaClass.() -> Unit
-) = JavaClass(fileName, packageName, documentation, superClass, interfaces, sorted, null)
+) = JavaClass(fileName, packageName, documentation, superClass, interfaces, sorted, null, null)
 	.also(init)
 	.run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 
@@ -90,7 +90,7 @@ fun JavaClass.javaClass(
 	sorted: Boolean = false,
 	category: String? = null,
 	init: JavaClass.() -> Unit
-) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category)
+) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category, this)
 	.apply(init)
 	.also { members.add(it) }
 
@@ -120,7 +120,7 @@ fun JavaInterface.javaClass(
 	sorted: Boolean = false,
 	category: String? = null,
 	init: JavaClass.() -> Unit
-) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category)
+) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category, this)
 	.apply(init)
 	.also { members.add(it) }
 
@@ -139,13 +139,20 @@ class JavaClass internal constructor(
 	val superClass: IJavaType?,
 	val interfaces: Array<out IJavaType>?,
 	sorted: Boolean,
-	override val category: String?
-): JavaTopLevelType(className, packageName, documentation, sorted) {
+	override val category: String?,
+    containerType: JavaTopLevelType?
+): JavaTopLevelType(className, packageName, documentation, sorted, containerType) {
 
 	override val name: String
 		get() = className
 
 	override val weight: Int = WEIGHT_TOPLEVEL
+
+    init {
+        modifiers.forEach { it.value.applyImports.invoke(this) }
+        if (superClass != null) import(superClass)
+        interfaces?.forEach { import(it) }
+    }
 
 	/**
      * Creates, registers and returns an object representing a Java constructor.
@@ -181,7 +188,13 @@ class JavaClass internal constructor(
 		typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
 		body: String? = null
 	) = JavaConstructor(this, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
-		.also { members.add(it) }
+		.also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
+            parameters.forEach { import(it.type) }
+            exceptions?.forEach { import(it.first) }
+            typeParameters?.forEach { import(it.first) }
+            members.add(it)
+        }
 
 	/**
      * Creates, registers and returns an object representing a Java field.
@@ -208,7 +221,11 @@ class JavaClass internal constructor(
         category: String? = null,
         see: Array<out String>? = null
     ) = JavaField(this, arrayOf(name to value), documentation, since, category, see)
-        .also { members.add(it) }
+        .also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
+            import(this)
+            members.add(it)
+        }
 
 	/**
      * Creates, registers and returns an object representing one or multiple
@@ -243,7 +260,11 @@ class JavaClass internal constructor(
 		category: String? = null,
         see: Array<out String>? = null
 	) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, category, see)
-        .also { members.add(it) }
+        .also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
+            import(this)
+            members.add(it)
+        }
 
 	/**
      * Creates, registers and returns an object representing one or multiple
@@ -279,7 +300,11 @@ class JavaClass internal constructor(
 		category: String? = null,
         see: Array<out String>? = null
 	) = JavaField(this, entries, documentation, since, category, see)
-		.also { members.add(it) }
+		.also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
+            import(this)
+            members.add(it)
+        }
 
 	/**
      * Creates, registers and returns an object representing a Java method.
@@ -317,7 +342,14 @@ class JavaClass internal constructor(
 		typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
 		body: String? = null
 	) = JavaMethod(this, name, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
-		.also { members.add(it) }
+        .also {
+            modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
+            import(this)
+            parameters.forEach { import(it.type) }
+            exceptions?.forEach { import(it.first) }
+            typeParameters?.forEach { import(it.first) }
+            members.add(it)
+        }
 
 	/**
      * Creates, registers and returns an object representing a Java type
@@ -336,7 +368,10 @@ class JavaClass internal constructor(
 		documentation: String? = null,
 		vararg bounds: IJavaType
 	) = JavaGenericType(this, *bounds)
-		.also { typeParameters.add(it to documentation) }
+		.also {
+            bounds.forEach { import(it) }
+            typeParameters.add(it to documentation)
+        }
 
 	override fun PrintWriter.printTypeDeclaration() {
 		print("class ")

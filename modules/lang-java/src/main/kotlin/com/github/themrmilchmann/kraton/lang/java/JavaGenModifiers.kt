@@ -156,7 +156,7 @@ val Override = Annotate(JavaTypeReference("Override", null))
 open class Annotate(
 	private val type: IJavaType,
 	private val parameters: String? = null
-): JavaModifier() {
+): JavaModifier({ import(type) }) {
 
 	override fun applyTo(target: JavaModifierTarget) {
 		target.annotations.add(this)
@@ -200,7 +200,9 @@ open class JavaVisibilityModifier internal constructor(
  *
  * @since 1.0.0
  */
-abstract class JavaModifier {
+abstract class JavaModifier internal constructor(
+    val applyImports: JavaTopLevelType.() -> Unit = {}
+) {
 
     /**
      * Applies this modifier to the given target.

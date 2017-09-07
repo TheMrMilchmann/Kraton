@@ -39,6 +39,7 @@ private val CATEGORY = "(\\d+)\\Q_\\E(.*)".toRegex()
 internal const val CATEGORY_DIVIDER = "################################################################################################################################################################"
 internal const val INDENT = "    "
 internal const val LN = "\n"
+internal const val IMPORT_WILDCARD = "*"
 
 internal const val WEIGHT_CONSTANT_FIELD = 0
 internal const val WEIGHT_STATIC_FIELD = 1
@@ -58,7 +59,7 @@ internal fun <T: JavaTopLevelType> Profile.targetOf(type: T, packageName: String
 		var specialImportId = ""
 
 		if (type.imports.any()) {
-			type.imports.forEach {
+			type.imports.flatMap { it.value.values }.forEach {
 				if (specialImportId.isNotEmpty() && !it.packageName.startsWith(specialImportId)) println()
 
 				specialImportId = when (it.packageName.startsWith("java.")) {
@@ -109,12 +110,48 @@ abstract class JavaTopLevelType(
 	val className: String,
 	val packageName: String,
 	val documentation: String?,
-	sorted: Boolean
+	sorted: Boolean,
+    val containerType: JavaTopLevelType?
 ): JavaModifierTarget(), JavaBodyMember, IJavaType {
 
-	internal val imports = TreeSet<JavaImport>()
+	internal val imports = mutableMapOf<String, MutableMap<String, JavaImport>>()
 	internal val members: MutableSet<JavaBodyMember> = if (sorted) TreeSet() else LinkedHashSet()
 	internal val typeParameters = mutableListOf<Pair<JavaGenericType, String?>>()
+
+    /**
+     * TODO doc
+     *
+     * @since 1.0.0
+     */
+    fun import(type: IJavaType, forceMode: JavaImportForceMode? = null) {
+        if (containerType != null) {
+            containerType.import(type, forceMode)
+            return
+        }
+
+        val packageName = type.toPackageString() ?: return
+        val packageImports = imports.getOrPut(packageName, { mutableMapOf() })
+
+        if (type.toString() in packageImports) {
+            if (forceMode === null)
+                return
+            else
+                throw IllegalStateException("Type already explicitly imported.")
+        }
+
+        if (forceMode === JavaImportForceMode.FORCE_QUALIFIED) {
+            packageImports[type.toString()] = JavaImport(packageName, type.toString(), forceMode)
+        } else if (packageImports.none { it.value.typeQualifier === IMPORT_WILDCARD }) {
+            val filteredImports = packageImports.filter { it.value.forceMode === null }
+
+            if (filteredImports.size >= 2 || forceMode === JavaImportForceMode.FORCE_WILDCARD) {
+                filteredImports.forEach { packageImports.remove(it.key) }
+                packageImports[type.toString()] = JavaImport(packageName, IMPORT_WILDCARD, forceMode)
+            } else {
+                packageImports[type.toString()] = JavaImport(packageName, type.toString(), forceMode)
+            }
+        }
+    }
 
 	internal fun PrintWriter.printType(indent: String) {
 		val documentation = documentation.toJavaDoc(indent)
@@ -232,12 +269,16 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
 
 }
 
+enum class JavaImportForceMode {
+    FORCE_QUALIFIED,
+    FORCE_WILDCARD
+}
+
 internal open class JavaImport(
 	val packageName: String,
-	val typeQualifier: String
+	val typeQualifier: String,
+    val forceMode: JavaImportForceMode?
 ): Comparable<JavaImport> {
-
-	constructor(type: IJavaType): this(type.toPackageString()!!, type.toQualifiedString())
 
 	override fun compareTo(other: JavaImport): Int {
 		if (this is JavaStaticImport) {
@@ -266,8 +307,9 @@ internal open class JavaImport(
 }
 
 internal class JavaStaticImport(
-	packageName: String
-): JavaImport(packageName, "*") {
+	packageName: String,
+    forceMode: JavaImportForceMode?
+): JavaImport(packageName, "*", forceMode) {
 
 	override fun toString() = "import static $packageName.$typeQualifier"
 

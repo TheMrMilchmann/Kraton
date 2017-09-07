@@ -75,8 +75,9 @@ interface IJavaType {
  *
  * @since 1.0.0
  */
-abstract class JavaReferableType(
-	val className: String
+abstract class JavaReferableType internal constructor(
+	val className: String,
+    internal val typeParameters: Array<out IJavaType>? = null
 ): IJavaType {
 
 	override fun toPackageString(): String? = null
@@ -96,8 +97,9 @@ abstract class JavaReferableType(
  */
 class JavaTypeReference(
 	className: String,
-	private val packageName: String?
-): JavaReferableType(className) {
+	private val packageName: String?,
+    vararg typeParameters: IJavaType
+): JavaReferableType(className, typeParameters) {
 
 	override fun toPackageString() = packageName
 
