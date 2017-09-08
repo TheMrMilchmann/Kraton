@@ -37,19 +37,25 @@ val Project.deployment: Deployment
         Deployment(
             BuildType.RELEASE,
             "https://oss.sonatype.org/service/local/staging/deploy/maven2/",
-            extra["sonatypeUsername"] as String,
-            extra["sonatypePassword"] as String
+            getProperty("sonatypeUsername"),
+            getProperty("sonatypePassword")
         )
     } else if (hasProperty("snapshot")) {
         Deployment(
             BuildType.SNAPSHOT,
             "https://oss.sonatype.org/content/repositories/snapshots/",
-            extra["sonatypeUsername"] as String,
-            extra["sonatypePassword"] as String
+            getProperty("sonatypeUsername"),
+            getProperty("sonatypePassword")
         )
     } else {
         Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
     }
+
+private fun Project.getProperty(k: String) =
+    if (extra.has(k))
+        extra[k] as String
+    else
+        System.getenv(k)
 
 enum class BuildType {
     LOCAL,

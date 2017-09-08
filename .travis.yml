@@ -13,4 +13,10 @@ language: java
 jdk:
     - oraclejdk8
 
-script: ./gradlew check --info --stacktrace --console=plain --max-workers=1 --no-daemon -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.colors.enabled=false
+script: ./gradlew check aggregateJavadoc --info --stacktrace -Psnapshot
+
+after_success: .ci/deploy.sh
+
+branches:
+    except:
+        - gh-pages

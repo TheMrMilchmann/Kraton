@@ -149,7 +149,7 @@ project(":modules").subprojects {
                             }
 
                             beforeDeployment {
-                                signing.signPom(this)
+                                if (deployment.type === BuildType.RELEASE) signing.signPom(this)
                             }
 
                             pom.project {
@@ -201,5 +201,17 @@ project(":modules").subprojects {
                 }
             }
         }
+    }
+}
+
+tasks {
+    val aggregateJavadoc = "aggregateJavadoc"(Javadoc::class) {
+        subprojects.filter { it.plugins.hasPlugin(JavaPlugin::class.java) }
+            .forEach {
+                val javadocTask = it.tasks["javadoc"] as Javadoc
+
+                source += javadocTask.source
+                classpath += javadocTask.classpath
+            }
     }
 }
