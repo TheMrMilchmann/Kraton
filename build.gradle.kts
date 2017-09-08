@@ -211,7 +211,7 @@ tasks {
 
         subprojects.filter { it.plugins.hasPlugin(DokkaPlugin::class.java) }
             .forEach {
-                val dokkaTask = it.tasks["javadoc"] as DokkaTask
+                val dokkaTask = it.tasks["dokka"] as DokkaTask
 
                 sourceDirs += dokkaTask.sourceDirs
                 classpath += dokkaTask.classpath
