@@ -205,13 +205,16 @@ project(":modules").subprojects {
 }
 
 tasks {
-    val aggregateJavadoc = "aggregateJavadoc"(Javadoc::class) {
-        subprojects.filter { it.plugins.hasPlugin(JavaPlugin::class.java) }
-            .forEach {
-                val javadocTask = it.tasks["javadoc"] as Javadoc
+    val aggregateJavadoc = "aggregateJavadoc"(DokkaTask::class) {
+        outputFormat = "javadoc"
+        outputDirectory = "$buildDir/docs/javadoc"
 
-                source += javadocTask.source
-                classpath += javadocTask.classpath
+        subprojects.filter { it.plugins.hasPlugin(DokkaPlugin::class.java) }
+            .forEach {
+                val dokkaTask = it.tasks["javadoc"] as DokkaTask
+
+                sourceDirs += dokkaTask.sourceDirs
+                classpath += dokkaTask.classpath
             }
     }
 }
