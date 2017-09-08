@@ -11,7 +11,7 @@ if [ "$TRAVIS_REPO_SLUG" == "$SLUG" ] && [ "$TRAVIS_JDK_VERSION" == "$JDK" ] && 
     # Upload snapshot artifacts to OSSRH.
 
     cd $TRAVIS_BUILD_DIR
-    source ./gradlew.sh uploadArchives --parallel -Psnapshot
+    source ./gradlew uploadArchives --parallel -Psnapshot
 
     # Upload latest Javadoc to Github pages.
 
