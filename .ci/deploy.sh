@@ -13,7 +13,7 @@ if [ "$TRAVIS_REPO_SLUG" == "$SLUG" ] && [ "$TRAVIS_JDK_VERSION" == "$JDK" ] && 
 
     ./gradlew aggregateDocs --parallel -Psnapshot
 
-    cp -R build/docs/html
+    cp -R build/docs/html $HOME/docs-latest
 
     pushd $HOME
     git config --global user.email "travis@travis-ci.org"
@@ -22,7 +22,7 @@ if [ "$TRAVIS_REPO_SLUG" == "$SLUG" ] && [ "$TRAVIS_JDK_VERSION" == "$JDK" ] && 
 
     pushd gh-pages
     git rm -rf .
-    cp -Rf $HOME/javadoc-latest .
+    cp -Rf $HOME/docs-latest .
     git add -f .
     git commit -m "ci: update documentation (travis build $TRAVIS_BUILD_NUMBER)"
     git push -fq origin gh-pages > /dev/null
