@@ -1,0 +1,109 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>JavaField - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.github.themrmilchmann.kraton.lang.java</a>&nbsp;/&nbsp;<a href=".">JavaField</a><br/>
+<br/>
+<h1>JavaField</h1>
+<code><span class="keyword">class </span><span class="identifier">JavaField</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-java-modifier-target/index.html"><span class="identifier">JavaModifierTarget</span></a><span class="symbol">, </span><span class="identifier">JavaBodyMember</span></code> <a href="https://github.com/TheMrMilchmann/Kraton/blob/master/modules/lang-java/src/main/kotlin/com/github/themrmilchmann/kraton/lang/java/JavaGenField.kt#L50">(source)</a>
+<p>An object representing one or multiple Java field/s.</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="category.html">category</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">category</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>The category declaration for this object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="documentation.html">documentation</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">documentation</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>the documentation of the field/s</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="entries.html">entries</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">entries</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html"><span class="identifier">Pair</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span></code>
+<p>the key-value mappings of the field/s (A <code>null</code>
+    value will leave the respective field
+    uninitialized. For <code>null</code> use <code>"null"</code> instead.)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="name.html">name</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">name</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>The name of this java object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="see.html">see</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">see</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code>
+<p>the references to be in the documentation of the
+    field/s</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="since.html">since</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">since</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>the documentation of the field's/fields' <code>@since</code>
+    tag</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="type.html">type</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">type</span><span class="symbol">: </span><a href="../-i-java-type/index.html"><span class="identifier">IJavaType</span></a></code>
+<p>the type of this field/s</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="weight.html">weight</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">weight</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The weight used to sort this java object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="print-member.html">printMember</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="http://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html"><span class="identifier">PrintWriter</span></a><span class="symbol">.</span><span class="identifier">printMember</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaField$printMember(java.io.PrintWriter, kotlin.String)/indent">indent</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Prints this java object to the given PrintWriter.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

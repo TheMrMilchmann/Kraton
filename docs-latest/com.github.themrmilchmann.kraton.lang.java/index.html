@@ -1,0 +1,510 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>com.github.themrmilchmann.kraton.lang.java - </title>
+<link rel="stylesheet" href="../style.css">
+</HEAD>
+<BODY>
+<a href=".">com.github.themrmilchmann.kraton.lang.java</a><br/>
+<br/>
+<h2>Package com.github.themrmilchmann.kraton.lang.java</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-annotate/index.html">Annotate</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">Annotate</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-modifier/index.html"><span class="identifier">JavaModifier</span></a></code>
+<p>This modifier may be used to add annotations to an object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-deprecated/index.html">Deprecated</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">Deprecated</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-annotate/index.html"><span class="identifier">Annotate</span></a></code>
+<p>The <code>@Deprecated</code> annotation.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-i-java-type/index.html">IJavaType</a></p>
+</td>
+<td>
+<code><span class="keyword">interface </span><span class="identifier">IJavaType</span></code>
+<p>A reference to a java type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-array-type/index.html">JavaArrayType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaArrayType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
+<p>A type representing a java array.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-class/index.html">JavaClass</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaClass</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-top-level-type/index.html"><span class="identifier">JavaTopLevelType</span></a></code>
+<p>An object representing a Java class.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-constructor.html">JavaConstructor</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-method/index.html"><span class="identifier">JavaMethod</span></a></code>
+<p>A java constructor.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-field/index.html">JavaField</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaField</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-modifier-target/index.html"><span class="identifier">JavaModifierTarget</span></a><span class="symbol">, </span><span class="identifier">JavaBodyMember</span></code>
+<p>An object representing one or multiple Java field/s.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-generic-type/index.html">JavaGenericType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaGenericType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
+<p>A java generic type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-import-force-mode/index.html">JavaImportForceMode</a></p>
+</td>
+<td>
+<code><span class="keyword">enum</span> <span class="keyword">class </span><span class="identifier">JavaImportForceMode</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-interface/index.html">JavaInterface</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaInterface</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-top-level-type/index.html"><span class="identifier">JavaTopLevelType</span></a></code>
+<p>An object representing a Java interface.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/index.html">JavaMethod</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">JavaMethod</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-modifier-target/index.html"><span class="identifier">JavaModifierTarget</span></a><span class="symbol">, </span><span class="identifier">JavaBodyMember</span></code>
+<p>An object representing a Java method.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-modifier/index.html">JavaModifier</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">JavaModifier</span></code>
+<p>A modifier that may be applied to a java object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-modifier-target/index.html">JavaModifierTarget</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">JavaModifierTarget</span></code>
+<p>A JavaModifierTarget represents java object to which modifiers may be applied to.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-parameter/index.html">JavaParameter</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaParameter</span></code>
+<p>A parameter to be used in java methods (or constructors).</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-primitive-type/index.html">JavaPrimitiveType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaPrimitiveType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
+<p>A JavaPrimitiveType represents a primitive type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-referable-type/index.html">JavaReferableType</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">JavaReferableType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a></code>
+<p>A reference to a java type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-top-level-type/index.html">JavaTopLevelType</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">JavaTopLevelType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-modifier-target/index.html"><span class="identifier">JavaModifierTarget</span></a><span class="symbol">, </span><span class="identifier">JavaBodyMember</span><span class="symbol">, </span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a></code>
+<p>A java top-level type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-type-reference/index.html">JavaTypeReference</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JavaTypeReference</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
+<p>A reference to a java type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-visibility-modifier/index.html">JavaVisibilityModifier</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">JavaVisibilityModifier</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-modifier/index.html"><span class="identifier">JavaModifier</span></a></code>
+<p>A modifier of this type may be applied to mutate the visibility of a java object.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="abstract.html">abstract</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">abstract</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>abstract</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="default.html">default</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">default</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>default</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="final.html">final</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">final</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>final</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="native.html">native</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">native</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>native</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="private.html">private</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">private</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>private</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="protected.html">protected</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">protected</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>protected</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="public.html">public</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">public</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>public</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="static.html">static</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">static</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>static</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="strictfp.html">strictfp</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">strictfp</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>strictfp</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="synchronized.html">synchronized</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">synchronized</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>synchronized</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="transient.html">transient</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">transient</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>transient</code> modifier.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="void.html">void</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">void</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
+<p>The <code>void</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="volatile.html">volatile</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">volatile</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-visibility-modifier/index.html"><span class="identifier">JavaVisibilityModifier</span></a></code>
+<p>The <code>volatile</code> modifier.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Extensions for External Classes</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="kotlin.-array/index.html">kotlin.Array</a></p>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-override.html">Override</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">Override</span><span class="symbol">: </span><a href="-annotate/index.html"><span class="identifier">Annotate</span></a></code>
+<p>The <code>@Override</code> annotation.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="boolean.html">boolean</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">boolean</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>boolean</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="byte.html">byte</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">byte</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>byte</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="char.html">char</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">char</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>char</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="double.html">double</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">double</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>double</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="float.html">float</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">float</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>float</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="inherit-doc.html">inheritDoc</a></p>
+</td>
+<td>
+<code><span class="keyword">const</span> <span class="keyword">val </span><span class="identifier">inheritDoc</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>The <code>{@inheritDoc}</code> tag.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="int.html">int</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">int</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>int</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="long.html">long</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">long</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>long</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="short.html">short</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">short</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>The <code>short</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="string.html">string</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">string</span><span class="symbol">: </span><a href="-java-type-reference/index.html"><span class="identifier">JavaTypeReference</span></a></code>
+<p>The <code>String</code> type.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-p-a-r-a-m.html">PARAM</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">.</span><span class="identifier">PARAM</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$PARAM(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.String, kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$PARAM(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.String, kotlin.String)/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-parameter/index.html"><span class="identifier">JavaParameter</span></a></code>
+<p>Shortcut to create a new JavaParameter.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="array.html">array</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">.</span><span class="identifier">array</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$array(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Int)/dim">dim</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">)</span><span class="symbol">: </span><a href="-java-array-type/index.html"><span class="identifier">JavaArrayType</span></a></code>
+<p>Shortcut to create a new JavaArrayType.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="cast.html">cast</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">cast</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$cast(com.github.themrmilchmann.kraton.lang.java.JavaReferableType, com.github.themrmilchmann.kraton.lang.java.JavaReferableType, kotlin.String)/from">from</span><span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$cast(com.github.themrmilchmann.kraton.lang.java.JavaReferableType, com.github.themrmilchmann.kraton.lang.java.JavaReferableType, kotlin.String)/to">to</span><span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$cast(com.github.themrmilchmann.kraton.lang.java.JavaReferableType, com.github.themrmilchmann.kraton.lang.java.JavaReferableType, kotlin.String)/value">value</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>Casts a value to another type (excluding unnecessary casts).</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="convert.html">convert</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">convert</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$convert(com.github.themrmilchmann.kraton.lang.java.JavaReferableType, com.github.themrmilchmann.kraton.lang.java.JavaReferableType, kotlin.String)/from">from</span><span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$convert(com.github.themrmilchmann.kraton.lang.java.JavaReferableType, com.github.themrmilchmann.kraton.lang.java.JavaReferableType, kotlin.String)/to">to</span><span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$convert(com.github.themrmilchmann.kraton.lang.java.JavaReferableType, com.github.themrmilchmann.kraton.lang.java.JavaReferableType, kotlin.String)/value">value</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>Converts a value to another type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="java-class.html">javaClass</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.github.themrmilchmann.kraton/-profile/index.html"><span class="identifier">Profile</span></a><span class="symbol">.</span><span class="identifier">javaClass</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/fileName">fileName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/packageName">packageName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/srcFolder">srcFolder</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/srcSet">srcSet</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/superClass">superClass</span><span class="symbol">:</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/interfaces">interfaces</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/sorted">sorted</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/copyrightHeader">copyrightHeader</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/init">init</span><span class="symbol">:</span>&nbsp;<a href="-java-class/index.html"><span class="identifier">JavaClass</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-class/index.html"><span class="identifier">JavaClass</span></a></code><br/>
+<code><span class="keyword">fun </span><a href="-java-class/index.html"><span class="identifier">JavaClass</span></a><span class="symbol">.</span><span class="identifier">javaClass</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/superClass">superClass</span><span class="symbol">:</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/interfaces">interfaces</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/sorted">sorted</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/category">category</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/init">init</span><span class="symbol">:</span>&nbsp;<a href="-java-class/index.html"><span class="identifier">JavaClass</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-class/index.html"><span class="identifier">JavaClass</span></a></code><br/>
+<code><span class="keyword">fun </span><a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a><span class="symbol">.</span><span class="identifier">javaClass</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/superClass">superClass</span><span class="symbol">:</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/interfaces">interfaces</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/sorted">sorted</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/category">category</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaClass(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.Unit)))/init">init</span><span class="symbol">:</span>&nbsp;<a href="-java-class/index.html"><span class="identifier">JavaClass</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-class/index.html"><span class="identifier">JavaClass</span></a></code>
+<p>Creates, registers and returns an object representing a Java class.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="java-interface.html">javaInterface</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../com.github.themrmilchmann.kraton/-profile/index.html"><span class="identifier">Profile</span></a><span class="symbol">.</span><span class="identifier">javaInterface</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/fileName">fileName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/packageName">packageName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/srcFolder">srcFolder</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/srcSet">srcSet</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/superInterfaces">superInterfaces</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/sorted">sorted</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/copyrightHeader">copyrightHeader</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.Profile, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/init">init</span><span class="symbol">:</span>&nbsp;<a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a></code><br/>
+<code><span class="keyword">fun </span><a href="-java-class/index.html"><span class="identifier">JavaClass</span></a><span class="symbol">.</span><span class="identifier">javaInterface</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/superInterfaces">superInterfaces</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/sorted">sorted</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/category">category</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaClass, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/init">init</span><span class="symbol">:</span>&nbsp;<a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a></code><br/>
+<code><span class="keyword">fun </span><a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a><span class="symbol">.</span><span class="identifier">javaInterface</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/superInterfaces">superInterfaces</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/sorted">sorted</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/category">category</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$javaInterface(com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.String, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)), kotlin.Boolean, kotlin.String, kotlin.Function1((com.github.themrmilchmann.kraton.lang.java.JavaInterface, kotlin.Unit)))/init">init</span><span class="symbol">:</span>&nbsp;<a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-interface/index.html"><span class="identifier">JavaInterface</span></a></code>
+<p>Creates, registers and returns an object representing a Java interface.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="larger.html">larger</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">larger</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$larger(com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType, com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType)/alpha">alpha</span><span class="symbol">:</span>&nbsp;<a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$larger(com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType, com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType)/beta">beta</span><span class="symbol">:</span>&nbsp;<a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>Compares two types by size in bytes and returns the larger one.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="range-to.html">rangeTo</a></p>
+</td>
+<td>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-modifier/index.html"><span class="identifier">JavaModifier</span></a><span class="symbol">&gt;</span> <span class="identifier">T</span><span class="symbol">.</span><span class="identifier">rangeTo</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$rangeTo(com.github.themrmilchmann.kraton.lang.java.rangeTo.T, com.github.themrmilchmann.kraton.lang.java.JavaModifierTarget)/trg">trg</span><span class="symbol">:</span>&nbsp;<a href="-java-modifier-target/index.html"><span class="identifier">JavaModifierTarget</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-modifier-target/index.html"><span class="identifier">JavaModifierTarget</span></a></code><br/>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-modifier/index.html"><span class="identifier">JavaModifier</span></a><span class="symbol">&gt;</span> <span class="identifier">T</span><span class="symbol">.</span><span class="identifier">rangeTo</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$rangeTo(com.github.themrmilchmann.kraton.lang.java.rangeTo.T, com.github.themrmilchmann.kraton.lang.java.rangeTo.T)/other">other</span><span class="symbol">:</span>&nbsp;<span class="identifier">T</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span></code>
+<p>Utility method to chain modifiers using the rangeTo operator.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="smaller.html">smaller</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">smaller</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$smaller(com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType, com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType)/alpha">alpha</span><span class="symbol">:</span>&nbsp;<a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$smaller(com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType, com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType)/beta">beta</span><span class="symbol">:</span>&nbsp;<a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
+<p>Compares two types by size in bytes and returns the smaller one.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

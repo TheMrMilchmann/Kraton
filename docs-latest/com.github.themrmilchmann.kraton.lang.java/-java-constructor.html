@@ -1,0 +1,135 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>JavaConstructor - </title>
+<link rel="stylesheet" href="../style.css">
+</HEAD>
+<BODY>
+<a href="index.html">com.github.themrmilchmann.kraton.lang.java</a>&nbsp;/&nbsp;<a href=".">JavaConstructor</a><br/>
+<br/>
+<h1>JavaConstructor</h1>
+<code><span class="keyword">class </span><span class="identifier">JavaConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-method/index.html"><span class="identifier">JavaMethod</span></a></code> <a href="https://github.com/TheMrMilchmann/Kraton/blob/master/modules/lang-java/src/main/kotlin/com/github/themrmilchmann/kraton/lang/java/JavaGenMethod.kt#L151">(source)</a>
+<p>A java constructor.</p>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-java-method/category.html">category</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">category</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>the category under which this method will be
+    generated within it's container</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/documentation.html">documentation</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">documentation</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>the documentation of the method</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/exceptions.html">exceptions</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">exceptions</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html"><span class="identifier">Pair</span></a><span class="symbol">&lt;</span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">?</span></code>
+<p>the exceptions that may be thrown by the method
+    and their respective documentation entries</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/name.html">name</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">name</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>the name of the method</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/parameters.html">parameters</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">parameters</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="-java-parameter/index.html"><span class="identifier">JavaParameter</span></a><span class="symbol">&gt;</span></code>
+<p>the parameters of the method</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/return-doc.html">returnDoc</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">returnDoc</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>the documentation of the method's <code>@returnDoc</code> tag</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/return-type.html">returnType</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">returnType</span><span class="symbol">: </span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a></code>
+<p>the return type of the method</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/see.html">see</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">see</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code>
+<p>the objects to be referenced in the method's
+    documentation</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/since.html">since</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">since</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>the documentation of the method's <code>@since</code> tag</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/type-parameters.html">typeParameters</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">typeParameters</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html"><span class="identifier">Pair</span></a><span class="symbol">&lt;</span><a href="-java-generic-type/index.html"><span class="identifier">JavaGenericType</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">?</span></code>
+<p>the type parameters of the method</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-method/weight.html">weight</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">weight</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>The weight used to sort this java object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-java-method/print-member.html">printMember</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><a href="http://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html"><span class="identifier">PrintWriter</span></a><span class="symbol">.</span><span class="identifier">printMember</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaMethod$printMember(java.io.PrintWriter, kotlin.String)/indent">indent</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Prints this java object to the given PrintWriter.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
