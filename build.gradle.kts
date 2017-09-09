@@ -204,17 +204,29 @@ project(":modules").subprojects {
     }
 }
 
+val sourceProjects = listOf(
+    project(":modules:base"),
+    project(":modules:lang-java")
+)
+
 tasks {
-    val aggregateJavadoc = "aggregateJavadoc"(DokkaTask::class) {
-        outputFormat = "javadoc"
-        outputDirectory = "$buildDir/docs/javadoc"
+    "aggregateDocs"(DokkaTask::class) {
+        outputFormat = "html"
+        outputDirectory = File(rootProject.buildDir, "docs/html").absolutePath
 
-        subprojects.filter { it.plugins.hasPlugin(DokkaPlugin::class.java) }
-            .forEach {
-                val dokkaTask = it.tasks["dokka"] as DokkaTask
+        impliedPlatforms = mutableListOf("JVM")
+        jdkVersion = 8
 
-                sourceDirs += dokkaTask.sourceDirs
-                classpath += dokkaTask.classpath
-            }
+        kotlinTasks(KotlinClosure0({ sourceProjects.map { it.tasks["compileKotlin"] } }))
+
+        sourceProjects.forEach {
+            val srcPath = File(it.projectDir, "src/main/kotlin")
+
+            linkMappings.add(LinkMapping().apply {
+                dir = srcPath.absolutePath
+                url = "https://github.com/TheMrMilchmann/Kraton/blob/master/modules/${it.name}/src/main/kotlin"
+                suffix = "#L"
+            })
+        }
     }
 }

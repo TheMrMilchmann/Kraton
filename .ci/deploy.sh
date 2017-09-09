@@ -7,26 +7,36 @@ BRANCH="master"
 set -e
 
 if [ "$TRAVIS_REPO_SLUG" == "$SLUG" ] && [ "$TRAVIS_JDK_VERSION" == "$JDK" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "$BRANCH" ]; then
+    # Upload latest documentation to Github pages.
 
-    # Upload snapshot artifacts to OSSRH.
-    ./gradlew uploadArchives --parallel -Psnapshot
+    echo -e "[deploy.sh] Publishing documentation...\n"
 
-    # Upload latest Javadoc to Github pages.
+    ./gradlew aggregateDocs --parallel -Psnapshot
 
-    echo -e "[deploy.sh] Publishing Javadoc...\n"
-    cp -R build/docs/javadoc
+    cp -R build/docs/html
 
-    cd $HOME
+    pushd $HOME
     git config --global user.email "travis@travis-ci.org"
     git config --global user.name "travis-ci"
     git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/TheMrMilchmann/Kraton gh-pages > /dev/null
 
-    cd gp-pages
+    pushd gh-pages
     git rm -rf .
     cp -Rf $HOME/javadoc-latest .
     git add -f .
-    git commit -m "ci: update javadoc (travis build $TRAVIS_BUILD_NUMBER)"
+    git commit -m "ci: update documentation (travis build $TRAVIS_BUILD_NUMBER)"
     git push -fq origin gh-pages > /dev/null
+    popd
 
-    echo -e "Published Javadoc to gh-pages.\n"
+    popd
+
+    echo -e "[deploy.sh] Published documentation to gh-pages.\n"
+
+    # Upload snapshot artifacts to OSSRH.
+
+    echo -e "[deploy.sh] Publishing snapshots...\n"
+
+    ./gradlew uploadArchives --parallel -Psnapshot
+
+    echo -e "[deploy.sh] Published snapshots to OSSRH.\n"
 fi
