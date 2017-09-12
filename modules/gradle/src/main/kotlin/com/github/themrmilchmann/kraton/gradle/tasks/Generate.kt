@@ -56,7 +56,7 @@ open class Generate internal constructor(): DefaultTask() {
             args("-t", templatesRoot!!.absolutePath, "-o", outputRoot!!.absolutePath)
 
 			if (isForce) args("-f")
-			if (generatorSourceState.isPresent) args("-g", generatorSource)
+			if (generatorSource != null) args("-g", generatorSource)
 
 			standardOutput = System.out
 			errorOutput = System.err
