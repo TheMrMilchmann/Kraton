@@ -7,5 +7,3 @@
 - [ ] Ensure that the `Allow edits from maintainers`-option is checked
 - [ ] Provide tests to verify the functionality of added or changed code
 - [ ] Ensure that tests pass locally: `./gradlew check --parallel`
-
-*(The checklist and this note should be removed once tasks have been checked.)*
