@@ -57,5 +57,4 @@ repositories {
 
 dependencies {
     compile(project(":modules:base"))
-    testCompile(kraton("lang-java"))
 }
