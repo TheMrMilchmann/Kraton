@@ -52,6 +52,8 @@ repositories {
 
 tasks {
     "generate"(Generate::class) {
+        dependsOn("compileKotlin")
+
         templatesRoot = File(projectDir, "src/main/kotlin/")
         outputRoot = rootDir
 
