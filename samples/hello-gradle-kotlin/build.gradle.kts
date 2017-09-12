@@ -31,22 +31,12 @@ import com.github.themrmilchmann.kraton.gradle.*
 import com.github.themrmilchmann.kraton.gradle.tasks.*
 import org.gradle.kotlin.dsl.*
 
-buildscript {
-    repositories {
-        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/")}
-    }
-
-    dependencies {
-        classpath("com.github.themrmilchmann.kraton:kraton-gradle:0.1.0-SNAPSHOT")
-    }
-}
-
 plugins {
     kotlin("jvm")
+    id("com.github.themrmilchmann.kraton") version "0.1.1"
 }
 
 repositories {
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
     mavenCentral()
 }
 
