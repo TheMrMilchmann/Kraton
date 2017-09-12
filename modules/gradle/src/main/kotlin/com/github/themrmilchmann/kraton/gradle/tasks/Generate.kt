@@ -31,34 +31,20 @@ package com.github.themrmilchmann.kraton.gradle.tasks
 
 import org.gradle.api.*
 import org.gradle.api.file.*
-import org.gradle.api.provider.*
 import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.*
 import java.io.*
 
 open class Generate internal constructor(): DefaultTask() {
 
-    private val classpathState = project.property<FileCollection>()
+    var classpath: FileCollection? = null
 
-    var classpath: FileCollection by classpathState
+    var templatesRoot: File? = null
 
-    private val templatesRootState = project.property<File>()
+    var outputRoot: File? = null
 
-    @get:InputDirectory
-    var templatesRoot by templatesRootState
+    var isForce: Boolean = false
 
-    private val outputRootState = project.property<File>()
-
-    @get:Input
-    var outputRoot by outputRootState
-
-    private val isForceState = project.property<Boolean>()
-
-    var isForce by isForceState
-
-    private val generatorSourceState = project.property<File>()
-
-	var generatorSource by generatorSourceState
+	var generatorSource: File? = null
 
 	@TaskAction
 	fun run() {
@@ -67,7 +53,7 @@ open class Generate internal constructor(): DefaultTask() {
 			classpath = this@Generate.classpath
 			isIgnoreExitValue = false
 
-            args("-t", templatesRoot.absolutePath, "-o", outputRoot.absolutePath)
+            args("-t", templatesRoot!!.absolutePath, "-o", outputRoot!!.absolutePath)
 
 			if (isForce) args("-f")
 			if (generatorSourceState.isPresent) args("-g", generatorSource)
