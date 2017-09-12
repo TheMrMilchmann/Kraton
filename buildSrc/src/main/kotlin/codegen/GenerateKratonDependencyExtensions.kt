@@ -60,9 +60,10 @@ val embeddedKratonVersion = "$embeddedKratonVersion"
  * Builds the dependency notation for the named Kraton [module].
  *
  * @param module simple name of the Kraton module, for example "lang-java".
+ * @param version the version of Kraton to use (defaults to the embedded version)
  */
-fun DependencyHandler.kraton(module: String): Any =
-    "${kraton()}:kraton-${'$'}module:${'$'}embeddedKratonVersion""""
+fun DependencyHandler.kraton(module: String, version: String = embeddedKratonVersion): Any =
+    "${kraton()}:kraton-${'$'}module:${'$'}version""""
         )
     }
 
