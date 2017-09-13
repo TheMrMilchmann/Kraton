@@ -36,6 +36,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.testng.ITest;
 import org.testng.TestException;
 import org.testng.annotations.*;
 
@@ -93,7 +94,12 @@ public final class KratonTests {
                         if (testResultFiles.contains(testFileName)) {
                             testResultFiles.remove(testFileName);
 
-                            tests.add(new Object() {
+                            tests.add(new ITest() {
+
+                                @Override
+                                public String getTestName() {
+                                    return testFileName;
+                                }
 
                                 @Test
                                 public void test() throws IOException {
@@ -121,7 +127,12 @@ public final class KratonTests {
 
                             });
                         } else {
-                            tests.add(new Object() {
+                            tests.add(new ITest() {
+
+                                @Override
+                                public String getTestName() {
+                                    return testFileName;
+                                }
 
                                 @Test
                                 public void test() {
@@ -133,7 +144,12 @@ public final class KratonTests {
                     }
 
                     for (String testResultFile : testResultFiles) {
-                        tests.add(new Object() {
+                        tests.add(new ITest() {
+
+                            @Override
+                            public String getTestName() {
+                                return testResultFile;
+                            }
 
                             @Test
                             public void test() {
