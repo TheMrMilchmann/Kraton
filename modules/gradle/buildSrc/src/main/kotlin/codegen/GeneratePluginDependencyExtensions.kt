@@ -34,7 +34,7 @@ import org.gradle.api.*
 import org.gradle.api.tasks.*
 import java.io.*
 
-open class GenerateKratonDependencyExtensions : DefaultTask() {
+open class GeneratePluginDependencyExtensions : DefaultTask() {
 
     @get:OutputFile
     var outputFile: File? = null
@@ -44,7 +44,7 @@ open class GenerateKratonDependencyExtensions : DefaultTask() {
 
     @Suppress("unused")
     @TaskAction
-    fun run() {
+    fun runTask() {
         outputFile!!.writeText(
             """$LICENSE_HEADER
 package ${kraton("gradle")}

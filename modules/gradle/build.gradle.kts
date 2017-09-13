@@ -29,15 +29,36 @@
  */
 import codegen.*
 import org.gradle.api.internal.*
+import org.gradle.api.tasks.bundling.*
 import org.gradle.kotlin.dsl.*
+import org.jetbrains.dokka.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.*
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath ("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
+    }
+}
 
 plugins {
 	`kotlin-dsl`
     `java-gradle-plugin`
+    maven
+    signing
 
     id("com.gradle.plugin-publish") version gradlePluginPublishVersion
 }
+
+apply {
+    plugin("org.jetbrains.dokka")
+}
+
+group = kraton()
+version = kratonVersion
 
 val apiExtensionsOutputDir = file("src/main-generated/kotlin")
 
@@ -48,6 +69,34 @@ val apiExtensionsOutputDir = file("src/main-generated/kotlin")
 }
 
 val pluginId = kraton()
+
+artifacts {
+    fun artifactNotation(artifact: String, classifier: String? = null) =
+        if (classifier == null) {
+            mapOf(
+                "file" to File(buildDir, "libs/$artifact-$version.jar"),
+                "name" to artifact,
+                "type" to "jar"
+            )
+        } else {
+            mapOf(
+                "file" to File(buildDir, "libs/$artifact-$version-$classifier.jar"),
+                "name" to artifact,
+                "type" to "jar",
+                "classifier" to classifier
+            )
+        }
+
+    add("archives", artifactNotation(project.name))
+    add("archives", artifactNotation(project.name, "sources"))
+    add("archives", artifactNotation(project.name, "javadoc"))
+}
+
+signing {
+    isRequired = deployment.type == BuildType.RELEASE
+
+    sign(configurations["archives"])
+}
 
 gradlePlugin {
     (plugins) {
@@ -73,7 +122,7 @@ pluginBundle {
 }
 
 tasks {
-    val generateKratonDependencyExtensions = "generateKratonDependencyExtensions"(GenerateKratonDependencyExtensions::class) {
+    val generateKratonDependencyExtensions = "generateKratonDependencyExtensions"(GeneratePluginDependencyExtensions::class) {
         outputFile = File(apiExtensionsOutputDir, "${kraton("gradle").replace('.', '/')}/KratonDependencyExtensions.kt")
         embeddedKratonVersion = kratonVersion
     }
@@ -85,4 +134,83 @@ tasks {
     "clean"(Delete::class) {
         delete(apiExtensionsOutputDir)
     }
+
+    val sourcesJar = "sourcesJar"(Jar::class) {
+        classifier = "sources"
+        from(java.sourceSets["main"].allSource)
+    }
+
+    val dokka = "dokka"(DokkaTask::class) {
+        outputFormat = "javadoc"
+        outputDirectory = "$buildDir/javadoc"
+    }
+
+    val javadocJar = "javadocJar"(Jar::class) {
+        dependsOn(dokka)
+
+        classifier = "javadoc"
+        from(File(buildDir, "javadoc"))
+    }
+
+    "signArchives" {
+        dependsOn(sourcesJar, javadocJar)
+    }
+
+    "uploadArchives"(Upload::class) {
+        if (deployment.type == BuildType.RELEASE) dependsOn("publishPlugins")
+
+        repositories {
+            withConvention(MavenRepositoryHandlerConvention::class) {
+                mavenDeployer {
+                    withGroovyBuilder {
+                        "repository"("url" to deployment.repo) {
+                            "authentication"(
+                                "userName" to deployment.user,
+                                "password" to deployment.password
+                            )
+                        }
+                    }
+
+                    beforeDeployment {
+                        if (deployment.type === BuildType.RELEASE) signing.signPom(this)
+                    }
+
+                    pom.project {
+                        withGroovyBuilder {
+                            "artifactId"(project.name)
+
+                            "name"("Kraton")
+                            "description"("A type-safe code generation tool.")
+                            "packaging"("jar")
+                            "url"("https://github.com/TheMrMilchmann/Kraton")
+
+                            "licenses" {
+                                "license" {
+                                    "name"("BSD-3-Clause")
+                                    "url"("https://github.com/TheMrMilchmann/Kraton/LICENSE.md")
+                                    "distribution"("repo")
+                                }
+                            }
+
+                            "developers" {
+                                "developer" {
+                                    "id"("TheMrMilchmann")
+                                    "name"("Leon Linhart")
+                                    "email"("themrmilchmann@gmail.com")
+                                    "url"("https://github.com/TheMrMilchmann")
+                                }
+                            }
+
+                            "scm" {
+                                "connection"("scm:git:git://github.com/TheMrMilchmann/Kraton.git")
+                                "developerConnection"("scm:git:git://github.com/TheMrMilchmann/Kraton.git")
+                                "url"("https://github.com/TheMrMilchmann/Kraton.git")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

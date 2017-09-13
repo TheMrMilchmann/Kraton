@@ -27,29 +27,24 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 import org.gradle.api.*
 import org.gradle.kotlin.dsl.*
 
-val Project.deployment: Deployment
-    get() =
-    if (hasProperty("release")) {
-        Deployment(
-            BuildType.RELEASE,
-            "https://oss.sonatype.org/service/local/staging/deploy/maven2/",
-            getProperty("sonatypeUsername"),
-            getProperty("sonatypePassword")
-        )
-    } else if (hasProperty("snapshot")) {
-        Deployment(
-            BuildType.SNAPSHOT,
-            "https://oss.sonatype.org/content/repositories/snapshots/",
-            getProperty("sonatypeUsername"),
-            getProperty("sonatypePassword")
-        )
-    } else {
-        Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
-    }
+val Project.deployment: Deployment get() = when {
+    hasProperty("release") -> Deployment(
+        BuildType.RELEASE,
+        "https://oss.sonatype.org/service/local/staging/deploy/maven2/",
+        getProperty("sonatypeUsername"),
+        getProperty("sonatypePassword")
+    )
+    hasProperty("snapshot") -> Deployment(
+        BuildType.SNAPSHOT,
+        "https://oss.sonatype.org/content/repositories/snapshots/",
+        getProperty("sonatypeUsername"),
+        getProperty("sonatypePassword")
+    )
+    else -> Deployment(BuildType.LOCAL, repositories.mavenLocal().url.toString())
+}
 
 private fun Project.getProperty(k: String) =
     if (extra.has(k))

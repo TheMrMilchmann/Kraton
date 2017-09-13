@@ -28,13 +28,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import build.*
-import com.github.themrmilchmann.kraton.gradle.*
 import com.github.themrmilchmann.kraton.gradle.tasks.*
+import org.gradle.kotlin.dsl.*
 import java.io.*
+
+buildscript {
+    dependencies {
+        classpath("${kraton()}:kraton-gradle:$kratonVersion")
+    }
+}
 
 plugins {
     kotlin("jvm")
-    id("com.github.themrmilchmann.kraton") version "0.1.1"
 }
 
 configureKotlinProject()

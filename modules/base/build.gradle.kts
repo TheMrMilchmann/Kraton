@@ -36,5 +36,5 @@ plugins {
 configureKotlinProject()
 
 dependencies {
-    compile("net.sf.jopt-simple:jopt-simple:$JOptSimpleVersion")
+    compile("net.sf.jopt-simple:jopt-simple:$jOptSimpleVersion")
 }

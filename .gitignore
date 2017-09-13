@@ -1,8 +1,10 @@
 .gradle
 .idea
 /buildSrc/build
+/buildSrc/src/*-implicit/
 /build
 /modules/*/build
+/modules/*/buildSrc/src/*-generated
 /modules/*/src/*-generated
 /samples/build
 /samples/*/build

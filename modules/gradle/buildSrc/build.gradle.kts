@@ -29,6 +29,7 @@
  */
 import org.gradle.api.internal.*
 import java.io.*
+import java.util.*
 import org.jetbrains.kotlin.gradle.plugin.*
 
 plugins {
@@ -36,5 +37,52 @@ plugins {
 }
 
 (the<JavaPluginConvention>().sourceSets["main"] as HasConvention).convention.getPlugin(KotlinSourceSet::class.java).kotlin.apply {
-    srcDir(File("src/main-implicit/kotlin"))
+    srcDir(File("src/main-generated/kotlin"))
+}
+
+fun String.toComment(indent: String = "") =
+    if (lines().size == 1)
+        "$indent/* $this */"
+    else
+        "$indent/*\n${StringBuilder().apply {
+            this@toComment.lines().forEach { appendln("$indent * $it") }
+        }}$indent */"
+
+tasks {
+    val generatePropertyConstants = "generatePropertyConstants" {
+        doLast {
+            val properties = Properties().apply {
+                FileInputStream(File(projectDir.parentFile.parentFile.parentFile, "gradle.properties")).use {
+                    load(it)
+                }
+            }
+
+            File(projectDir, "src/main-generated/kotlin/KratonConstantProperties.kt").apply {
+                parentFile.mkdirs()
+                createNewFile()
+
+                writeText(
+                    """${File(projectDir.parentFile.parentFile.parentFile, ".ci/resources/LICENSE_HEADER_GEN.txt").readText().toComment()}
+
+${
+                    StringJoiner("\n").apply {
+                        properties.forEach { k, v -> add("const val $k = \"$v\"") }
+                    }
+ }""")
+            }
+        }
+    }
+
+    val copy = "copyImplicitAdditions"(Copy::class) {
+        from(File(projectDir, "src/main/kotlin"))
+        from(File(projectDir, "src/main-generated/kotlin"))
+
+        into(File(projectDir.parentFile.parentFile.parentFile, "buildSrc/src/main-implicit/kotlin"))
+
+        exclude("codegen/**")
+    }
+
+    "compileKotlin" {
+        dependsOn(generatePropertyConstants, copy)
+    }
 }

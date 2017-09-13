@@ -29,17 +29,9 @@
  */
 import org.gradle.api.*
 
-const val kratonNextVersion = "0.2.0"
-const val kotlinVersion = "1.1.4"
-const val dokkaVersion = "0.9.15"
-const val gradlePluginPublishVersion = "0.9.7"
-const val testNGVersion = "6.11"
-const val JOptSimpleVersion = "5.0.4"
-
 fun kraton(path: String = "") = "com.github.themrmilchmann.kraton${if (path.isNotEmpty()) ".$path" else "" }"
 
 val Project.kratonVersion: String get() = when (deployment.type) {
-    BuildType.RELEASE -> kratonNextVersion
     BuildType.SNAPSHOT -> "$kratonNextVersion-SNAPSHOT"
-    BuildType.LOCAL -> "$kratonNextVersion-LOCAL"
+    else -> kratonNextVersion
 }

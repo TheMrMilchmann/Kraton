@@ -5,6 +5,35 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+ * Copyright (c) 2017 Leon Linhart,
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
  *  Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
  *
@@ -40,10 +69,6 @@ buildscript {
     }
 }
 
-plugins {
-    id("org.jetbrains.dokka") version dokkaVersion apply false
-}
-
 allprojects {
     group = kraton()
     version = kratonVersion
@@ -58,8 +83,6 @@ allprojects {
 project(":modules").subprojects {
     if (!this@subprojects.name.startsWith("internal")) {
         val isBase = this.name == "base"
-        val isGradle = this.name == "gradle"
-        val isBaseOrGradle = isBase || isGradle
         val artifactId = if (this@subprojects === project(":modules:base"))
             "kraton"
         else
@@ -95,10 +118,8 @@ project(":modules").subprojects {
 
             add("archives", artifactNotation(artifactId))
 
-            if (!isGradle) { // The plugin-publish plugin takes care of this for kraton-gradle.
-                add("archives", artifactNotation(artifactId, "sources"))
-                add("archives", artifactNotation(artifactId, "javadoc"))
-            }
+            add("archives", artifactNotation(artifactId, "sources"))
+            add("archives", artifactNotation(artifactId, "javadoc"))
         }
 
         configure<SigningExtension> {
@@ -107,24 +128,32 @@ project(":modules").subprojects {
             sign(configurations["archives"])
         }
 
+        val gradlePlugin = gradle.includedBuild("kraton-gradle")
+
         tasks {
             "jar"(Jar::class) {
+                dependsOn(gradlePlugin.task(":$name"))
+
                 baseName = artifactId
             }
 
             val sourcesJar = "sourcesJar"(Jar::class) {
+                dependsOn(gradlePlugin.task(":$name"))
+
                 baseName = artifactId
                 classifier = "sources"
                 from(java.sourceSets["main"].allSource)
             }
 
             val dokka = "dokka"(DokkaTask::class) {
+                dependsOn(gradlePlugin.task(":$name"))
+
                 outputFormat = "javadoc"
                 outputDirectory = "$buildDir/javadoc"
             }
 
             val javadocJar = "javadocJar"(Jar::class) {
-                dependsOn(dokka)
+                dependsOn(dokka, gradlePlugin.task(":$name"))
 
                 baseName = artifactId
                 classifier = "javadoc"
@@ -132,10 +161,12 @@ project(":modules").subprojects {
             }
 
             "signArchives" {
-                dependsOn(sourcesJar, javadocJar)
+                dependsOn(sourcesJar, javadocJar, gradlePlugin.task(":$name"))
             }
 
             "uploadArchives"(Upload::class) {
+                dependsOn(gradlePlugin.task(":$name"))
+
                 repositories {
                     withConvention(MavenRepositoryHandlerConvention::class) {
                         mavenDeployer {
@@ -184,7 +215,7 @@ project(":modules").subprojects {
                                         "url"("https://github.com/TheMrMilchmann/Kraton.git")
                                     }
 
-                                    if (!isBaseOrGradle) {
+                                    if (!isBase) {
                                         "dependencies" {
                                             "dependency" {
                                                 "groupId"(project.group)
