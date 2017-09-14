@@ -40,7 +40,7 @@ open class GeneratePluginDependencyExtensions : DefaultTask() {
     var outputFile: File? = null
 
     @get:Input
-    var embeddedKratonVersion: String? = null
+    var currentKratonVersion: String? = null
 
     @Suppress("unused")
     @TaskAction
@@ -52,17 +52,17 @@ package ${kraton("gradle")}
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
 /**
- * The version of the Kraton generator embedded in kraton-gradle (currently _${embeddedKratonVersion}_).
+ * The latest version of Kraton (at the time of this plugin's release). (currently _${currentKratonVersion}_).
  */
-val embeddedKratonVersion = "$embeddedKratonVersion"
+val currentKratonVersion = "$currentKratonVersion"
 
 /**
  * Builds the dependency notation for the named Kraton [module].
  *
  * @param module simple name of the Kraton module, for example "lang-java".
- * @param version the version of Kraton to use (defaults to the embedded version)
+ * @param version the version of Kraton to use
  */
-fun DependencyHandler.kraton(module: String, version: String = embeddedKratonVersion): Any =
+fun DependencyHandler.kraton(module: String, version: String = currentKratonVersion): Any =
     "${kraton()}:kraton-${'$'}module:${'$'}version""""
         )
     }
@@ -72,6 +72,7 @@ fun DependencyHandler.kraton(module: String, version: String = embeddedKratonVer
 private const val LICENSE_HEADER = """/*
  * Copyright (c) 2017 Leon Linhart,
  * All rights reserved.
+ * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

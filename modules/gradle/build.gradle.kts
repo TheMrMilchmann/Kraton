@@ -124,7 +124,7 @@ pluginBundle {
 tasks {
     val generateKratonDependencyExtensions = "generateKratonDependencyExtensions"(GeneratePluginDependencyExtensions::class) {
         outputFile = File(apiExtensionsOutputDir, "${kraton("gradle").replace('.', '/')}/KratonDependencyExtensions.kt")
-        embeddedKratonVersion = kratonVersion
+        currentKratonVersion = kratonVersion
     }
 
     "compileKotlin" {
