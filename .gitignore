@@ -4,6 +4,7 @@
 /buildSrc/src/*-generated/
 /build
 /modules/*/build
+/modules/*/buildSrc/build
 /modules/*/buildSrc/src/*-generated
 /modules/*/buildSrc/src/*-implicit
 /modules/*/src/*-generated
