@@ -30,7 +30,7 @@
 import build.*
 
 plugins {
-    kotlin("jvm")
+    kotlin("jvm", kotlinVersion)
 }
 
 configureKotlinProject()
