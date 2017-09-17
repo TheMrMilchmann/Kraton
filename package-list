@@ -1,5 +1,7 @@
 $dokka.format:html
 $dokka.linkExtension:html
+$dokka.location:com.github.themrmilchmann.kraton.lang.java$asType#java.lang.Class((kotlin.Any))com.github.themrmilchmann.kraton.lang.java/java.lang.-class/as-type.html
+$dokka.location:com.github.themrmilchmann.kraton.lang.java$asType#kotlin.reflect.KClass((kotlin.Any))com.github.themrmilchmann.kraton.lang.java/kotlin.reflect.-k-class/as-type.html
 $dokka.location:com.github.themrmilchmann.kraton.lang.java$rangeTo(kotlin.Array((com.github.themrmilchmann.kraton.lang.java.rangeTo.T)), com.github.themrmilchmann.kraton.lang.java.JavaModifierTarget)com.github.themrmilchmann.kraton.lang.java/kotlin.-array/range-to.html
 $dokka.location:com.github.themrmilchmann.kraton.lang.java$rangeTo(kotlin.Array((com.github.themrmilchmann.kraton.lang.java.rangeTo.T)), com.github.themrmilchmann.kraton.lang.java.rangeTo.T)com.github.themrmilchmann.kraton.lang.java/kotlin.-array/range-to.html
 com.github.themrmilchmann.kraton
