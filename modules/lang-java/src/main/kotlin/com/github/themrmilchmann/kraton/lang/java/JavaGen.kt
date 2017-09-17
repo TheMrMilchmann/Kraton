@@ -32,7 +32,7 @@ package com.github.themrmilchmann.kraton.lang.java
 import com.github.themrmilchmann.kraton.*
 import java.io.*
 import java.util.*
-import kotlin.collections.*
+import kotlin.collections.LinkedHashSet
 
 private val CATEGORY = "(\\d+)\\Q_\\E(.*)".toRegex()
 
