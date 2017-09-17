@@ -143,7 +143,7 @@ class Deprecated(
  *
  * @since 1.0.0
  */
-val Override = Annotate(JavaTypeReference("Override", null))
+val Override = Annotate(Override::class.asType)
 
 /**
  * This modifier may be used to add annotations to an object.

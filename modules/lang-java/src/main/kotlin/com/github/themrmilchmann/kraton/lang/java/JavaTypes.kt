@@ -30,6 +30,22 @@
 package com.github.themrmilchmann.kraton.lang.java
 
 import java.util.*
+import kotlin.reflect.*
+
+/**
+ * TODO doc
+ *
+ * @since 1.0.0
+ */
+val Class<*>.asType get() = JavaTypeReference(simpleName, `package`?.name)
+
+/**
+ * TODO doc
+ *
+ * @since 1.0.0
+ */
+val KClass<*>.asType get() = java.asType
+
 
 /**
  * A reference to a java type.
