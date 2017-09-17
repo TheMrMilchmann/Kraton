@@ -52,18 +52,18 @@ import java.util.*
  * @since 1.0.0
  */
 fun Profile.javaInterface(
-	fileName: String,
-	packageName: String,
-	srcFolder: String,
-	srcSet: String,
-	documentation: String? = null,
-	superInterfaces: Array<out IJavaType>? = null,
-	sorted: Boolean = false,
+    fileName: String,
+    packageName: String,
+    srcFolder: String,
+    srcSet: String,
+    documentation: String? = null,
+    superInterfaces: Array<out IJavaType>? = null,
+    sorted: Boolean = false,
     copyrightHeader: String? = null,
-	init: JavaInterface.() -> Unit
+    init: JavaInterface.() -> Unit
 ) = JavaInterface(fileName, packageName, documentation, superInterfaces, sorted, null, null)
-	.also(init)
-	.run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
+    .also(init)
+    .run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 
 /**
  * Creates, registers and returns an object representing a Java interface.
@@ -83,15 +83,15 @@ fun Profile.javaInterface(
  * @since 1.0.0
  */
 fun JavaClass.javaInterface(
-	className: String,
-	documentation: String? = null,
-	superInterfaces: Array<out IJavaType>? = null,
-	sorted: Boolean = false,
-	category: String? = null,
-	init: JavaInterface.() -> Unit
+    className: String,
+    documentation: String? = null,
+    superInterfaces: Array<out IJavaType>? = null,
+    sorted: Boolean = false,
+    category: String? = null,
+    init: JavaInterface.() -> Unit
 ) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category, this)
-	.apply(init)
-	.also { members.add(it) }
+    .apply(init)
+    .also { members.add(it) }
 
 /**
  * Creates, registers and returns an object representing a Java interface.
@@ -111,15 +111,15 @@ fun JavaClass.javaInterface(
  * @since 1.0.0
  */
 fun JavaInterface.javaInterface(
-	className: String,
-	documentation: String? = null,
-	superInterfaces: Array<out IJavaType>? = null,
-	sorted: Boolean = false,
-	category: String? = null,
-	init: JavaInterface.() -> Unit
+    className: String,
+    documentation: String? = null,
+    superInterfaces: Array<out IJavaType>? = null,
+    sorted: Boolean = false,
+    category: String? = null,
+    init: JavaInterface.() -> Unit
 ) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category, this)
-	.apply(init)
-	.also { members.add(it) }
+    .apply(init)
+    .also { members.add(it) }
 
 /**
  * An object representing a Java interface.
@@ -129,19 +129,19 @@ fun JavaInterface.javaInterface(
  * @since 1.0.0
  */
 class JavaInterface internal constructor(
-	className: String,
-	packageName: String,
-	documentation: String?,
-	val superInterfaces: Array<out IJavaType>?,
-	sorted: Boolean,
-	override val category: String?,
+    className: String,
+    packageName: String,
+    documentation: String?,
+    val superInterfaces: Array<out IJavaType>?,
+    sorted: Boolean,
+    override val category: String?,
     containerType: JavaTopLevelType?
 ): JavaTopLevelType(className, packageName, documentation, sorted, containerType) {
 
-	override val name: String
-		get() = className
+    override val name: String
+        get() = className
 
-	override val weight: Int = WEIGHT_TOPLEVEL
+    override val weight: Int = WEIGHT_TOPLEVEL
 
     init {
         modifiers.forEach { it.value.applyImports.invoke(this) }
@@ -326,25 +326,25 @@ class JavaInterface internal constructor(
         }
 
     override fun PrintWriter.printTypeDeclaration() {
-		print("class ")
-		print(className)
+        print("class ")
+        print(className)
 
-		if (typeParameters.isNotEmpty()) {
-			print("<")
-			print(StringJoiner(", ").apply {
-				typeParameters.forEach { add(it.toString()) }
-			})
-			print(">")
-		}
+        if (typeParameters.isNotEmpty()) {
+            print("<")
+            print(StringJoiner(", ").apply {
+                typeParameters.forEach { add(it.toString()) }
+            })
+            print(">")
+        }
 
-		if (superInterfaces != null) {
-			print(" implements ")
-			print(StringJoiner(", ").apply {
-				superInterfaces.forEach { add(it.toString()) }
-			})
-		}
-	}
+        if (superInterfaces != null) {
+            print(" implements ")
+            print(StringJoiner(", ").apply {
+                superInterfaces.forEach { add(it.toString()) }
+            })
+        }
+    }
 
-	override fun toQualifiedString() = className
+    override fun toQualifiedString() = className
 
 }

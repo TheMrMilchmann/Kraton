@@ -44,26 +44,26 @@ open class Generate internal constructor(): DefaultTask() {
 
     var isForce: Boolean = false
 
-	var generatorSource: File? = null
+    var generatorSource: File? = null
 
-	@TaskAction
-	fun run() {
-		val res = project.javaexec {
-			main = "com.github.themrmilchmann.kraton.GeneratorKt"
-			classpath = this@Generate.classpath
-			isIgnoreExitValue = false
+    @TaskAction
+    fun run() {
+        val res = project.javaexec {
+            main = "com.github.themrmilchmann.kraton.GeneratorKt"
+            classpath = this@Generate.classpath
+            isIgnoreExitValue = false
 
             args("-t", templatesRoot!!.absolutePath, "-o", outputRoot!!.absolutePath)
 
-			if (isForce) args("-f")
-			if (generatorSource != null) args("-g", generatorSource)
+            if (isForce) args("-f")
+            if (generatorSource != null) args("-g", generatorSource)
 
-			standardOutput = System.out
-			errorOutput = System.err
-		}
+            standardOutput = System.out
+            errorOutput = System.err
+        }
 
-		res.rethrowFailure()
-		res.assertNormalExitValue()
-	}
+        res.rethrowFailure()
+        res.assertNormalExitValue()
+    }
 
 }

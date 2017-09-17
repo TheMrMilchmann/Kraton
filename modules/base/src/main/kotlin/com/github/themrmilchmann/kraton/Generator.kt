@@ -151,11 +151,11 @@ private fun readFile(file: Path) = Files.newByteChannel(file).use {
 
 private class KratonWriter(out: Writer): PrintWriter(out) {
 
-	/**
+    /**
      * Terminates the current line by writing the line separator string. The line separator string is always a single
      * newline character (<code>'\n'</code>).
-	 */
-	override fun println() = print("\n")
+     */
+    override fun println() = print("\n")
 
 }
 
@@ -165,7 +165,7 @@ private fun <T> generateOutput(target: T, file: Path, lmt: Long, generate: T.(Pr
     if (Files.isRegularFile(file)) {
         // Generate in memory
         val baos = ByteArrayOutputStream(4 * 1024)
-		KratonWriter(OutputStreamWriter(baos, Charsets.UTF_8)).use { target.generate(it) }
+        KratonWriter(OutputStreamWriter(baos, Charsets.UTF_8)).use { target.generate(it) }
 
         // Compare the existing file content with the generated content.
         val before = readFile(file)
@@ -185,7 +185,7 @@ private fun <T> generateOutput(target: T, file: Path, lmt: Long, generate: T.(Pr
         // Update the file timestamp
         Files.setLastModifiedTime(file, FileTime.fromMillis(lmt))
     } else {
-		cliOutln("WRITING: $file")
-		KratonWriter(Files.newBufferedWriter(file, Charsets.UTF_8)).use { target.generate(it) }
+        cliOutln("WRITING: $file")
+        KratonWriter(Files.newBufferedWriter(file, Charsets.UTF_8)).use { target.generate(it) }
     }
 }

@@ -98,6 +98,6 @@ abstract class GeneratorTarget(
      *
      * @since 1.0.0
      */
-	abstract fun PrintWriter.printTarget()
+    abstract fun PrintWriter.printTarget()
 
 }

@@ -45,7 +45,7 @@ interface IJavaType {
      *
      * @since 1.0.0
      */
-	fun toPackageString(): String?
+    fun toPackageString(): String?
 
     /**
      * Returns the qualified name of this type. That is, the name of this type dot prefixed by enclosing types.
@@ -54,7 +54,7 @@ interface IJavaType {
      *
      * @since 1.0.0
      */
-	fun toQualifiedString(): String
+    fun toQualifiedString(): String
 
     /**
      * Returns the name of this type.
@@ -63,7 +63,7 @@ interface IJavaType {
      *
      * @since 1.0.0
      */
-	override fun toString(): String
+    override fun toString(): String
 
 }
 
@@ -76,15 +76,15 @@ interface IJavaType {
  * @since 1.0.0
  */
 abstract class JavaReferableType internal constructor(
-	val className: String,
+    val className: String,
     internal val typeParameters: Array<out IJavaType>? = null
 ): IJavaType {
 
-	override fun toPackageString(): String? = null
+    override fun toPackageString(): String? = null
 
-	override fun toQualifiedString() = toString()
+    override fun toQualifiedString() = toString()
 
-	override fun toString() = className
+    override fun toString() = className
 
 }
 
@@ -96,12 +96,12 @@ abstract class JavaReferableType internal constructor(
  * @since 1.0.0
  */
 class JavaTypeReference(
-	className: String,
-	private val packageName: String?,
+    className: String,
+    private val packageName: String?,
     vararg typeParameters: IJavaType
 ): JavaReferableType(className, typeParameters) {
 
-	override fun toPackageString() = packageName
+    override fun toPackageString() = packageName
 
 }
 
@@ -128,18 +128,18 @@ fun IJavaType.array(dim: Int = 1) = JavaArrayType(this, dim)
  * @since 1.0.0
  */
 class JavaArrayType(
-	val type: IJavaType,
-	val dim: Int = 1
+    val type: IJavaType,
+    val dim: Int = 1
 ): JavaReferableType(type.toString()) {
 
-	override fun toPackageString() = type.toPackageString()
+    override fun toPackageString() = type.toPackageString()
 
-	override fun toQualifiedString() = type.toQualifiedString()
+    override fun toQualifiedString() = type.toQualifiedString()
 
-	override fun toString() = super.toString().plus(StringBuilder().run {
-		for (i in 0 until dim) append("[]")
-		toString()
-	})
+    override fun toString() = super.toString().plus(StringBuilder().run {
+        for (i in 0 until dim) append("[]")
+        toString()
+    })
 
 }
 
@@ -152,21 +152,21 @@ class JavaArrayType(
  * @since 1.0.0
  */
 class JavaGenericType(
-	name: String,
-	private vararg val bounds: IJavaType
+    name: String,
+    private vararg val bounds: IJavaType
 ): JavaReferableType(name) {
 
-	override fun toString() = className.plus(StringBuilder().run {
-		if (bounds.isNotEmpty()) {
-			append(" extends ")
-			append(StringJoiner(",").run {
-				for (bound in bounds) append(bound)
-				toString()
-			})
-		}
+    override fun toString() = className.plus(StringBuilder().run {
+        if (bounds.isNotEmpty()) {
+            append(" extends ")
+            append(StringJoiner(",").run {
+                for (bound in bounds) append(bound)
+                toString()
+            })
+        }
 
-		toString()
-	})
+        toString()
+    })
 
 }
 
@@ -182,15 +182,15 @@ class JavaGenericType(
  * @since 1.0.0
  */
 class JavaPrimitiveType private constructor(
-	val boxedType: JavaReferableType,
-	className: String,
-	val nullValue: String,
-	val size: Int,
-	val abbrevName: String
+    val boxedType: JavaReferableType,
+    className: String,
+    val nullValue: String,
+    val size: Int,
+    val abbrevName: String
 ): JavaReferableType(className) {
 
-	internal constructor(boxedType: String, className: String, nullValue: String, size: Int = -1, abbrevName: String = boxedType):
-		this(JavaTypeReference(boxedType, null), className, nullValue, size, abbrevName)
+    internal constructor(boxedType: String, className: String, nullValue: String, size: Int = -1, abbrevName: String = boxedType):
+        this(JavaTypeReference(boxedType, null), className, nullValue, size, abbrevName)
 
 }
 
@@ -205,32 +205,32 @@ class JavaPrimitiveType private constructor(
  * @since 1.0.0
  */
 fun cast(from: JavaReferableType, to: JavaReferableType, value: String): String {
-	if (from is JavaPrimitiveType && to is JavaPrimitiveType) {
-		when (to) {
-			byte -> when (from) {
-				short, int, char, long -> return "($to) $value"
-			}
-			short -> when (from) {
-				int, char, long -> return "($to) $value"
-			}
-			int -> when (from) {
-				long, float, double -> return "($to) $value"
-			}
-			char -> when(from) {
-				byte, short, int, long, float, double -> return "($to) $value"
-			}
-			long -> when (from) {
-				float, double -> return "($to) $value"
-			}
-			float -> when (from) {
-				double -> return "($to) $value"
-			}
-		}
+    if (from is JavaPrimitiveType && to is JavaPrimitiveType) {
+        when (to) {
+            byte -> when (from) {
+                short, int, char, long -> return "($to) $value"
+            }
+            short -> when (from) {
+                int, char, long -> return "($to) $value"
+            }
+            int -> when (from) {
+                long, float, double -> return "($to) $value"
+            }
+            char -> when(from) {
+                byte, short, int, long, float, double -> return "($to) $value"
+            }
+            long -> when (from) {
+                float, double -> return "($to) $value"
+            }
+            float -> when (from) {
+                double -> return "($to) $value"
+            }
+        }
 
-		return value
-	}
+        return value
+    }
 
-	return "($to) $value"
+    return "($to) $value"
 }
 
 /**
@@ -244,34 +244,34 @@ fun cast(from: JavaReferableType, to: JavaReferableType, value: String): String 
  * @since 1.0.0
  */
 fun convert(from: JavaReferableType, to: JavaReferableType, value: String): String {
-	if (from is JavaPrimitiveType && to is JavaPrimitiveType) {
-		when (from) {
-			boolean -> when (to) {
-				byte, short, int, float, double, long -> return cast(int, to, "($value ? 1 : ${to.nullValue})")
-				char -> return "$value ? '\\u0001' : ${to.nullValue}"
-			}
-			float -> when (to) {
-				byte, short -> return convert(int, to, "Float.floatToRawIntBits($value)")
-				int, long -> return "Float.floatToRawIntBits($value)"
-			}
-			double -> when (to) {
-				byte, short, int -> return convert(long, to, "Double.doubleToRawLongBits($value)")
-				long -> return "Double.doubleToRawLongBits($value)"
-			}
-		}
+    if (from is JavaPrimitiveType && to is JavaPrimitiveType) {
+        when (from) {
+            boolean -> when (to) {
+                byte, short, int, float, double, long -> return cast(int, to, "($value ? 1 : ${to.nullValue})")
+                char -> return "$value ? '\\u0001' : ${to.nullValue}"
+            }
+            float -> when (to) {
+                byte, short -> return convert(int, to, "Float.floatToRawIntBits($value)")
+                int, long -> return "Float.floatToRawIntBits($value)"
+            }
+            double -> when (to) {
+                byte, short, int -> return convert(long, to, "Double.doubleToRawLongBits($value)")
+                long -> return "Double.doubleToRawLongBits($value)"
+            }
+        }
 
-		when (to) {
-			boolean -> return "$value != ${from.nullValue}"
-			float -> when (from) {
-				byte, short, int, char -> return "Float.intBitsToFloat($value)"
-			}
-			double -> when (from) {
-				byte, short, int, char, long -> return "Double.longBitsToDouble($value)"
-			}
-		}
-	}
+        when (to) {
+            boolean -> return "$value != ${from.nullValue}"
+            float -> when (from) {
+                byte, short, int, char -> return "Float.intBitsToFloat($value)"
+            }
+            double -> when (from) {
+                byte, short, int, char, long -> return "Double.longBitsToDouble($value)"
+            }
+        }
+    }
 
-	return cast(from, to, value)
+    return cast(from, to, value)
 }
 
 /**

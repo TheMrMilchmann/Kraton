@@ -156,45 +156,45 @@ internal fun String?.toJavaDoc(
     authors: Array<out String>? = null,
     since: String? = null
 ): String? = if (typeParameters == null && see == null && authors == null && since == null) {
-	if (this == null || this.isEmpty())
-		null
-	else
-		this.cleanup("$indent * ").layoutJavadoc(indent)
+    if (this == null || this.isEmpty())
+        null
+    else
+        this.cleanup("$indent * ").layoutJavadoc(indent)
 } else {
     StringBuilder(this?.cleanup("$indent * ") ?: "").apply {
-		if (typeParameters != null && typeParameters.any { it.second != null }) {
-			val alignment = typeParameters.map { it.first.toString().length }.fold(0) { l, r -> maxOf(l, r) }
-			val multilineAlignment = tagMultilineAlignment(indent, alignment)
+        if (typeParameters != null && typeParameters.any { it.second != null }) {
+            val alignment = typeParameters.map { it.first.toString().length }.fold(0) { l, r -> maxOf(l, r) }
+            val multilineAlignment = tagMultilineAlignment(indent, alignment)
 
-			if (isNotEmpty()) append("\n$indent *")
-			typeParameters.filter { it.second != null }
-				.forEach { printMultilineTag("param", "<${it.first}>", it.second!!, indent, alignment, multilineAlignment) }
-		}
+            if (isNotEmpty()) append("\n$indent *")
+            typeParameters.filter { it.second != null }
+                .forEach { printMultilineTag("param", "<${it.first}>", it.second!!, indent, alignment, multilineAlignment) }
+        }
 
-		if (see != null) {
-			if (isNotEmpty()) append("\n$indent *")
-			see.forEach {
-				if (isNotEmpty()) append("\n$indent * ")
-				append("@see ")
-				append(it)
-			}
-		}
+        if (see != null) {
+            if (isNotEmpty()) append("\n$indent *")
+            see.forEach {
+                if (isNotEmpty()) append("\n$indent * ")
+                append("@see ")
+                append(it)
+            }
+        }
 
-		if (authors != null) {
-			if (isNotEmpty()) append("\n$indent *")
-			authors.forEach {
-				if (isNotEmpty()) append("\n$indent * ")
-				append("@author ")
-				append(it)
-			}
-		}
+        if (authors != null) {
+            if (isNotEmpty()) append("\n$indent *")
+            authors.forEach {
+                if (isNotEmpty()) append("\n$indent * ")
+                append("@author ")
+                append(it)
+            }
+        }
 
-		if (since != null) {
-			if (isNotEmpty()) if (authors == null) append("\n$indent *\n$indent * ") else append("\n$indent * ")
-			append("@since ")
-			append(since)
-		}
-	}.toString()
+        if (since != null) {
+            if (isNotEmpty()) if (authors == null) append("\n$indent *\n$indent * ") else append("\n$indent * ")
+            append("@since ")
+            append(since)
+        }
+    }.toString()
         .layoutJavadoc(indent)
 }
 
@@ -236,7 +236,7 @@ internal fun JavaMethod.toJavaDoc(indent: String = ""): String? {
                     .forEach { printMultilineTag("param", "<${it.first}>", it.second!!, indent, alignment, multilineAlignment) }
                 parameters.filter { if (documentation === inheritDoc) it.documentation.isNotEmpty() else it.documentation !== inheritDoc }
                     .forEach { printMultilineTag("param", it.name, it.documentation, indent, alignment, multilineAlignment) }
-			}
+            }
 
             if (returnDoc != null) {
                 if (isNotEmpty()) append("\n$indent *\n$indent * ")
@@ -248,23 +248,23 @@ internal fun JavaMethod.toJavaDoc(indent: String = ""): String? {
                 val alignment = exceptions.map { it.second?.length ?: 0 }.fold(0) { left, right -> maxOf(left, right) }
                 val multilineAlignment = tagMultilineAlignment(indent, alignment)
 
-				if (isNotEmpty()) append("\n$indent *")
+                if (isNotEmpty()) append("\n$indent *")
                 exceptions.filter { it.second != null }.forEach {
                     printMultilineTag("throws", it.first.toQualifiedString(), it.second as String, indent, alignment, multilineAlignment)
                 }
-			}
+            }
 
             if (exceptions != null) {
                 if (isNotEmpty()) append("\n$indent *")
                 exceptions.forEach {
                     if (it.second != null) {
-						if (isNotEmpty()) append("\n$indent * ")
+                        if (isNotEmpty()) append("\n$indent * ")
 
-						append("@throws ")
-						append(it.first)
-						append(" ")
-						append(it.second)
-					}
+                        append("@throws ")
+                        append(it.first)
+                        append(" ")
+                        append(it.second)
+                    }
                 }
             }
 

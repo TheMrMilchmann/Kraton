@@ -71,15 +71,15 @@ options:
 """
 
 internal fun cliOut(msg: String) {
-	var out = msg
+    var out = msg
 
-	while (out.startsWith('\n')) out = out.removePrefix("\n")
-	while (out.endsWith('\n')) out = out.removeSuffix("\n")
+    while (out.startsWith('\n')) out = out.removePrefix("\n")
+    while (out.endsWith('\n')) out = out.removeSuffix("\n")
 
-	print(out)
+    print(out)
 }
 
 internal fun cliOutln(msg: String) {
-	cliOut(msg)
-	println()
+    cliOut(msg)
+    println()
 }

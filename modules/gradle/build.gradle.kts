@@ -45,7 +45,7 @@ buildscript {
 }
 
 plugins {
-	`kotlin-dsl`
+    `kotlin-dsl`
     `java-gradle-plugin`
     maven
     signing

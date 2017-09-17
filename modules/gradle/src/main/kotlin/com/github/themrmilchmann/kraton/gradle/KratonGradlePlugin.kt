@@ -33,6 +33,6 @@ import org.gradle.api.*
 
 open class KratonGradlePlugin internal constructor(): Plugin<Project> {
 
-	override fun apply(project: Project) {}
+    override fun apply(project: Project) {}
 
 }

@@ -154,13 +154,13 @@ val Override = Annotate(JavaTypeReference("Override", null))
  * @since 1.0.0
  */
 open class Annotate(
-	private val type: IJavaType,
-	private val parameters: String? = null
+    private val type: IJavaType,
+    private val parameters: String? = null
 ): JavaModifier({ import(type) }) {
 
-	override fun applyTo(target: JavaModifierTarget) {
-		target.annotations.add(this)
-	}
+    override fun applyTo(target: JavaModifierTarget) {
+        target.annotations.add(this)
+    }
 
     /**
      * Returns a pre-formatted annotation string.
@@ -169,7 +169,7 @@ open class Annotate(
      *
      * @since 1.0.0
      */
-	override fun toString() = "@$type($parameters)"
+    override fun toString() = "@$type($parameters)"
 
 }
 
@@ -181,7 +181,7 @@ open class Annotate(
  * @since 1.0.0
  */
 open class JavaVisibilityModifier internal constructor(
-	internal val name: String
+    internal val name: String
 ): JavaModifier() {
 
     /**
@@ -189,7 +189,7 @@ open class JavaVisibilityModifier internal constructor(
      *
      * @since 1.0.0
      */
-	override fun toString() = name
+    override fun toString() = name
 
 }
 
@@ -211,9 +211,9 @@ abstract class JavaModifier internal constructor(
      *
      * @since 1.0.0
      */
-	internal open fun applyTo(target: JavaModifierTarget) {
-		target.modifiers.put(this::class, this)
-	}
+    internal open fun applyTo(target: JavaModifierTarget) {
+        target.modifiers.put(this::class, this)
+    }
 
 }
 
@@ -224,61 +224,61 @@ abstract class JavaModifier internal constructor(
  */
 abstract class JavaModifierTarget {
 
-	internal val annotations = mutableListOf<Annotate>()
-	internal val modifiers = mutableMapOf<KClass<out JavaModifier>, JavaModifier>()
-	internal fun setModifiers(vararg modifiers: JavaModifier) {
-		modifiers.forEach { it.applyTo(this) }
-	}
+    internal val annotations = mutableListOf<Annotate>()
+    internal val modifiers = mutableMapOf<KClass<out JavaModifier>, JavaModifier>()
+    internal fun setModifiers(vararg modifiers: JavaModifier) {
+        modifiers.forEach { it.applyTo(this) }
+    }
 
-	internal inline infix fun <reified M : JavaModifier> has(modifier: M) = modifiers[M::class] === modifier
+    internal inline infix fun <reified M : JavaModifier> has(modifier: M) = modifiers[M::class] === modifier
 
-	internal inline fun <reified M : JavaModifier> has() = modifiers.containsKey(M::class)
-	internal inline fun <reified M : JavaModifier> get() = modifiers[M::class] as M
+    internal inline fun <reified M : JavaModifier> has() = modifiers.containsKey(M::class)
+    internal inline fun <reified M : JavaModifier> get() = modifiers[M::class] as M
 
-	internal fun PrintWriter.printAnnotations(indent: String) {
-		if (annotations.isNotEmpty()) {
-			print(StringJoiner(LN + indent).run {
-				annotations.forEach { add(it.toString()) }
-			})
-			print(LN)
-		}
-	}
+    internal fun PrintWriter.printAnnotations(indent: String) {
+        if (annotations.isNotEmpty()) {
+            print(StringJoiner(LN + indent).run {
+                annotations.forEach { add(it.toString()) }
+            })
+            print(LN)
+        }
+    }
 
-	internal fun printAnnotationsInline() =
-		if (annotations.isNotEmpty()) {
-			val annotations = StringJoiner(" ").run {
-				annotations.forEach { add(it.toString()) }
-				toString()
-			}
+    internal fun printAnnotationsInline() =
+        if (annotations.isNotEmpty()) {
+            val annotations = StringJoiner(" ").run {
+                annotations.forEach { add(it.toString()) }
+                toString()
+            }
 
-			annotations + " "
-		} else
-			""
+            annotations + " "
+        } else
+            ""
 
-	internal fun PrintWriter.printModifiers() {
-		if (modifiers.values.any { it is JavaVisibilityModifier }) {
-			val modifiers = StringJoiner(" ").run {
-				if (has(public)) add(public.toString())
-				if (has(protected)) add(protected.toString())
-				if (has(private)) add(private.toString())
-				if (has(static)) add(static.toString())
-				if (has(abstract)) add(abstract.toString())
-				if (has(final)) add(final.toString())
-				if (has(transient)) add(transient.toString())
-				if (has(volatile)) add(volatile.toString())
-				if (has(default)) add(default.toString())
-				if (has(synchronized)) add(synchronized.toString())
-				if (has(native)) add(native.toString())
-				if (has(strictfp)) add(strictfp.toString())
+    internal fun PrintWriter.printModifiers() {
+        if (modifiers.values.any { it is JavaVisibilityModifier }) {
+            val modifiers = StringJoiner(" ").run {
+                if (has(public)) add(public.toString())
+                if (has(protected)) add(protected.toString())
+                if (has(private)) add(private.toString())
+                if (has(static)) add(static.toString())
+                if (has(abstract)) add(abstract.toString())
+                if (has(final)) add(final.toString())
+                if (has(transient)) add(transient.toString())
+                if (has(volatile)) add(volatile.toString())
+                if (has(default)) add(default.toString())
+                if (has(synchronized)) add(synchronized.toString())
+                if (has(native)) add(native.toString())
+                if (has(strictfp)) add(strictfp.toString())
 
-				toString()
-			}
+                toString()
+            }
 
-			print(modifiers)
+            print(modifiers)
 
-			if (modifiers.isNotEmpty()) print(" ")
-		}
-	}
+            if (modifiers.isNotEmpty()) print(" ")
+        }
+    }
 
 }
 

@@ -49,50 +49,50 @@ internal const val WEIGHT_INSTANCE_METHOD = 5
 internal const val WEIGHT_TOPLEVEL = Int.MAX_VALUE
 
 internal fun <T: JavaTopLevelType> Profile.targetOf(type: T, packageName: String, srcFolder: String, srcSet: String, copyrightHeader: String?) =
-	JavaGeneratorTarget(type.className, packageName, srcFolder, srcSet, {
+    JavaGeneratorTarget(type.className, packageName, srcFolder, srcSet, {
         if (copyrightHeader != null) println(copyrightHeader)
-		print("package ")
-		print(packageName)
-		println(";")
-		println()
+        print("package ")
+        print(packageName)
+        println(";")
+        println()
 
-		var specialImportId = ""
+        var specialImportId = ""
 
-		if (type.imports.any()) {
-			type.imports.flatMap { it.value.values }.forEach {
-				if (specialImportId.isNotEmpty() && !it.packageName.startsWith(specialImportId)) println()
+        if (type.imports.any()) {
+            type.imports.flatMap { it.value.values }.forEach {
+                if (specialImportId.isNotEmpty() && !it.packageName.startsWith(specialImportId)) println()
 
-				specialImportId = when (it.packageName.startsWith("java.")) {
-					true -> "java."
-					false -> when (it.packageName.startsWith("javax.")) {
-						true -> "javax."
-						false -> ""
-					}
-				}
+                specialImportId = when (it.packageName.startsWith("java.")) {
+                    true -> "java."
+                    false -> when (it.packageName.startsWith("javax.")) {
+                        true -> "javax."
+                        false -> ""
+                    }
+                }
 
-				it.apply { printImport() }
-			}
+                it.apply { printImport() }
+            }
 
-			println()
-		}
+            println()
+        }
 
-		type.apply { printType("") }
-	}).run {
-		targets.add(this)
-		type
-	}
+        type.apply { printType("") }
+    }).run {
+        targets.add(this)
+        type
+    }
 
 internal class JavaGeneratorTarget(
-	fileName: String,
-	packageName: String,
-	srcFolder: String,
-	srcSet: String,
-	private val print: PrintWriter.() -> Unit
+    fileName: String,
+    packageName: String,
+    srcFolder: String,
+    srcSet: String,
+    private val print: PrintWriter.() -> Unit
 ): GeneratorTarget(fileName, "java", packageName, srcFolder, srcSet) {
 
-	override fun PrintWriter.printTarget() {
-		this.apply(print)
-	}
+    override fun PrintWriter.printTarget() {
+        this.apply(print)
+    }
 
 }
 
@@ -107,16 +107,18 @@ internal class JavaGeneratorTarget(
  * @since 1.0.0
  */
 abstract class JavaTopLevelType(
-	val className: String,
-	val packageName: String,
-	val documentation: String?,
-	sorted: Boolean,
+    val className: String,
+    val packageName: String,
+    val documentation: String?,
+    sorted: Boolean,
     val containerType: JavaTopLevelType?
 ): JavaModifierTarget(), JavaBodyMember, IJavaType {
 
-	internal val imports = mutableMapOf<String, MutableMap<String, JavaImport>>()
-	internal val members: MutableSet<JavaBodyMember> = if (sorted) TreeSet() else LinkedHashSet()
-	internal val typeParameters = mutableListOf<Pair<JavaGenericType, String?>>()
+    private val _imports by lazy { mutableMapOf<String, MutableMap<String, JavaImport>>() }
+    internal val imports: MutableMap<String, MutableMap<String, JavaImport>> get() = containerType?.imports ?: _imports
+
+    internal val members: MutableSet<JavaBodyMember> = if (sorted) TreeSet() else LinkedHashSet()
+    internal val typeParameters = mutableListOf<Pair<JavaGenericType, String?>>()
 
     /**
      * TODO doc
@@ -124,11 +126,6 @@ abstract class JavaTopLevelType(
      * @since 1.0.0
      */
     fun import(type: IJavaType, forceMode: JavaImportForceMode? = null) {
-        if (containerType != null) {
-            containerType.import(type, forceMode)
-            return
-        }
-
         val packageName = type.toPackageString() ?: return
         val packageImports = imports.getOrPut(packageName, { mutableMapOf() })
 
@@ -153,55 +150,55 @@ abstract class JavaTopLevelType(
         }
     }
 
-	internal fun PrintWriter.printType(indent: String) {
-		val documentation = documentation.toJavaDoc(indent)
-		if (documentation != null) println(documentation)
+    internal fun PrintWriter.printType(indent: String) {
+        val documentation = documentation.toJavaDoc(indent)
+        if (documentation != null) println(documentation)
 
-		print(indent)
-		printAnnotations("$LN$indent")
-		printModifiers()
-		printTypeDeclaration()
-		print(" {")
+        print(indent)
+        printAnnotations("$LN$indent")
+        printModifiers()
+        printTypeDeclaration()
+        print(" {")
 
-		if (members.isNotEmpty()) {
-			println(LN)
+        if (members.isNotEmpty()) {
+            println(LN)
 
-			val subIndent = indent + INDENT
-			var isFirst = true
-			var prevCategory: String? = null
-			var isLastLineBlank = true
+            val subIndent = indent + INDENT
+            var isFirst = true
+            var prevCategory: String? = null
+            var isLastLineBlank = true
 
-			members.forEach {
-				val cat = it.category
+            members.forEach {
+                val cat = it.category
 
-				if (cat != null) {
-					val mCat = CATEGORY.matchEntire(cat) ?: throw IllegalArgumentException("Category name does not match pattern")
-					val category = mCat.groupValues[2]
+                if (cat != null) {
+                    val mCat = CATEGORY.matchEntire(cat) ?: throw IllegalArgumentException("Category name does not match pattern")
+                    val category = mCat.groupValues[2]
 
-					if (cat != prevCategory && !(isFirst && category.isEmpty())) {
-						if (category.isNotEmpty()) {
-							if (!isLastLineBlank) println()
+                    if (cat != prevCategory && !(isFirst && category.isEmpty())) {
+                        if (category.isNotEmpty()) {
+                            if (!isLastLineBlank) println()
 
-							println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
-							println("$subIndent// # $category ${CATEGORY_DIVIDER.substring(subIndent.length + category.length + 6)}")
-							println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
-						}
+                            println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
+                            println("$subIndent// # $category ${CATEGORY_DIVIDER.substring(subIndent.length + category.length + 6)}")
+                            println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
+                        }
 
-						println()
-					}
+                        println()
+                    }
 
-					isFirst = false
-					prevCategory = cat
-				}
+                    isFirst = false
+                    prevCategory = cat
+                }
 
-				it.run { isLastLineBlank = printMember(subIndent) }
-			}
+                it.run { isLastLineBlank = printMember(subIndent) }
+            }
 
-			print(indent)
-		}
+            print(indent)
+        }
 
-		print("}")
-	}
+        print("}")
+    }
 
     /**
      * Prints the declaration of this top-level type.
@@ -210,17 +207,17 @@ abstract class JavaTopLevelType(
      *
      * @since 1.0.0
      */
-	internal abstract fun PrintWriter.printTypeDeclaration()
+    internal abstract fun PrintWriter.printTypeDeclaration()
 
-	override fun PrintWriter.printMember(indent: String): Boolean {
-		printType(indent)
-		println(LN)
+    override fun PrintWriter.printMember(indent: String): Boolean {
+        printType(indent)
+        println(LN)
 
-		return false
-	}
+        return false
+    }
 
-	override fun toPackageString() = packageName
-	override fun toString() = className
+    override fun toPackageString() = packageName
+    override fun toString() = className
 
 }
 
@@ -231,7 +228,7 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      *
      * @since 1.0.0
      */
-	val name: String
+    val name: String
 
     /**
      * The weight used to sort this java object.
@@ -247,14 +244,14 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      */
     val category: String?
 
-	override fun compareTo(other: JavaBodyMember) = when(this.weight.compareTo(other.weight)) {
-		-1 -> -1
-		1 -> 1
-		else -> when (name.compareTo(other.name)) {
-			-1 -> -1
-			else -> 1
-		}
-	}
+    override fun compareTo(other: JavaBodyMember) = when(this.weight.compareTo(other.weight)) {
+        -1 -> -1
+        1 -> 1
+        else -> when (name.compareTo(other.name)) {
+            -1 -> -1
+            else -> 1
+        }
+    }
 
     /**
      * Prints this java object to the given PrintWriter.
@@ -265,7 +262,7 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      *
      * @since 1.0.0
      */
-	fun PrintWriter.printMember(indent: String): Boolean
+    fun PrintWriter.printMember(indent: String): Boolean
 
 }
 
@@ -275,42 +272,42 @@ enum class JavaImportForceMode {
 }
 
 internal open class JavaImport(
-	val packageName: String,
-	val typeQualifier: String,
+    val packageName: String,
+    val typeQualifier: String,
     val forceMode: JavaImportForceMode?
 ): Comparable<JavaImport> {
 
-	override fun compareTo(other: JavaImport): Int {
-		if (this is JavaStaticImport) {
-			if (other !is JavaStaticImport)
-				return 1
-		} else if (other is JavaStaticImport)
-			return -1
+    override fun compareTo(other: JavaImport): Int {
+        if (this is JavaStaticImport) {
+            if (other !is JavaStaticImport)
+                return 1
+        } else if (other is JavaStaticImport)
+            return -1
 
-		if (packageName.startsWith("java.") && !other.packageName.startsWith("java.")) return -1
-		if (!packageName.startsWith("java.") && other.packageName.startsWith("java.")) return 1
-		if (packageName.startsWith("javax.") && !other.packageName.startsWith("javax.")) return -1
-		if (!packageName.startsWith("javax.") && other.packageName.startsWith("javax.")) return 1
+        if (packageName.startsWith("java.") && !other.packageName.startsWith("java.")) return -1
+        if (!packageName.startsWith("java.") && other.packageName.startsWith("java.")) return 1
+        if (packageName.startsWith("javax.") && !other.packageName.startsWith("javax.")) return -1
+        if (!packageName.startsWith("javax.") && other.packageName.startsWith("javax.")) return 1
 
-		val cmp = packageName.compareTo(other.packageName)
-		if (cmp != 0) return cmp
+        val cmp = packageName.compareTo(other.packageName)
+        if (cmp != 0) return cmp
 
-		if (typeQualifier == "*" || other.typeQualifier == "*") return 0
+        if (typeQualifier == "*" || other.typeQualifier == "*") return 0
 
-		return typeQualifier.compareTo(other.typeQualifier)
-	}
+        return typeQualifier.compareTo(other.typeQualifier)
+    }
 
-	fun PrintWriter.printImport() = println(this@JavaImport)
+    fun PrintWriter.printImport() = println(this@JavaImport)
 
-	override fun toString() = "import $packageName.$typeQualifier"
+    override fun toString() = "import $packageName.$typeQualifier"
 
 }
 
 internal class JavaStaticImport(
-	packageName: String,
+    packageName: String,
     forceMode: JavaImportForceMode?
 ): JavaImport(packageName, "*", forceMode) {
 
-	override fun toString() = "import static $packageName.$typeQualifier"
+    override fun toString() = "import static $packageName.$typeQualifier"
 
 }

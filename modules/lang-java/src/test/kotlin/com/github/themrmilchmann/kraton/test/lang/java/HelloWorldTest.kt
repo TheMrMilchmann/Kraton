@@ -38,58 +38,58 @@ private const val srcSet = "kraton/generated"
 
 val HelloWorld = Profile {
 
-	public..final..javaClass(
-		"HelloWorld",
-		packageName,
-		srcFolder,
-		srcSet
-	) {
+    public..final..javaClass(
+        "HelloWorld",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
 
-		public..static..void(
-			"main",
-			"",
-			string.array().PARAM("args", ""),
+        public..static..void(
+            "main",
+            "",
+            string.array().PARAM("args", ""),
 
-			body = "System.out.println(\"Hello World!\");"
-		)
+            body = "System.out.println(\"Hello World!\");"
+        )
 
-	}
+    }
 
-	public..final..javaClass(
-		"HelloWorld2",
-		packageName,
-		srcFolder,
-		srcSet
-	) {
+    public..final..javaClass(
+        "HelloWorld2",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
 
-		public..static..void(
-			"main",
-			"",
-			string.array().PARAM("args", ""),
+        public..static..void(
+            "main",
+            "",
+            string.array().PARAM("args", ""),
 
-			body = "new HelloWorld(\"Hello World\").run();"
-		)
+            body = "new HelloWorld(\"Hello World\").run();"
+        )
 
-		private..final..string(
-			"text",
-			null,
-			""
-		)
+        private..final..string(
+            "text",
+            null,
+            ""
+        )
 
-		private..constructor(
-			"",
-			string.PARAM("text", ""),
+        private..constructor(
+            "",
+            string.PARAM("text", ""),
 
-			body = "this.text = text;"
-		)
+            body = "this.text = text;"
+        )
 
-		private..void(
-			"run",
-			"",
+        private..void(
+            "run",
+            "",
 
-			body = "System.out.println(this.text);"
-		)
+            body = "System.out.println(this.text);"
+        )
 
-	}
+    }
 
 }

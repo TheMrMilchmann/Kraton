@@ -53,41 +53,41 @@ import java.util.*
  * @since 1.0.0
  */
 open class JavaMethod internal constructor(
-	val returnType: IJavaType,
-	override val name: String,
-	val documentation: String,
-	val parameters: Array<out JavaParameter>,
-	val returnDoc: String?,
-	val since: String?,
-	override val category: String?,
-	val exceptions: Array<out Pair<IJavaType, String?>>?,
-	val see: Array<out String>?,
-	val typeParameters: Array<out Pair<JavaGenericType, String?>>?,
-	private val body: String?
+    val returnType: IJavaType,
+    override val name: String,
+    val documentation: String,
+    val parameters: Array<out JavaParameter>,
+    val returnDoc: String?,
+    val since: String?,
+    override val category: String?,
+    val exceptions: Array<out Pair<IJavaType, String?>>?,
+    val see: Array<out String>?,
+    val typeParameters: Array<out Pair<JavaGenericType, String?>>?,
+    private val body: String?
 ): JavaModifierTarget(), JavaBodyMember {
 
-	override val weight: Int
-		get() = if (has(static)) WEIGHT_STATIC_METHOD else WEIGHT_INSTANCE_METHOD
+    override val weight: Int
+        get() = if (has(static)) WEIGHT_STATIC_METHOD else WEIGHT_INSTANCE_METHOD
 
-	override fun PrintWriter.printMember(indent: String): Boolean {
-		val documentation = toJavaDoc(indent)
-		if (documentation != null) println(documentation)
+    override fun PrintWriter.printMember(indent: String): Boolean {
+        val documentation = toJavaDoc(indent)
+        if (documentation != null) println(documentation)
 
-		printAnnotations(indent)
-		print(indent)
-		printModifiers()
-		printMethodHead()
-		print("(")
+        printAnnotations(indent)
+        print(indent)
+        printModifiers()
+        printMethodHead()
+        print("(")
 
-		if (parameters.isNotEmpty()) {
-			print(StringJoiner(", ").apply {
-				parameters.forEach {
-					add("${printAnnotationsInline()}${it.type} ${it.name}")
-				}
-			})
-		}
+        if (parameters.isNotEmpty()) {
+            print(StringJoiner(", ").apply {
+                parameters.forEach {
+                    add("${printAnnotationsInline()}${it.type} ${it.name}")
+                }
+            })
+        }
 
-		print(")")
+        print(")")
 
         if (exceptions != null) {
             print(" throws ")
@@ -98,33 +98,33 @@ open class JavaMethod internal constructor(
             })
         }
 
-		if (body == null) {
-			println(";")
-		} else {
-			print(" {")
+        if (body == null) {
+            println(";")
+        } else {
+            print(" {")
 
-			if (body.isNotEmpty()) {
-				var body: String = body
+            if (body.isNotEmpty()) {
+                var body: String = body
 
-				while (body.startsWith(LN)) body = body.removePrefix(LN)
-				while (body.endsWith(LN)) body = body.removeSuffix(LN)
+                while (body.startsWith(LN)) body = body.removePrefix(LN)
+                while (body.endsWith(LN)) body = body.removeSuffix(LN)
 
-				println()
-				body.lineSequence().forEach {
-					print(indent + INDENT)
-					println(it)
-				}
+                println()
+                body.lineSequence().forEach {
+                    print(indent + INDENT)
+                    println(it)
+                }
 
-				print(indent)
-			}
+                print(indent)
+            }
 
-			println("}")
-		}
+            println("}")
+        }
 
-		println()
+        println()
 
-		return true
-	}
+        return true
+    }
 
     /**
      * Prints the head of this method.
@@ -133,11 +133,11 @@ open class JavaMethod internal constructor(
      *
      * @since 1.0.0
      */
-	internal open fun PrintWriter.printMethodHead() {
-		print(returnType.toString())
-		print(" ")
-		print(name)
-	}
+    internal open fun PrintWriter.printMethodHead() {
+        print(returnType.toString())
+        print(" ")
+        print(name)
+    }
 
 }
 
@@ -149,16 +149,16 @@ open class JavaMethod internal constructor(
  * @since 1.0.0
  */
 class JavaConstructor internal constructor(
-	returnType: IJavaType,
-	documentation: String,
-	parameters: Array<out JavaParameter>,
-	returnDoc: String?,
-	since: String?,
-	category: String?,
-	exceptions: Array<out Pair<IJavaType, String?>>?,
-	see: Array<out String>?,
-	typeParameters: Array<out Pair<JavaGenericType, String?>>?,
-	body: String?
+    returnType: IJavaType,
+    documentation: String,
+    parameters: Array<out JavaParameter>,
+    returnDoc: String?,
+    since: String?,
+    category: String?,
+    exceptions: Array<out Pair<IJavaType, String?>>?,
+    see: Array<out String>?,
+    typeParameters: Array<out Pair<JavaGenericType, String?>>?,
+    body: String?
 ): JavaMethod(returnType, returnType.toString(), documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body) {
 
     /**
@@ -168,8 +168,8 @@ class JavaConstructor internal constructor(
      *
      * @since 1.0.0
      */
-	override fun PrintWriter.printMethodHead() {
-		print(returnType.toString())
-	}
+    override fun PrintWriter.printMethodHead() {
+        print(returnType.toString())
+    }
 
 }

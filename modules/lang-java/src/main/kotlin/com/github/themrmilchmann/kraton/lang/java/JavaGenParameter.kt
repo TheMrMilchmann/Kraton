@@ -40,8 +40,8 @@ package com.github.themrmilchmann.kraton.lang.java
  * @since 1.0.0
  */
 fun IJavaType.PARAM(
-	name: String,
-	documentation: String
+    name: String,
+    documentation: String
 ) = JavaParameter(this, name, documentation)
 
 /**
@@ -55,7 +55,7 @@ fun IJavaType.PARAM(
  * @since 1.0.0
  */
 class JavaParameter internal constructor(
-	val type: IJavaType,
-	val name: String,
-	val documentation: String
+    val type: IJavaType,
+    val name: String,
+    val documentation: String
 )

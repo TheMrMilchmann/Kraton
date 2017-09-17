@@ -33,7 +33,7 @@ import org.gradle.api.*
 import org.gradle.kotlin.dsl.*
 
 fun Project.configureKotlinProject(stdlib: Boolean = true) {
-	dependencies {
-		if (stdlib) "compile"(kotlin("stdlib-jre8"))
-	}
+    dependencies {
+        if (stdlib) "compile"(kotlin("stdlib-jre8"))
+    }
 }

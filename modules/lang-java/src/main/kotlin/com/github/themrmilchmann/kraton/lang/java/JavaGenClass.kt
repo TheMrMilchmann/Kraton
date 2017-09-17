@@ -51,19 +51,19 @@ import java.util.*
  * @since 1.0.0
  */
 fun Profile.javaClass(
-	fileName: String,
-	packageName: String,
-	srcFolder: String,
-	srcSet: String,
-	documentation: String? = null,
-	superClass: IJavaType? = null,
-	interfaces: Array<out IJavaType>? = null,
-	sorted: Boolean = false,
+    fileName: String,
+    packageName: String,
+    srcFolder: String,
+    srcSet: String,
+    documentation: String? = null,
+    superClass: IJavaType? = null,
+    interfaces: Array<out IJavaType>? = null,
+    sorted: Boolean = false,
     copyrightHeader: String? = null,
-	init: JavaClass.() -> Unit
+    init: JavaClass.() -> Unit
 ) = JavaClass(fileName, packageName, documentation, superClass, interfaces, sorted, null, null)
-	.also(init)
-	.run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
+    .also(init)
+    .run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 
 /**
  * Creates, registers and returns an object representing a Java class.
@@ -83,16 +83,16 @@ fun Profile.javaClass(
  * @since 1.0.0
  */
 fun JavaClass.javaClass(
-	className: String,
-	documentation: String? = null,
-	superClass: IJavaType? = null,
-	interfaces: Array<out IJavaType>? = null,
-	sorted: Boolean = false,
-	category: String? = null,
-	init: JavaClass.() -> Unit
+    className: String,
+    documentation: String? = null,
+    superClass: IJavaType? = null,
+    interfaces: Array<out IJavaType>? = null,
+    sorted: Boolean = false,
+    category: String? = null,
+    init: JavaClass.() -> Unit
 ) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category, this)
-	.apply(init)
-	.also { members.add(it) }
+    .apply(init)
+    .also { members.add(it) }
 
 /**
  * Creates, registers and returns an object representing a Java class.
@@ -112,16 +112,16 @@ fun JavaClass.javaClass(
  * @since 1.0.0
  */
 fun JavaInterface.javaClass(
-	className: String,
-	documentation: String? = null,
-	superClass: IJavaType? = null,
-	interfaces: Array<out IJavaType>? = null,
-	sorted: Boolean = false,
-	category: String? = null,
-	init: JavaClass.() -> Unit
+    className: String,
+    documentation: String? = null,
+    superClass: IJavaType? = null,
+    interfaces: Array<out IJavaType>? = null,
+    sorted: Boolean = false,
+    category: String? = null,
+    init: JavaClass.() -> Unit
 ) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category, this)
-	.apply(init)
-	.also { members.add(it) }
+    .apply(init)
+    .also { members.add(it) }
 
 /**
  * An object representing a Java class.
@@ -132,20 +132,20 @@ fun JavaInterface.javaClass(
  * @since 1.0.0
  */
 class JavaClass internal constructor(
-	className: String,
-	packageName: String,
-	documentation: String?,
-	val superClass: IJavaType?,
-	val interfaces: Array<out IJavaType>?,
-	sorted: Boolean,
-	override val category: String?,
+    className: String,
+    packageName: String,
+    documentation: String?,
+    val superClass: IJavaType?,
+    val interfaces: Array<out IJavaType>?,
+    sorted: Boolean,
+    override val category: String?,
     containerType: JavaTopLevelType?
 ): JavaTopLevelType(className, packageName, documentation, sorted, containerType) {
 
-	override val name: String
-		get() = className
+    override val name: String
+        get() = className
 
-	override val weight: Int = WEIGHT_TOPLEVEL
+    override val weight: Int = WEIGHT_TOPLEVEL
 
     init {
         modifiers.forEach { it.value.applyImports.invoke(this) }
@@ -153,9 +153,9 @@ class JavaClass internal constructor(
         interfaces?.forEach { import(it) }
     }
 
-	/**
+    /**
      * Creates, registers and returns an object representing a Java constructor.
-	 *
+     *
      * @param documentation     the documentation for the constructor
      * @param parameters        the parameters for the constructor
      * @param returnDoc         the documentation for the constructor's
@@ -174,20 +174,20 @@ class JavaClass internal constructor(
      *
      * @return the newly created and registered JavaConstructor object
      *
-	 * @since 1.0.0
-	 */
-	fun constructor(
-		documentation: String,
-		vararg parameters: JavaParameter,
-		returnDoc: String? = null,
-		since: String? = null,
-		category: String? = null,
-		exceptions: Array<out Pair<IJavaType, String?>>? = null,
-		see: Array<out String>? = null,
-		typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
-		body: String? = null
-	) = JavaConstructor(this, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
-		.also {
+     * @since 1.0.0
+     */
+    fun constructor(
+        documentation: String,
+        vararg parameters: JavaParameter,
+        returnDoc: String? = null,
+        since: String? = null,
+        category: String? = null,
+        exceptions: Array<out Pair<IJavaType, String?>>? = null,
+        see: Array<out String>? = null,
+        typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
+        body: String? = null
+    ) = JavaConstructor(this, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
+        .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
             parameters.forEach { import(it.type) }
             exceptions?.forEach { import(it.first) }
@@ -195,7 +195,7 @@ class JavaClass internal constructor(
             members.add(it)
         }
 
-	/**
+    /**
      * Creates, registers and returns an object representing a Java field.
      *
      * @receiver the type for the field
@@ -212,10 +212,10 @@ class JavaClass internal constructor(
      *
      * @since 1.0.0
      */
-	operator fun IJavaType.invoke(
-		name: String,
-		value: String?,
-		documentation: String,
+    operator fun IJavaType.invoke(
+        name: String,
+        value: String?,
+        documentation: String,
         since: String? = null,
         category: String? = null,
         see: Array<out String>? = null
@@ -226,7 +226,7 @@ class JavaClass internal constructor(
             members.add(it)
         }
 
-	/**
+    /**
      * Creates, registers and returns an object representing one or multiple
      * Java field/s.
      *
@@ -249,35 +249,35 @@ class JavaClass internal constructor(
      *                      field/s
      *
      * @return the newly created and registered JavaField object
-	 *
-	 * @since 1.0.0
-	 */
-	operator fun IJavaType.invoke(
-		names: Array<String>,
-		documentation: String,
+     *
+     * @since 1.0.0
+     */
+    operator fun IJavaType.invoke(
+        names: Array<String>,
+        documentation: String,
         since: String? = null,
-		category: String? = null,
+        category: String? = null,
         see: Array<out String>? = null
-	) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, category, see)
+    ) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, category, see)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
             import(this)
             members.add(it)
         }
 
-	/**
+    /**
      * Creates, registers and returns an object representing one or multiple
      * Java field/s.
-	 *
+     *
      * This function may be used to generate multiple fields of the same type.
      * If this is the case the returned JavaField object will also not only
      * represent one of the fields but all of them.
      *
-	 * A value may be `null` to leave the field uninitialized.
-	 *
-	 * @receiver the type for the field/s
+     * A value may be `null` to leave the field uninitialized.
      *
-	 * @param entries       the name and value pairs for the field/s (A `null`
+     * @receiver the type for the field/s
+     *
+     * @param entries       the name and value pairs for the field/s (A `null`
      *                      value will leave the respective field uninitialized.
      *                      For `null` use `"null"` instead.)
      * @param documentation the documentation for the field/s
@@ -288,26 +288,26 @@ class JavaClass internal constructor(
      * @param see           the references to be in the documentation of the
      *                      field/s
      *
-	 * @return the newly created and registered JavaField object
-	 *
-	 * @since 1.0.0
-	 */
-	operator fun IJavaType.invoke(
-		vararg entries: Pair<String, String?>,
-		documentation: String,
+     * @return the newly created and registered JavaField object
+     *
+     * @since 1.0.0
+     */
+    operator fun IJavaType.invoke(
+        vararg entries: Pair<String, String?>,
+        documentation: String,
         since: String? = null,
-		category: String? = null,
+        category: String? = null,
         see: Array<out String>? = null
-	) = JavaField(this, entries, documentation, since, category, see)
-		.also {
+    ) = JavaField(this, entries, documentation, since, category, see)
+        .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
             import(this)
             members.add(it)
         }
 
-	/**
+    /**
      * Creates, registers and returns an object representing a Java method.
-	 *
+     *
      * @receiver the return type for the method
      *
      * @param name              the name for the method
@@ -327,20 +327,20 @@ class JavaClass internal constructor(
      *
      * @return the newly created and registered JavaMethod object
      *
-	 * @since 1.0.0
-	 */
-	operator fun IJavaType.invoke(
-		name: String,
-		documentation: String,
-		vararg parameters: JavaParameter,
-		returnDoc: String? = null,
-		since: String? = null,
-		category: String? = null,
-		exceptions: Array<out Pair<IJavaType, String?>>? = null,
-		see: Array<out String>? = null,
-		typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
-		body: String? = null
-	) = JavaMethod(this, name, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
+     * @since 1.0.0
+     */
+    operator fun IJavaType.invoke(
+        name: String,
+        documentation: String,
+        vararg parameters: JavaParameter,
+        returnDoc: String? = null,
+        since: String? = null,
+        category: String? = null,
+        exceptions: Array<out Pair<IJavaType, String?>>? = null,
+        see: Array<out String>? = null,
+        typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
+        body: String? = null
+    ) = JavaMethod(this, name, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
             import(this)
@@ -350,10 +350,10 @@ class JavaClass internal constructor(
             members.add(it)
         }
 
-	/**
+    /**
      * Creates, registers and returns an object representing a Java type
      * parameter.
-	 *
+     *
      * @receiver the name for the type parameter
      *
      * @param documentation the documentation for the type parameter
@@ -361,42 +361,42 @@ class JavaClass internal constructor(
      *
      * @return the newly created and registered JavaGenericType object
      *
-	 * @since 1.0.0
-	 */
-	fun String.typeParameter(
-		documentation: String? = null,
-		vararg bounds: IJavaType
-	) = JavaGenericType(this, *bounds)
-		.also {
+     * @since 1.0.0
+     */
+    fun String.typeParameter(
+        documentation: String? = null,
+        vararg bounds: IJavaType
+    ) = JavaGenericType(this, *bounds)
+        .also {
             bounds.forEach { import(it) }
             typeParameters.add(it to documentation)
         }
 
-	override fun PrintWriter.printTypeDeclaration() {
-		print("class ")
-		print(className)
+    override fun PrintWriter.printTypeDeclaration() {
+        print("class ")
+        print(className)
 
-		if (typeParameters.isNotEmpty()) {
-			print("<")
-			print(StringJoiner(", ").apply {
-				typeParameters.forEach { add(it.toString()) }
-			})
-			print(">")
-		}
+        if (typeParameters.isNotEmpty()) {
+            print("<")
+            print(StringJoiner(", ").apply {
+                typeParameters.forEach { add(it.toString()) }
+            })
+            print(">")
+        }
 
-		if (superClass != null) {
-			print(" extends ")
-			print(superClass.toString())
-		}
+        if (superClass != null) {
+            print(" extends ")
+            print(superClass.toString())
+        }
 
-		if (interfaces != null) {
-			print(" implements ")
-			print(StringJoiner(", ").apply {
-				interfaces.forEach { add(it.toString()) }
-			})
-		}
-	}
+        if (interfaces != null) {
+            print(" implements ")
+            print(StringJoiner(", ").apply {
+                interfaces.forEach { add(it.toString()) }
+            })
+        }
+    }
 
-	override fun toQualifiedString() = className
+    override fun toQualifiedString() = className
 
 }

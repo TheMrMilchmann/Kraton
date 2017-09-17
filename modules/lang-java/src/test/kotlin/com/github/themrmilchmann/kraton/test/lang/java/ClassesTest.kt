@@ -39,19 +39,19 @@ private const val srcSet = "kraton/generated"
 
 val Classes = Profile {
 
-	public..final..javaClass("EmptyClass", packageName, srcFolder, srcSet) {}
+    public..final..javaClass("EmptyClass", packageName, srcFolder, srcSet) {}
 
-	javaClass(
-		"Classes",
-		packageName,
-		srcFolder,
-		srcSet
-	) {
+    javaClass(
+        "Classes",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
 
-		public..javaClass(
-			"PublicClass"
-		) {}
+        public..javaClass(
+            "PublicClass"
+        ) {}
 
-	}
+    }
 
 }
