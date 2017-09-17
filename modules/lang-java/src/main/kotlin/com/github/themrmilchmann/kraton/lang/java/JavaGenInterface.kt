@@ -62,6 +62,7 @@ fun Profile.javaInterface(
     copyrightHeader: String? = null,
     init: JavaInterface.() -> Unit
 ) = JavaInterface(fileName, packageName, documentation, superInterfaces, sorted, null, null)
+    .apply { import("java.lang", false, true) }
     .also(init)
     .run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 

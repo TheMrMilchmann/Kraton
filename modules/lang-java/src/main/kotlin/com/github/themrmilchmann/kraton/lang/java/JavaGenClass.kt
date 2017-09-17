@@ -62,6 +62,7 @@ fun Profile.javaClass(
     copyrightHeader: String? = null,
     init: JavaClass.() -> Unit
 ) = JavaClass(fileName, packageName, documentation, superClass, interfaces, sorted, null, null)
+    .apply { import("java.lang", false, true) }
     .also(init)
     .run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
 

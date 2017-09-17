@@ -56,23 +56,8 @@ internal fun <T: JavaTopLevelType> Profile.targetOf(type: T, packageName: String
         println(";")
         println()
 
-        var specialImportId = ""
-
         if (type.imports.any()) {
-            type.imports.flatMap { it.value.values }.forEach {
-                if (specialImportId.isNotEmpty() && !it.packageName.startsWith(specialImportId)) println()
-
-                specialImportId = when (it.packageName.startsWith("java.")) {
-                    true -> "java."
-                    false -> when (it.packageName.startsWith("javax.")) {
-                        true -> "javax."
-                        false -> ""
-                    }
-                }
-
-                it.apply { printImport() }
-            }
-
+            type.imports.flatMap { it.value.values }.filter { !it.isImplicit }.forEach { it.apply { printImport() } }
             println()
         }
 
@@ -111,7 +96,7 @@ abstract class JavaTopLevelType(
     val packageName: String,
     val documentation: String?,
     sorted: Boolean,
-    val containerType: JavaTopLevelType?
+    private val containerType: JavaTopLevelType?
 ): JavaModifierTarget(), JavaBodyMember, IJavaType {
 
     private val _imports by lazy { mutableMapOf<String, MutableMap<String, JavaImport>>() }
@@ -120,34 +105,67 @@ abstract class JavaTopLevelType(
     internal val members: MutableSet<JavaBodyMember> = if (sorted) TreeSet() else LinkedHashSet()
     internal val typeParameters = mutableListOf<Pair<JavaGenericType, String?>>()
 
+    private fun doImport(
+        container: String,
+        member: String,
+        forceMode: JavaImportForceMode?,
+        isStatic: Boolean,
+        isImplicit: Boolean
+    ) {
+        val containerImports = imports.getOrPut(container, ::mutableMapOf)
+        if (member in containerImports && forceMode === null) return
+
+        val factory = { JavaImport(container, member, forceMode, isStatic, isImplicit) }
+
+        if (forceMode === JavaImportForceMode.FORCE_QUALIFIED) {
+            containerImports[member] = factory.invoke()
+        } else if (containerImports.none { it.value.member === IMPORT_WILDCARD }) {
+            val filteredImports = containerImports.filter { it.value.forceMode === null }
+
+            if (filteredImports.size >= 2 || member === IMPORT_WILDCARD)
+                filteredImports.forEach { containerImports.remove(it.key) }
+
+            containerImports[member] = factory.invoke()
+        }
+    }
+
+    /**
+     * TODO doc
+     *
+     * @param type
+     * @param isStatic
+     * @param isImplicit
+     *
+     * @since 1.0.0
+     */
+    fun import(type: String, isStatic: Boolean = false, isImplicit: Boolean = false) =
+        doImport(type, IMPORT_WILDCARD, JavaImportForceMode.FORCE_WILDCARD, isStatic, isImplicit)
+
     /**
      * TODO doc
      *
      * @since 1.0.0
      */
-    fun import(type: IJavaType, forceMode: JavaImportForceMode? = null) {
-        val packageName = type.toPackageString() ?: return
-        val packageImports = imports.getOrPut(packageName, { mutableMapOf() })
+    fun import(
+        type: IJavaType,
+        forceMode: JavaImportForceMode? = null,
+        isImplicit: Boolean = false
+    ) {
+        type.toPackageString()?.let { doImport(it, type.toString(), forceMode, false, isImplicit) }
+    }
 
-        if (type.toString() in packageImports) {
-            if (forceMode === null)
-                return
-            else
-                throw IllegalStateException("Type already explicitly imported.")
-        }
-
-        if (forceMode === JavaImportForceMode.FORCE_QUALIFIED) {
-            packageImports[type.toString()] = JavaImport(packageName, type.toString(), forceMode)
-        } else if (packageImports.none { it.value.typeQualifier === IMPORT_WILDCARD }) {
-            val filteredImports = packageImports.filter { it.value.forceMode === null }
-
-            if (filteredImports.size >= 2 || forceMode === JavaImportForceMode.FORCE_WILDCARD) {
-                filteredImports.forEach { packageImports.remove(it.key) }
-                packageImports[type.toString()] = JavaImport(packageName, IMPORT_WILDCARD, forceMode)
-            } else {
-                packageImports[type.toString()] = JavaImport(packageName, type.toString(), forceMode)
-            }
-        }
+    /**
+     * TODO doc
+     *
+     * @since 1.0.0
+     */
+    fun import(
+        type: IJavaType,
+        member: String,
+        forceMode: JavaImportForceMode? = null,
+        isImplicit: Boolean = false
+    ) {
+        type.toPackageString()?.let { doImport("$it.$type", member, forceMode, true, isImplicit) }
     }
 
     internal fun PrintWriter.printType(indent: String) {
@@ -271,43 +289,31 @@ enum class JavaImportForceMode {
     FORCE_WILDCARD
 }
 
-internal open class JavaImport(
-    val packageName: String,
-    val typeQualifier: String,
-    val forceMode: JavaImportForceMode?
+internal class JavaImport(
+    val container: String,
+    val member: String,
+    val forceMode: JavaImportForceMode?,
+    val isStatic: Boolean,
+    val isImplicit: Boolean
 ): Comparable<JavaImport> {
 
     override fun compareTo(other: JavaImport): Int {
-        if (this is JavaStaticImport) {
-            if (other !is JavaStaticImport)
+        if (isStatic) {
+            if (!other.isStatic)
                 return 1
-        } else if (other is JavaStaticImport)
+        } else if (other.isStatic)
             return -1
 
-        if (packageName.startsWith("java.") && !other.packageName.startsWith("java.")) return -1
-        if (!packageName.startsWith("java.") && other.packageName.startsWith("java.")) return 1
-        if (packageName.startsWith("javax.") && !other.packageName.startsWith("javax.")) return -1
-        if (!packageName.startsWith("javax.") && other.packageName.startsWith("javax.")) return 1
-
-        val cmp = packageName.compareTo(other.packageName)
+        val cmp = container.compareTo(other.container)
         if (cmp != 0) return cmp
 
-        if (typeQualifier == "*" || other.typeQualifier == "*") return 0
+        if (member == "*" || other.member == "*") return 0
 
-        return typeQualifier.compareTo(other.typeQualifier)
+        return member.compareTo(other.member)
     }
 
     fun PrintWriter.printImport() = println(this@JavaImport)
 
-    override fun toString() = "import $packageName.$typeQualifier"
-
-}
-
-internal class JavaStaticImport(
-    packageName: String,
-    forceMode: JavaImportForceMode?
-): JavaImport(packageName, "*", forceMode) {
-
-    override fun toString() = "import static $packageName.$typeQualifier"
+    override fun toString() = "import ${if (isStatic) "static " else ""}$container.$member"
 
 }
