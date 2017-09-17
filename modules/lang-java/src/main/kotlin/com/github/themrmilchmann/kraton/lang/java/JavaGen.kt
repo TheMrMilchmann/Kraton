@@ -56,8 +56,10 @@ internal fun <T: JavaTopLevelType> Profile.targetOf(type: T, packageName: String
         println(";")
         println()
 
-        if (type.imports.any()) {
-            type.imports.flatMap { it.value.values }.filter { !it.isImplicit }.forEach { it.apply { printImport() } }
+        val imports = type.imports.flatMap { it.value.values }.filter { !it.isImplicit }
+
+        if (imports.any()) {
+            imports.forEach { it.apply { printImport() } }
             println()
         }
 
@@ -115,20 +117,20 @@ abstract class JavaTopLevelType(
         val containerImports = imports.getOrPut(container, ::mutableMapOf)
         if (member in containerImports && forceMode === null) return
 
-        val factory = { JavaImport(container, member, forceMode, isStatic, isImplicit) }
+        val factory = { mem: String -> JavaImport(container, mem, forceMode, isStatic, isImplicit) }
 
         if (forceMode === JavaImportForceMode.FORCE_QUALIFIED) {
-            containerImports[member] = factory.invoke()
-        } else if (containerImports.none { it.value.member === IMPORT_WILDCARD }) {
+            containerImports[member] = factory.invoke(member)
+        } else if (IMPORT_WILDCARD !in containerImports) {
             val filteredImports = containerImports.filter { it.value.forceMode === null }
 
-            if (filteredImports.size >= 2 || member === IMPORT_WILDCARD)
+            if (filteredImports.size >= 2 || forceMode === JavaImportForceMode.FORCE_WILDCARD) {
                 filteredImports.forEach { containerImports.remove(it.key) }
-
-            containerImports[member] = factory.invoke()
+                containerImports[IMPORT_WILDCARD] = factory.invoke(IMPORT_WILDCARD)
+            } else
+                containerImports[member] = factory.invoke(member)
         }
     }
-
     /**
      * TODO doc
      *
