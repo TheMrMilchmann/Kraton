@@ -53,7 +53,7 @@ class JavaField internal constructor(
     val documentation: String,
     val since: String?,
     override val category: String?,
-    val see: Array<out String>?
+    val see: List<String>?
 ): JavaModifierTarget(), JavaBodyMember {
 
     override val name = entries.first().first

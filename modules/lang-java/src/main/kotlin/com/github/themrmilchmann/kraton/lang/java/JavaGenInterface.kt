@@ -43,6 +43,7 @@ import java.util.*
  * @param srcFolder         the name of the source folder for the interface
  * @param srcSet            the name of the source folder for the interface
  * @param documentation     the documentation for the interface
+ * @param since             the value for the interface's `@since` tag
  * @param superInterfaces   the interfaces for the interface to extend
  * @param sorted            whether or not the interface's content will be
  *                          sorted
@@ -57,11 +58,12 @@ fun Profile.javaInterface(
     srcFolder: String,
     srcSet: String,
     documentation: String? = null,
+    since: String? = null,
     superInterfaces: Array<out IJavaType>? = null,
     sorted: Boolean = false,
     copyrightHeader: String? = null,
     init: JavaInterface.() -> Unit
-) = JavaInterface(fileName, packageName, documentation, superInterfaces, sorted, null, null)
+) = JavaInterface(fileName, packageName, documentation, since, superInterfaces, sorted, null, null)
     .apply { import("java.lang", false, true) }
     .also(init)
     .run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
@@ -73,6 +75,7 @@ fun Profile.javaInterface(
  *
  * @param className         the name for the interface
  * @param documentation     the documentation for the interface
+ * @param since             the value for the interface's `@since` tag
  * @param superInterfaces   the interfaces for the interface to extend
  * @param sorted            whether or not the interface's content will be
  *                          sorted
@@ -86,11 +89,12 @@ fun Profile.javaInterface(
 fun JavaClass.javaInterface(
     className: String,
     documentation: String? = null,
+    since: String? = null,
     superInterfaces: Array<out IJavaType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaInterface.() -> Unit
-) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category, this)
+) = JavaInterface(className, this.packageName, documentation, since, superInterfaces, sorted, category, this)
     .apply(init)
     .also { members.add(it) }
 
@@ -101,6 +105,7 @@ fun JavaClass.javaInterface(
  *
  * @param className         the name for the interface
  * @param documentation     the documentation for the interface
+ * @param since             the value for the interface's `@since` tag
  * @param superInterfaces   the interfaces for the interface to extend
  * @param sorted            whether or not the interface's content will be
  *                          sorted
@@ -114,11 +119,12 @@ fun JavaClass.javaInterface(
 fun JavaInterface.javaInterface(
     className: String,
     documentation: String? = null,
+    since: String? = null,
     superInterfaces: Array<out IJavaType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaInterface.() -> Unit
-) = JavaInterface(className, this.packageName, documentation, superInterfaces, sorted, category, this)
+) = JavaInterface(className, this.packageName, documentation, since, superInterfaces, sorted, category, this)
     .apply(init)
     .also { members.add(it) }
 
@@ -133,11 +139,12 @@ class JavaInterface internal constructor(
     className: String,
     packageName: String,
     documentation: String?,
+    since: String?,
     val superInterfaces: Array<out IJavaType>?,
     sorted: Boolean,
     override val category: String?,
     containerType: JavaTopLevelType?
-): JavaTopLevelType(className, packageName, documentation, sorted, containerType) {
+): JavaTopLevelType(className, packageName, documentation, since, sorted, containerType) {
 
     override val name: String
         get() = className
@@ -172,7 +179,7 @@ class JavaInterface internal constructor(
         documentation: String,
         since: String? = null,
         category: String? = null,
-        see: Array<out String>? = null
+        see: List<String>? = null
     ) = JavaField(this, arrayOf(name to value), documentation, since, category, see)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
@@ -211,7 +218,7 @@ class JavaInterface internal constructor(
         documentation: String,
         since: String? = null,
         category: String? = null,
-        see: Array<out String>? = null
+        see: List<String>? = null
     ) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, category, see)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
@@ -251,7 +258,7 @@ class JavaInterface internal constructor(
         documentation: String,
         since: String? = null,
         category: String? = null,
-        see: Array<out String>? = null
+        see: List<String>? = null
     ) = JavaField(this, entries, documentation, since, category, see)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }

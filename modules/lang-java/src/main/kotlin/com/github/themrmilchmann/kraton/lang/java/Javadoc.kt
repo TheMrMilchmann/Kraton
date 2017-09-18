@@ -151,9 +151,9 @@ private fun String.layoutJavadoc(indent: String = INDENT): String {
  */
 internal fun String?.toJavaDoc(
     indent: String,
-    typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
-    see: Array<out String>? = null,
-    authors: Array<out String>? = null,
+    typeParameters: List<Pair<JavaGenericType, String?>>? = null,
+    see: List<String>? = null,
+    authors: List<String>? = null,
     since: String? = null
 ): String? = if (typeParameters == null && see == null && authors == null && since == null) {
     if (this == null || this.isEmpty())

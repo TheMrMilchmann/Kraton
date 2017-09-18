@@ -97,6 +97,7 @@ abstract class JavaTopLevelType(
     val className: String,
     val packageName: String,
     val documentation: String?,
+    val since: String?,
     sorted: Boolean,
     private val containerType: JavaTopLevelType?
 ): JavaModifierTarget(), JavaBodyMember, IJavaType {
@@ -106,6 +107,13 @@ abstract class JavaTopLevelType(
 
     internal val members: MutableSet<JavaBodyMember> = if (sorted) TreeSet() else LinkedHashSet()
     internal val typeParameters = mutableListOf<Pair<JavaGenericType, String?>>()
+
+    private val _authors: MutableList<String> by lazy(::mutableListOf)
+    private val authors: MutableList<String> get() = containerType?.authors ?: _authors
+    fun authors(vararg authors: String) { this.authors.addAll(authors) }
+
+    private val references = mutableListOf<String>()
+    fun see(ref: String) { this.references.add(ref) }
 
     private fun doImport(
         container: String,
@@ -171,7 +179,7 @@ abstract class JavaTopLevelType(
     }
 
     internal fun PrintWriter.printType(indent: String) {
-        val documentation = documentation.toJavaDoc(indent)
+        val documentation = documentation.toJavaDoc(indent, typeParameters, references, authors, since)
         if (documentation != null) println(documentation)
 
         print(indent)

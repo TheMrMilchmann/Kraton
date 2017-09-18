@@ -43,6 +43,8 @@ import java.util.*
  * @param srcFolder     the name of the source folder for the class
  * @param srcSet        the name of the source folder for the class
  * @param documentation the documentation for the class
+ * @param since         the value for the class' `@since` tag
+ * @param superClass    the parent class for the class
  * @param interfaces    the interfaces for the class to implement
  * @param sorted        whether or not the class' content will be sorted
  *
@@ -56,12 +58,13 @@ fun Profile.javaClass(
     srcFolder: String,
     srcSet: String,
     documentation: String? = null,
+    since: String? = null,
     superClass: IJavaType? = null,
     interfaces: Array<out IJavaType>? = null,
     sorted: Boolean = false,
     copyrightHeader: String? = null,
     init: JavaClass.() -> Unit
-) = JavaClass(fileName, packageName, documentation, superClass, interfaces, sorted, null, null)
+) = JavaClass(fileName, packageName, documentation, since, superClass, interfaces, sorted, null, null)
     .apply { import("java.lang", false, true) }
     .also(init)
     .run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
@@ -73,6 +76,7 @@ fun Profile.javaClass(
  *
  * @param className     the name for the class
  * @param documentation the documentation for the class
+ * @param since         the value for the class' `@since` tag
  * @param superClass    the parent class for the class
  * @param interfaces    the interfaces for the class to implement
  * @param sorted        whether or not the class' content will be sorted
@@ -86,12 +90,13 @@ fun Profile.javaClass(
 fun JavaClass.javaClass(
     className: String,
     documentation: String? = null,
+    since: String? = null,
     superClass: IJavaType? = null,
     interfaces: Array<out IJavaType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaClass.() -> Unit
-) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category, this)
+) = JavaClass(className, this.packageName, documentation, since, superClass, interfaces, sorted, category, this)
     .apply(init)
     .also { members.add(it) }
 
@@ -102,6 +107,7 @@ fun JavaClass.javaClass(
  *
  * @param className     the name for the class
  * @param documentation the documentation for the class
+ * @param since         the value for the class' `@since` tag
  * @param superClass    the parent class for the class
  * @param interfaces    the interfaces for the class to implement
  * @param sorted        whether or not the class' content will be sorted
@@ -115,12 +121,13 @@ fun JavaClass.javaClass(
 fun JavaInterface.javaClass(
     className: String,
     documentation: String? = null,
+    since: String? = null,
     superClass: IJavaType? = null,
     interfaces: Array<out IJavaType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaClass.() -> Unit
-) = JavaClass(className, this.packageName, documentation, superClass, interfaces, sorted, category, this)
+) = JavaClass(className, this.packageName, documentation, since, superClass, interfaces, sorted, category, this)
     .apply(init)
     .also { members.add(it) }
 
@@ -136,12 +143,13 @@ class JavaClass internal constructor(
     className: String,
     packageName: String,
     documentation: String?,
+    since: String?,
     val superClass: IJavaType?,
     val interfaces: Array<out IJavaType>?,
     sorted: Boolean,
     override val category: String?,
     containerType: JavaTopLevelType?
-): JavaTopLevelType(className, packageName, documentation, sorted, containerType) {
+): JavaTopLevelType(className, packageName, documentation, since, sorted, containerType) {
 
     override val name: String
         get() = className
@@ -219,7 +227,7 @@ class JavaClass internal constructor(
         documentation: String,
         since: String? = null,
         category: String? = null,
-        see: Array<out String>? = null
+        see: List<String>? = null
     ) = JavaField(this, arrayOf(name to value), documentation, since, category, see)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
@@ -258,7 +266,7 @@ class JavaClass internal constructor(
         documentation: String,
         since: String? = null,
         category: String? = null,
-        see: Array<out String>? = null
+        see: List<String>? = null
     ) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, category, see)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
@@ -298,7 +306,7 @@ class JavaClass internal constructor(
         documentation: String,
         since: String? = null,
         category: String? = null,
-        see: Array<out String>? = null
+        see: List<String>? = null
     ) = JavaField(this, entries, documentation, since, category, see)
         .also {
             modifiers.forEach { it.value.applyImports.invoke(this@JavaClass) }
