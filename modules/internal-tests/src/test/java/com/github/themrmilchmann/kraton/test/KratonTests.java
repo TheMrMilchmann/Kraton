@@ -38,6 +38,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.testng.ITest;
 import org.testng.TestException;
+import org.testng.TestNGException;
 import org.testng.annotations.*;
 
 public final class KratonTests {
@@ -54,6 +55,24 @@ public final class KratonTests {
                 .filter(it -> it.getFileName().toString().matches("lang-[a-z]*"))
                 .flatMap(it -> {
                     Path testOutputDir = it.resolve("build/kraton/generated");
+                    if (!Files.exists(testOutputDir)) {
+                        return Arrays.stream(new Object[] {
+                            new ITest() {
+
+                                @Override
+                                public String getTestName() {
+                                    return "Error";
+                                }
+
+                                @Test
+                                public void test() throws IOException {
+                                    throw new TestNGException(testOutputDir.toAbsolutePath() + " does not exist!");
+                                }
+
+                            }
+                        });
+                    }
+
                     Path testResultDir = it.resolve("src/test/resources");
 
                     List<Object> tests = new ArrayList<>(16);
