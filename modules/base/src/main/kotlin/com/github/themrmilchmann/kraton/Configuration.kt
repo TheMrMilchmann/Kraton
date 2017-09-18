@@ -157,7 +157,7 @@ data class GeneratorConfiguration(
                         val source = it.first
 
                         fun String.upperCaseClass() =
-                            replaceAfterLast('.', this[lastIndexOf('.') + 1].toUpperCase().toString())
+                            replaceRange(lastIndexOf('.') + 1..lastIndexOf('.') + 1, this[lastIndexOf('.') + 1].toUpperCase().toString())
 
                         val name = it.second.upperCaseClass()
 
