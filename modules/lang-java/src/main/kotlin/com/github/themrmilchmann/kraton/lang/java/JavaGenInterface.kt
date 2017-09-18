@@ -334,7 +334,7 @@ class JavaInterface internal constructor(
         }
 
     override fun PrintWriter.printTypeDeclaration() {
-        print("class ")
+        print("interface ")
         print(className)
 
         if (typeParameters.isNotEmpty()) {
