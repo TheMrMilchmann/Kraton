@@ -37,7 +37,19 @@ import kotlin.reflect.*
  *
  * @since 1.0.0
  */
-val Class<*>.asType get() = JavaTypeReference(simpleName, `package`?.name)
+val Class<*>.asType get() = this.asType()
+
+/**
+ * Creates and returns a new [JavaTypeReference] referring to the receiver type.
+ *
+ * @receiver the type to create a new reference to
+ * @param typeParameters the type-parameters for the type
+ * @return the newly created [JavaTypeReference]
+ *
+ * @since 1.0.0
+ */
+fun Class<*>.asType(vararg typeParameters: IJavaType) =
+    JavaTypeReference(simpleName, `package`.name, *typeParameters)
 
 /**
  * TODO doc
@@ -46,6 +58,17 @@ val Class<*>.asType get() = JavaTypeReference(simpleName, `package`?.name)
  */
 val KClass<*>.asType get() = java.asType
 
+/**
+ * Creates and returns a new [JavaTypeReference] referring to the receiver type.
+ *
+ * @receiver the type to create a new reference to
+ * @param typeParameters the type-parameters for the type
+ * @return the newly created [JavaTypeReference]
+ *
+ * @since 1.0.0
+ */
+fun KClass<*>.asType(vararg typeParameters: IJavaType) =
+    java.asType(*typeParameters)
 
 /**
  * A reference to a java type.
