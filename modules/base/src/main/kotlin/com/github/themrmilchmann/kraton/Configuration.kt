@@ -155,7 +155,11 @@ data class GeneratorConfiguration(
                             }
                     ).flatMap {
                         val source = it.first
-                        val name = it.second
+
+                        fun String.upperCaseClass() =
+                            replaceAfterLast('.', this[lastIndexOf('.') + 1].toUpperCase().toString())
+
+                        val name = it.second.upperCaseClass()
 
                         try {
                             Class.forName(name).methods.asSequence()
