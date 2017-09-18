@@ -171,7 +171,7 @@ internal fun String?.toJavaDoc(
                 .forEach { printMultilineTag("param", "<${it.first}>", it.second!!, indent, alignment, multilineAlignment) }
         }
 
-        if (see != null) {
+        if (see != null && !see.isEmpty()) {
             if (isNotEmpty()) append("\n$indent *")
             see.forEach {
                 if (isNotEmpty()) append("\n$indent * ")
@@ -180,7 +180,7 @@ internal fun String?.toJavaDoc(
             }
         }
 
-        if (authors != null) {
+        if (authors != null && !authors.isEmpty()) {
             if (isNotEmpty()) append("\n$indent *")
             authors.forEach {
                 if (isNotEmpty()) append("\n$indent * ")
@@ -254,20 +254,6 @@ internal fun JavaMethod.toJavaDoc(indent: String = ""): String? {
                 }
             }
 
-            if (exceptions != null) {
-                if (isNotEmpty()) append("\n$indent *")
-                exceptions.forEach {
-                    if (it.second != null) {
-                        if (isNotEmpty()) append("\n$indent * ")
-
-                        append("@throws ")
-                        append(it.first)
-                        append(" ")
-                        append(it.second)
-                    }
-                }
-            }
-
             if (see != null) {
                 if (isNotEmpty()) append("\n$indent *")
                 see.forEach {
@@ -303,7 +289,7 @@ private fun StringBuilder.printMultilineTag(tag: String, name: String, documenta
     // Align
     for (i in 0..(alignment - name.length)) append(' ')
 
-    append(documentation.cleanup(multilineAligment))
+    append(" " + documentation.cleanup(multilineAligment))
 }
 
 private inline fun List<*>?.isNullOrEmpty() = (this === null || isEmpty())
