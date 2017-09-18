@@ -388,7 +388,7 @@ class JavaClass internal constructor(
         if (typeParameters.isNotEmpty()) {
             print("<")
             print(StringJoiner(", ").apply {
-                typeParameters.forEach { add(it.toString()) }
+                typeParameters.forEach { add(it.first.toString()) }
             })
             print(">")
         }
