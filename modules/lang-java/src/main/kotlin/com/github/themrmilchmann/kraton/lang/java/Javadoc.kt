@@ -155,7 +155,7 @@ internal fun String?.toJavaDoc(
     see: List<String>? = null,
     authors: List<String>? = null,
     since: String? = null
-): String? = if (typeParameters == null && see == null && authors == null && since == null) {
+): String? = if (typeParameters.isNullOrEmpty() && see.isNullOrEmpty() && authors.isNullOrEmpty() && since === null) {
     if (this == null || this.isEmpty())
         null
     else
@@ -305,3 +305,5 @@ private fun StringBuilder.printMultilineTag(tag: String, name: String, documenta
 
     append(documentation.cleanup(multilineAligment))
 }
+
+private inline fun List<*>?.isNullOrEmpty() = (this === null || isEmpty())
