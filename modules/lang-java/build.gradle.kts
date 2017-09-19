@@ -43,38 +43,15 @@ apply {
 }
 
 configureKotlinProject()
-
-the<JavaPluginConvention>().sourceSets {
-    val main by getting
-
-    "test" {
-        kotlin.srcDir("src/test/kotlin")
-    }
-
-    "test-integration" {
-        compileClasspath += main.compileClasspath + main.output
-        runtimeClasspath += main.runtimeClasspath
-    }
-}
+configureLangModule()
 
 tasks {
     "generateTests"(Generate::class) {
         dependsOn("compileTestKotlin")
 
-        templatesRoot = File(projectDir, "src/test/kotlin")
+        templatesRoot = File(projectDir, "src/test-integration/kotlin")
         outputRoot = parent!!.projectDir
 
-        classpath = the<JavaPluginConvention>().sourceSets["test"].runtimeClasspath
+        classpath = the<JavaPluginConvention>().sourceSets["test-integration"].runtimeClasspath
     }
-}
-
-repositories {
-    mavenCentral()
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
-}
-
-dependencies {
-    "compile"(project(":modules:base"))
-
-    "testCompile"("org.testng", "testng", testNGVersion)
 }
