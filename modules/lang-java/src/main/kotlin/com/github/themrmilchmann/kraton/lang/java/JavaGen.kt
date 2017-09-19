@@ -183,7 +183,7 @@ abstract class JavaTopLevelType(
         if (documentation != null) println(documentation)
 
         print(indent)
-        printAnnotations("$LN$indent")
+        printAnnotations(indent)
         printModifiers()
         printTypeDeclaration()
         print(" {")
