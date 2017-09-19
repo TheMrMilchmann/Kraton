@@ -33,6 +33,7 @@ import org.gradle.api.*
 import org.gradle.api.plugins.*
 import org.gradle.api.tasks.testing.*
 import org.gradle.kotlin.dsl.*
+import org.jetbrains.kotlin.gradle.tasks.*
 import testNGVersion
 
 fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTests: Boolean = true) {
@@ -49,13 +50,24 @@ fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTe
     }
 
     if (withIntegrationTests) {
-        java.sourceSets {
-            "test-integration" {
-                compileClasspath += srcSetMain.compileClasspath + srcSetMain.output
-                runtimeClasspath += srcSetMain.runtimeClasspath
+        val testInteg = java.sourceSets.create("test-integration") {
+            compileClasspath += srcSetUnitTests.compileClasspath
+            runtimeClasspath += srcSetMain.runtimeClasspath + srcSetUnitTests.runtimeClasspath
+        }
+
+        tasks {
+            "compileTestIntegrationKotlin"(KotlinCompile::class) {
+                dependsOn("compileKotlin")
+            }
+
+            "test-integration"(Test::class) {
+                useTestNG()
+
+                testClassesDirs = testInteg.output.classesDirs
+                classpath = testInteg.runtimeClasspath
             }
         }
-    }
+     }
 
     repositories {
         mavenCentral()
@@ -63,7 +75,7 @@ fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTe
 
     dependencies {
         "compile"(project(":modules:base"))
-
         "testCompile"("org.testng", "testng", testNGVersion)
+        "testIntegrationCompile"(project(":modules:internal-test"))
     }
 }

@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2017 Leon Linhart,
  * All rights reserved.
+ * MACHINE GENERATED FILE, DO NOT EDIT
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,23 +28,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-plugins {
-    java
-}
+package com.github.themrmilchmann.kraton.gradle
 
-parent!!.subprojects.forEach {
-    if (it.name != name) evaluationDependsOn(it.path)
-}
+import org.gradle.api.artifacts.dsl.DependencyHandler
 
-tasks {
-    "test"(Test::class) {
-        dependsOn(project(":modules:lang-java").tasks["generateTests"])
+/**
+ * The latest version of Kraton (at the time of this plugin's release). (currently _0.2.0_).
+ */
+val currentKratonVersion = "0.2.0"
 
-        useTestNG()
-        systemProperty("rootDir", rootProject.projectDir.absolutePath)
-    }
-}
-
-dependencies {
-    testCompile("org.testng", "testng", testNGVersion)
-}
+/**
+ * Builds the dependency notation for the named Kraton [module].
+ *
+ * @param module simple name of the Kraton module, for example "lang-java".
+ * @param version the version of Kraton to use
+ */
+fun DependencyHandler.kraton(module: String, version: String = currentKratonVersion): Any =
+    "com.github.themrmilchmann.kraton:kraton-$module:$version"

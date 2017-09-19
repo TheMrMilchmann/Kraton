@@ -30,6 +30,7 @@
 import build.*
 import com.github.themrmilchmann.kraton.gradle.tasks.*
 import org.gradle.kotlin.dsl.*
+import org.jetbrains.kotlin.gradle.tasks.*
 import java.io.*
 
 buildscript {
@@ -45,13 +46,20 @@ apply {
 configureKotlinProject()
 configureLangModule()
 
+val java = the<JavaPluginConvention>()
+
 tasks {
     "generateTests"(Generate::class) {
-        dependsOn("compileTestKotlin")
+        dependsOn("compileTestIntegrationKotlin")
 
         templatesRoot = File(projectDir, "src/test-integration/kotlin")
         outputRoot = parent!!.projectDir
 
-        classpath = the<JavaPluginConvention>().sourceSets["test-integration"].runtimeClasspath
+        classpath = java.sourceSets["test-integration"].runtimeClasspath
     }
+
+    "test-integration" {
+        dependsOn(tasks["generateTests"])
+    }
+
 }

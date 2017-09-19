@@ -81,7 +81,7 @@ ${
         from(File(projectDir, "src/main/kotlin"))
         from(File(projectDir, "src/main-generated/kotlin"))
 
-        into(File(projectDir.parentFile, "modules/gradle/buildSrc/src/main-implicit/kotlin"))
+        into(File(projectDir.parentFile, "integration/gradle/buildSrc/src/main-implicit/kotlin"))
 
         exclude("build/**")
 
