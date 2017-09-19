@@ -58,4 +58,4 @@ class JavaParameter internal constructor(
     val type: IJavaType,
     val name: String,
     val documentation: String
-)
+): JavaModifierTarget()

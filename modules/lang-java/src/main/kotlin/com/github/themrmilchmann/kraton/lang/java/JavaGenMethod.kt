@@ -82,7 +82,7 @@ open class JavaMethod internal constructor(
         if (parameters.isNotEmpty()) {
             print(StringJoiner(", ").apply {
                 parameters.forEach {
-                    add("${printAnnotationsInline()}${it.type} ${it.name}")
+                    add("${it.printAnnotationsInline()}${it.type} ${it.name}")
                 }
             })
         }
