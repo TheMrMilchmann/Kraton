@@ -239,6 +239,7 @@ abstract class JavaModifierTarget {
         if (annotations.isNotEmpty()) {
             print(StringJoiner(LN + indent).run {
                 annotations.forEach { add(it.toString()) }
+                toString()
             })
             print(LN)
         }
