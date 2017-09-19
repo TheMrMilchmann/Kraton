@@ -324,6 +324,6 @@ internal class JavaImport(
 
     fun PrintWriter.printImport() = println(this@JavaImport)
 
-    override fun toString() = "import ${if (isStatic) "static " else ""}$container.$member"
+    override fun toString() = "import ${if (isStatic) "static " else ""}$container.$member;"
 
 }

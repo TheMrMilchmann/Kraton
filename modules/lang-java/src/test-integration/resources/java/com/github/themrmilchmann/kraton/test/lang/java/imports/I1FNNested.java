@@ -1,6 +1,6 @@
 package com.github.themrmilchmann.kraton.test.lang.java.imports;
 
-import java.io.File
+import java.io.File;
 
 public final class I1FNNested {
 
