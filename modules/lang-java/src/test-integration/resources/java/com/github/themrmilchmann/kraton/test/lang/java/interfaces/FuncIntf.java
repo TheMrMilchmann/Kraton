@@ -1,7 +1,7 @@
 package com.github.themrmilchmann.kraton.test.lang.java.interfaces;
 
-kotlin.Unit
-public interfaces FuncIntf {
+@FunctionalInterface
+public interface FuncIntf {
 
     void run();
 

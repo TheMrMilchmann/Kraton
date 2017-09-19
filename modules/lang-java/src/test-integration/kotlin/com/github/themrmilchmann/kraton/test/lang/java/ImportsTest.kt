@@ -145,7 +145,7 @@ val Imports = Profile {
 
     // Test imports in interfaces
 
-    public..final..javaInterface(
+    public..javaInterface(
         "I2FN1FWInterface",
         packageName,
         srcFolder,
@@ -165,7 +165,7 @@ val Imports = Profile {
 
     }
 
-    public..final..javaInterface(
+    public..javaInterface(
         "I1FQ1FWInterface",
         packageName,
         srcFolder,
@@ -186,7 +186,7 @@ val Imports = Profile {
 
     }
 
-    public..final..javaInterface(
+    public..javaInterface(
         "I3FQ1FNInterface",
         packageName,
         srcFolder,
@@ -210,7 +210,7 @@ val Imports = Profile {
 
     }
 
-    public..final..javaInterface(
+    public..javaInterface(
         "I3FQ3FNInterface",
         packageName,
         srcFolder,

@@ -5,7 +5,7 @@ import java.io.EOFException
 import java.io.IOException
 import java.io.*
 
-public final class I3FQ3FNInterface {
+public interface I3FQ3FNInterface {
 
     File test(FileReader par0, FileInputStream par1, FileOutputStream par2) throws EOFException, IOException;
 

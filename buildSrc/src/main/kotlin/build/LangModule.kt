@@ -63,8 +63,10 @@ fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTe
             val testInteg = "test-integration"(Test::class) {
                 useTestNG()
 
-                testClassesDirs = testInteg.output.classesDirs
+                testClassesDirs = project(":modules:internal-test").the<JavaPluginConvention>().sourceSets["main"].output
                 classpath = testInteg.runtimeClasspath
+
+                systemProperty("rootDir", rootProject.projectDir.absolutePath)
             }
 
             "check" {
