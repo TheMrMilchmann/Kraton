@@ -346,7 +346,7 @@ class JavaInterface internal constructor(
         }
 
         if (superInterfaces != null) {
-            print(" implements ")
+            print(" extends ")
             print(StringJoiner(", ").apply {
                 superInterfaces.forEach { add(it.toString()) }
             })
