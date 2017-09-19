@@ -29,7 +29,6 @@
  */
 package com.github.themrmilchmann.kraton.test.lang.java
 
-import com.github.themrmilchmann.kraton.*
 import com.github.themrmilchmann.kraton.lang.java.*
 
 private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java.imports"

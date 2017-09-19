@@ -27,30 +27,67 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package com.github.themrmilchmann.kraton.test.lang.java
 
-import com.github.themrmilchmann.kraton.*
 import com.github.themrmilchmann.kraton.lang.java.*
 
 private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java.classes"
 private const val srcFolder = "lang-java/build"
 private const val srcSet = "kraton/generated"
 
-val Classes = Profile {
+val HelloWorld = Profile {
 
-    public..final..javaClass("EmptyClass", packageName, srcFolder, srcSet) {}
-
-    javaClass(
-        "Classes",
+    public..final..javaClass(
+        "HelloWorld",
         packageName,
         srcFolder,
         srcSet
     ) {
 
-        public..javaClass(
-            "PublicClass"
-        ) {}
+        public..static..void(
+            "main",
+            "",
+            string.array().PARAM("args", ""),
+
+            body = "System.out.println(\"Hello World!\");"
+        )
+
+    }
+
+    public..final..javaClass(
+        "HelloWorld2",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
+
+        public..static..void(
+            "main",
+            "",
+            string.array().PARAM("args", ""),
+
+            body = "new HelloWorld(\"Hello World\").run();"
+        )
+
+        private..final..string(
+            "text",
+            null,
+            ""
+        )
+
+        private..constructor(
+            "",
+            string.PARAM("text", ""),
+
+            body = "this.text = text;"
+        )
+
+        private..void(
+            "run",
+            "",
+
+            body = "System.out.println(this.text);"
+        )
 
     }
 

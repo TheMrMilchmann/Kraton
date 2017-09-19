@@ -29,6 +29,7 @@
  */
 import org.gradle.api.internal.*
 import org.gradle.api.tasks.*
+import org.gradle.kotlin.dsl.*
 import java.io.*
 import java.util.*
 import org.jetbrains.kotlin.gradle.plugin.*
@@ -90,4 +91,12 @@ ${
     "compileKotlin" {
         dependsOn(copy)
     }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-3")
 }

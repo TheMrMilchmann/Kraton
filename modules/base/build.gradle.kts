@@ -29,12 +29,12 @@
  */
 import build.*
 
-plugins {
-    kotlin("jvm", kotlinVersion)
+apply {
+    plugin("org.jetbrains.kotlin.jvm")
 }
 
 configureKotlinProject()
 
 dependencies {
-    compile("net.sf.jopt-simple:jopt-simple:$jOptSimpleVersion")
+    "compile"("net.sf.jopt-simple:jopt-simple:$jOptSimpleVersion")
 }

@@ -31,7 +31,7 @@ plugins {
     java
 }
 
-parent.subprojects.forEach {
+parent!!.subprojects.forEach {
     if (it.name != name) evaluationDependsOn(it.path)
 }
 

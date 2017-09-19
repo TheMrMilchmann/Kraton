@@ -29,3 +29,24 @@
  */
 package com.github.themrmilchmann.kraton.test.lang.java
 
+import com.github.themrmilchmann.kraton.lang.java.*
+
+private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java.interfaces"
+private const val srcFolder = "lang-java/build"
+private const val srcSet = "kraton/generated"
+
+val Interfaces = Profile {
+
+    public..javaInterface("EmptyInterface", packageName, srcFolder, srcSet) {}
+
+    Annotate(FunctionalInterface::class.asType)..
+    public..javaInterface("FuncIntf", packageName, srcFolder, srcSet) {
+
+        void(
+            "run",
+            ""
+        )
+
+    }
+
+}

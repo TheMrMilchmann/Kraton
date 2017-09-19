@@ -27,6 +27,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.github.themrmilchmann.kraton.test.lang.java
 
 import com.github.themrmilchmann.kraton.*
@@ -36,59 +37,34 @@ private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java
 private const val srcFolder = "lang-java/build"
 private const val srcSet = "kraton/generated"
 
-val HelloWorld = Profile {
+val Classes = Profile {
 
-    public..final..javaClass(
-        "HelloWorld",
+    public..final..javaClass("EmptyClass", packageName, srcFolder, srcSet) {}
+
+    javaClass(
+        "Classes",
         packageName,
         srcFolder,
         srcSet
     ) {
 
-        public..static..void(
-            "main",
-            "",
-            string.array().PARAM("args", ""),
-
-            body = "System.out.println(\"Hello World!\");"
-        )
+        public..javaClass(
+            "PublicClass"
+        ) {}
 
     }
 
-    public..final..javaClass(
-        "HelloWorld2",
-        packageName,
-        srcFolder,
-        srcSet
-    ) {
+    public..javaClass("PublicClass", packageName, srcFolder, srcSet) {}
 
-        public..static..void(
-            "main",
-            "",
-            string.array().PARAM("args", ""),
+    public..javaClass("TypeParamClass", packageName, srcFolder, srcSet) {
 
-            body = "new HelloWorld(\"Hello World\").run();"
-        )
+        "T".typeParameter("Test type-parameter")
 
-        private..final..string(
-            "text",
-            null,
-            ""
-        )
+    }
 
-        private..constructor(
-            "",
-            string.PARAM("text", ""),
+    public..javaClass("TypeParamWithBoundsClass", packageName, srcFolder, srcSet) {
 
-            body = "this.text = text;"
-        )
-
-        private..void(
-            "run",
-            "",
-
-            body = "System.out.println(this.text);"
-        )
+        "T".typeParameter("Test type-parameter", java.util.List::class.asType)
 
     }
 

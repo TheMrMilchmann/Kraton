@@ -38,20 +38,33 @@ buildscript {
     }
 }
 
-plugins {
-    kotlin("jvm", kotlinVersion)
+apply {
+    plugin("org.jetbrains.kotlin.jvm")
 }
 
 configureKotlinProject()
+
+the<JavaPluginConvention>().sourceSets {
+    val main by getting
+
+    "test" {
+        kotlin.srcDir("src/test/kotlin")
+    }
+
+    "test-integration" {
+        compileClasspath += main.compileClasspath + main.output
+        runtimeClasspath += main.runtimeClasspath
+    }
+}
 
 tasks {
     "generateTests"(Generate::class) {
         dependsOn("compileTestKotlin")
 
         templatesRoot = File(projectDir, "src/test/kotlin")
-        outputRoot = parent.projectDir
+        outputRoot = parent!!.projectDir
 
-        classpath = java.sourceSets["test"].runtimeClasspath
+        classpath = the<JavaPluginConvention>().sourceSets["test"].runtimeClasspath
     }
 }
 
@@ -61,5 +74,7 @@ repositories {
 }
 
 dependencies {
-    compile(project(":modules:base"))
+    "compile"(project(":modules:base"))
+
+    "testCompile"("org.testng", "testng", testNGVersion)
 }

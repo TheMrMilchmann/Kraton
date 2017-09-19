@@ -73,7 +73,7 @@ public final class KratonTests {
                         });
                     }
 
-                    Path testResultDir = it.resolve("src/test/resources");
+                    Path testResultDir = it.resolve("src/test-integration/resources");
 
                     List<Object> tests = new ArrayList<>(16);
 
