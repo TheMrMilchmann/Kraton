@@ -38,7 +38,11 @@ private const val srcSet = "kraton/generated"
 
 val Interfaces = Profile {
 
-    public..javaInterface("EmptyInterface", packageName, srcFolder, srcSet) {}
+    val emptyInterface = public..javaInterface("EmptyInterface", packageName, srcFolder, srcSet) {}
+
+    public..javaInterface("EmptyInterfaceWithParent", packageName, srcFolder, srcSet, superInterfaces = arrayOf(emptyInterface)) {}
+
+    public..javaInterface("EmptyInterfaceWithParents", packageName, srcFolder, srcSet, superInterfaces = arrayOf(emptyInterface, java.io.Serializable::class.asType)) {}
 
     Annotate(FunctionalInterface::class.asType)..
     public..javaInterface("FuncIntf", packageName, srcFolder, srcSet) {
