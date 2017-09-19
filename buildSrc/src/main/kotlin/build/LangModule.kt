@@ -60,11 +60,15 @@ fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTe
                 dependsOn("compileKotlin")
             }
 
-            "test-integration"(Test::class) {
+            val testInteg = "test-integration"(Test::class) {
                 useTestNG()
 
                 testClassesDirs = testInteg.output.classesDirs
                 classpath = testInteg.runtimeClasspath
+            }
+
+            "check" {
+                dependsOn(testInteg)
             }
         }
      }
