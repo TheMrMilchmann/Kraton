@@ -237,6 +237,7 @@ abstract class JavaModifierTarget {
 
     internal fun PrintWriter.printAnnotations(indent: String) {
         if (annotations.isNotEmpty()) {
+            print(indent)
             print(StringJoiner(LN + indent).run {
                 annotations.forEach { add(it.toString()) }
                 toString()
