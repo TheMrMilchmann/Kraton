@@ -153,7 +153,7 @@ val Override = Annotate(Override::class.asType)
  *
  * @since 1.0.0
  */
-open class Annotate(
+open class Annotate @JvmOverloads constructor(
     private val type: IJavaType,
     private val parameters: String? = null
 ): JavaModifier({ import(type) }) {
