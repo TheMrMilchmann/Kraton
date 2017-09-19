@@ -169,7 +169,7 @@ open class Annotate @JvmOverloads constructor(
      *
      * @since 1.0.0
      */
-    override fun toString() = "@$type($parameters)"
+    override fun toString() = "@$type${if (parameters === null) "" else "($parameters)"}"
 
 }
 
