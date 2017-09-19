@@ -288,14 +288,14 @@ abstract class JavaModifierTarget {
  *
  * @since 1.0.0
  */
-operator fun <T : JavaModifier> T.rangeTo(trg: JavaModifierTarget) = trg.apply { setModifiers(this@rangeTo) }
+operator fun <T : JavaModifier, R: JavaModifierTarget> T.rangeTo(trg: R) = trg.apply { setModifiers(this@rangeTo) }
 
 /**
  * Utility method to chain modifiers using the rangeTo operator.
  *
  * @since 1.0.0
  */
-operator fun <T : JavaModifier> Array<T>.rangeTo(trg: JavaModifierTarget) = trg.apply { setModifiers(*this@rangeTo) }
+operator fun <T : JavaModifier, R: JavaModifierTarget> Array<T>.rangeTo(trg: R) = trg.apply { setModifiers(*this@rangeTo) }
 
 /**
  * Utility method to chain modifiers using the rangeTo operator.
