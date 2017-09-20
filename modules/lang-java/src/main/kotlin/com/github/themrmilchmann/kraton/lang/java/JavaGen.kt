@@ -124,7 +124,11 @@ abstract class JavaTopLevelType(
         isStatic: Boolean,
         isImplicit: Boolean
     ) {
-        if (container == packageName) return
+        if (forceMode == null) {
+            if (container == packageName) return
+            if (imports.flatMap { it.value.values }.map { "${it.container}.${it.member}" }.any { it == "$container.$member" || it == "$container.*" }) return
+        }
+
         if (imports.any { it.value.any { it.key == member } }) return
 
         val containerImports = imports.getOrPut(container, ::mutableMapOf)
