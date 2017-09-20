@@ -1,9 +1,8 @@
 package com.github.themrmilchmann.kraton.test.lang.java.imports;
 
-import java.io.File;
 import java.io.*;
 
-public final class I1FQ1FWClass {
+public interface I1FW1FNInterface {
 
     File test() throws EOFException {
         return null;

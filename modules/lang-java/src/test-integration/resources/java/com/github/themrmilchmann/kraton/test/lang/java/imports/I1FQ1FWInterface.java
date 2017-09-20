@@ -5,6 +5,6 @@ import java.io.*;
 
 public interface I1FQ1FWInterface {
 
-    File test() throws EOFException, IOException;
+    File test() throws EOFException;
 
 }

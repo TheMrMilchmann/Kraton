@@ -83,8 +83,27 @@ val Imports = Profile {
             "",
 
             exceptions = arrayOf(
-                eof to null,
-                ioe to null
+                eof to null
+            ),
+            body = "return null;"
+        )
+
+    }
+
+    public..final..javaClass(
+        "I1FW1FNClass",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
+        import(eof, JavaImportForceMode.FORCE_WILDCARD)
+
+        file(
+            "test",
+            "",
+
+            exceptions = arrayOf(
+                eof to null
             ),
             body = "return null;"
         )
@@ -179,9 +198,28 @@ val Imports = Profile {
             "",
 
             exceptions = arrayOf(
-                eof to null,
-                ioe to null
+                eof to null
             )
+        )
+
+    }
+
+    public..javaInterface(
+        "I1FW1FNInterface",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
+        import(eof, JavaImportForceMode.FORCE_WILDCARD)
+
+        file(
+            "test",
+            "",
+
+            exceptions = arrayOf(
+                eof to null
+            ),
+            body = "return null;"
         )
 
     }
