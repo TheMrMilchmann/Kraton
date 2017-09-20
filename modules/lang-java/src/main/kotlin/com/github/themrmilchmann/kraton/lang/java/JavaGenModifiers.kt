@@ -169,7 +169,8 @@ open class Annotate @JvmOverloads constructor(
      *
      * @since 1.0.0
      */
-    override fun toString() = "@$type${if (parameters === null) "" else "($parameters)"}"
+    fun asString(containerType: JavaTopLevelType) =
+        "@${type.asString(containerType)}${if (parameters === null) "" else "($parameters)"}"
 
 }
 
@@ -235,21 +236,21 @@ abstract class JavaModifierTarget {
     internal inline fun <reified M : JavaModifier> has() = modifiers.containsKey(M::class)
     internal inline fun <reified M : JavaModifier> get() = modifiers[M::class] as M
 
-    internal fun PrintWriter.printAnnotations(indent: String) {
+    internal fun PrintWriter.printAnnotations(indent: String, containerType: JavaTopLevelType) {
         if (annotations.isNotEmpty()) {
             print(indent)
             print(StringJoiner(LN + indent).run {
-                annotations.forEach { add(it.toString()) }
+                annotations.forEach { add(it.asString(containerType)) }
                 toString()
             })
             print(LN)
         }
     }
 
-    internal fun printAnnotationsInline() =
+    internal fun printAnnotationsInline(containerType: JavaTopLevelType) =
         if (annotations.isNotEmpty()) {
             val annotations = StringJoiner(" ").run {
-                annotations.forEach { add(it.toString()) }
+                annotations.forEach { add(it.asString(containerType)) }
                 toString()
             }
 

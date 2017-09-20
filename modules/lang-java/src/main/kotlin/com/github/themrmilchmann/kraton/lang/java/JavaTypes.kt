@@ -48,8 +48,11 @@ val Class<*>.asType get() = this.asType()
  *
  * @since 1.0.0
  */
-fun Class<*>.asType(vararg typeParameters: IJavaType) =
-    JavaTypeReference(simpleName, `package`.name, *typeParameters)
+fun Class<*>.asType(vararg typeParameters: IJavaType): JavaTypeReference =
+    if (this.isMemberClass)
+        enclosingClass.asType.member(simpleName, *typeParameters)
+    else
+        JavaTypeReference(simpleName, `package`.name, *typeParameters)
 
 /**
  * TODO doc
@@ -70,6 +73,14 @@ val KClass<*>.asType get() = java.asType
 fun KClass<*>.asType(vararg typeParameters: IJavaType) =
     java.asType(*typeParameters)
 
+fun IJavaType.member(className: String, vararg typeParameters: IJavaType) =
+    object: JavaTypeReference(className, "", *typeParameters) {
+
+        override val enclosingType get() = this@member
+        override val packageName get() = enclosingType.packageName
+
+    }
+
 /**
  * A reference to a java type.
  *
@@ -77,32 +88,40 @@ fun KClass<*>.asType(vararg typeParameters: IJavaType) =
  */
 interface IJavaType {
 
-    /**
-     * Returns the name of the package containing this type (or `null` for "java.lang" and primitives types).
-     *
-     * @return the name of the package containing this type (or `null` for "java.lang" and primitives types)
-     *
-     * @since 1.0.0
-     */
-    fun toPackageString(): String?
+    val enclosingType: IJavaType? get() = null
 
     /**
-     * Returns the qualified name of this type. That is, the name of this type dot prefixed by enclosing types.
-     *
-     * @return the qualified name of this type
+     * The name of the package containing this type. (May be `null`.)
      *
      * @since 1.0.0
      */
-    fun toQualifiedString(): String
+    val packageName: String? get() = enclosingType?.packageName
+    /**
+     * The simple name of the class represented by this type.
+     *
+     * @since 1.0.0
+     */
+    val className: String
 
     /**
-     * Returns the name of this type.
-     *
-     * @return the name of this type
+     * The class name of the outermost enclosing type.
      *
      * @since 1.0.0
      */
-    override fun toString(): String
+    val containerName: String get() = enclosingType?.className ?: className
+    /**
+     * The name of this class dot prefixed with the name of it's enclosing type.
+     *
+     * @since 1.0.0
+     */
+    val memberName: String get() = enclosingType?.memberName?.plus(".$className") ?: className
+
+    fun asString(from: JavaTopLevelType?) =
+        if (from != null && from.isResolved(this)) {
+            memberName
+        } else {
+            packageName?.plus(".$memberName") ?: memberName
+        }
 
 }
 
@@ -115,15 +134,26 @@ interface IJavaType {
  * @since 1.0.0
  */
 abstract class JavaReferableType internal constructor(
-    val className: String,
-    internal val typeParameters: Array<out IJavaType>? = null
+    override val className: String,
+    private val typeParameters: Array<out IJavaType>? = null
 ): IJavaType {
 
-    override fun toPackageString(): String? = null
+    override val packageName: String? = null
 
-    override fun toQualifiedString() = toString()
-
-    override fun toString() = className
+    override fun asString(from: JavaTopLevelType?) =
+        if (typeParameters == null || typeParameters.isEmpty())
+            super.asString(from)
+        else
+            StringBuilder().run {
+                append(super.asString(from))
+                append("<")
+                append(StringJoiner(",").run {
+                    typeParameters.forEach { add(it.asString(from)) }
+                    toString()
+                })
+                append(">")
+                toString()
+            }
 
 }
 
@@ -134,15 +164,11 @@ abstract class JavaReferableType internal constructor(
  *
  * @since 1.0.0
  */
-class JavaTypeReference(
+open class JavaTypeReference(
     className: String,
-    private val packageName: String?,
+    override val packageName: String?,
     vararg typeParameters: IJavaType
-): JavaReferableType(className, typeParameters) {
-
-    override fun toPackageString() = packageName
-
-}
+): JavaReferableType(className, typeParameters)
 
 /**
  * Shortcut to create a new JavaArrayType.
@@ -169,16 +195,13 @@ fun IJavaType.array(dim: Int = 1) = JavaArrayType(this, dim)
 class JavaArrayType(
     val type: IJavaType,
     val dim: Int = 1
-): JavaReferableType(type.toString()) {
+): IJavaType by type {
 
-    override fun toPackageString() = type.toPackageString()
-
-    override fun toQualifiedString() = type.toQualifiedString()
-
-    override fun toString() = super.toString().plus(StringBuilder().run {
-        for (i in 0 until dim) append("[]")
-        toString()
-    })
+    override fun asString(from: JavaTopLevelType?) =
+        super.asString(from) + StringBuilder().run {
+            for (i in 0 until dim) append("[]")
+            toString()
+        }
 
 }
 
@@ -195,17 +218,18 @@ class JavaGenericType(
     private vararg val bounds: IJavaType
 ): JavaReferableType(name) {
 
-    override fun toString() = className.plus(StringBuilder().run {
-        if (bounds.isNotEmpty()) {
-            append(" extends ")
-            append(StringJoiner(",").run {
-                for (bound in bounds) append(bound)
-                toString()
-            })
-        }
+    override fun asString(from: JavaTopLevelType?) =
+        className + StringBuilder().run {
+            if (bounds.isNotEmpty()) {
+                append(" extends ")
+                append(StringJoiner(", ").run {
+                    for (bound in bounds) append(bound.asString(from))
+                    toString()
+                })
+            }
 
-        toString()
-    })
+            toString()
+        }
 
 }
 

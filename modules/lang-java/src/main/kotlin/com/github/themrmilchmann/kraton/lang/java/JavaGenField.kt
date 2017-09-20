@@ -67,14 +67,14 @@ class JavaField internal constructor(
         else
             WEIGHT_INSTANCE_FIELD
 
-    override fun PrintWriter.printMember(indent: String): Boolean {
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType): Boolean {
         val documentation = documentation.toJavaDoc(indent, see = see, since = since)
         if (documentation != null) println(documentation)
 
-        printAnnotations(indent)
+        printAnnotations(indent, containerType)
         print(indent)
         printModifiers()
-        print(type.toString())
+        print(type.asString(containerType))
 
         if (entries.size == 1) {
             print(" ")

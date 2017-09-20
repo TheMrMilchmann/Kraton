@@ -69,20 +69,20 @@ open class JavaMethod internal constructor(
     override val weight: Int
         get() = if (has(static)) WEIGHT_STATIC_METHOD else WEIGHT_INSTANCE_METHOD
 
-    override fun PrintWriter.printMember(indent: String): Boolean {
-        val documentation = toJavaDoc(indent)
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType): Boolean {
+        val documentation = toJavaDoc(indent, containerType)
         if (documentation != null) println(documentation)
 
-        printAnnotations(indent)
+        printAnnotations(indent, containerType)
         print(indent)
         printModifiers()
-        printMethodHead()
+        printMethodHead(containerType)
         print("(")
 
         if (parameters.isNotEmpty()) {
             print(StringJoiner(", ").apply {
                 parameters.forEach {
-                    add("${it.printAnnotationsInline()}${it.type} ${it.name}")
+                    add("${it.printAnnotationsInline(containerType)}${it.type.asString(containerType)} ${it.name}")
                 }
             })
         }
@@ -93,7 +93,7 @@ open class JavaMethod internal constructor(
             print(" throws ")
             print(StringJoiner(", ").apply {
                 exceptions.forEach {
-                    add(it.first.toString())
+                    add(it.first.asString(containerType))
                 }
             })
         }
@@ -133,8 +133,8 @@ open class JavaMethod internal constructor(
      *
      * @since 1.0.0
      */
-    internal open fun PrintWriter.printMethodHead() {
-        print(returnType.toString())
+    internal open fun PrintWriter.printMethodHead(containerType: JavaTopLevelType) {
+        print(returnType.asString(containerType))
         print(" ")
         print(name)
     }
@@ -159,7 +159,7 @@ class JavaConstructor internal constructor(
     see: Array<out String>?,
     typeParameters: Array<out Pair<JavaGenericType, String?>>?,
     body: String?
-): JavaMethod(returnType, returnType.toString(), documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body) {
+): JavaMethod(returnType, returnType.className, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body) {
 
     /**
      * Prints the head of this constructor.
@@ -168,8 +168,8 @@ class JavaConstructor internal constructor(
      *
      * @since 1.0.0
      */
-    override fun PrintWriter.printMethodHead() {
-        print(returnType.toString())
+    override fun PrintWriter.printMethodHead(containerType: JavaTopLevelType) {
+        print(returnType.asString(containerType))
     }
 
 }

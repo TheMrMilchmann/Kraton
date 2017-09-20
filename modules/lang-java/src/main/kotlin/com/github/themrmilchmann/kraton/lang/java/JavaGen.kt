@@ -94,13 +94,15 @@ internal class JavaGeneratorTarget(
  * @since 1.0.0
  */
 abstract class JavaTopLevelType(
-    val className: String,
-    val packageName: String,
+    override val className: String,
+    override val packageName: String,
     val documentation: String?,
     val since: String?,
     sorted: Boolean,
     private val containerType: JavaTopLevelType?
 ): JavaModifierTarget(), JavaBodyMember, IJavaType {
+
+    override val enclosingType get() = containerType
 
     private val _imports by lazy { mutableMapOf<String, MutableMap<String, JavaImport>>() }
     internal val imports: MutableMap<String, MutableMap<String, JavaImport>> get() = containerType?.imports ?: _imports
@@ -122,7 +124,8 @@ abstract class JavaTopLevelType(
         isStatic: Boolean,
         isImplicit: Boolean
     ) {
-        if (container == packageName || container == "$packageName.$className") return
+        if (container == packageName) return
+        if (imports.any { it.value.any { it.key == member } }) return
 
         val containerImports = imports.getOrPut(container, ::mutableMapOf)
         if (member in containerImports && forceMode === null) return
@@ -141,6 +144,7 @@ abstract class JavaTopLevelType(
                 containerImports[member] = factory.invoke(member)
         }
     }
+
     /**
      * TODO doc
      *
@@ -163,7 +167,7 @@ abstract class JavaTopLevelType(
         forceMode: JavaImportForceMode? = null,
         isImplicit: Boolean = false
     ) {
-        type.toPackageString()?.let { doImport(it, type.toString(), forceMode, false, isImplicit) }
+        type.packageName?.let { doImport(it, type.containerName, forceMode, false, isImplicit) }
     }
 
     /**
@@ -177,15 +181,21 @@ abstract class JavaTopLevelType(
         forceMode: JavaImportForceMode? = null,
         isImplicit: Boolean = false
     ) {
-        type.toPackageString()?.let { doImport("$it.$type", member, forceMode, true, isImplicit) }
+        type.packageName?.let { doImport("$it.$type", member, forceMode, true, isImplicit) }
     }
+
+    fun isImported(type: IJavaType) =
+        imports[type.packageName]?.any { it.value.member === IMPORT_WILDCARD || it.value.member == type.className } ?: false
+
+    fun isResolved(type: IJavaType) =
+        isImported(type) || type.packageName == packageName
 
     internal fun PrintWriter.printType(indent: String) {
         val documentation = documentation.toJavaDoc(indent, typeParameters, references, authors, since)
         if (documentation != null) println(documentation)
 
         print(indent)
-        printAnnotations(indent)
+        printAnnotations(indent, this@JavaTopLevelType)
         printModifiers()
         printTypeDeclaration()
         print(" {")
@@ -221,7 +231,7 @@ abstract class JavaTopLevelType(
                     prevCategory = cat
                 }
 
-                it.run { isLastLineBlank = printMember(subIndent) }
+                it.run { isLastLineBlank = printMember(subIndent, this@JavaTopLevelType) }
             }
 
             print(indent)
@@ -239,14 +249,13 @@ abstract class JavaTopLevelType(
      */
     internal abstract fun PrintWriter.printTypeDeclaration()
 
-    override fun PrintWriter.printMember(indent: String): Boolean {
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType): Boolean {
         printType(indent)
         println(LN)
 
         return false
     }
 
-    override fun toPackageString() = packageName
     override fun toString() = className
 
 }
@@ -288,11 +297,12 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      *
      * @receiver the receiver to which this member will be printed
      * @param indent the indent to be used
+     * @param containerType the type this member will be printed in
      * @return returns whether or not this member ends with a blank line
      *
      * @since 1.0.0
      */
-    fun PrintWriter.printMember(indent: String): Boolean
+    fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType): Boolean
 
 }
 

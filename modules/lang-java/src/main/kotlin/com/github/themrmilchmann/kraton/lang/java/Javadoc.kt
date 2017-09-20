@@ -163,12 +163,12 @@ internal fun String?.toJavaDoc(
 } else {
     StringBuilder(this?.cleanup("$indent * ") ?: "").apply {
         if (typeParameters != null && typeParameters.any { it.second != null }) {
-            val alignment = typeParameters.map { it.first.toString().length }.fold(0) { l, r -> maxOf(l, r) }
+            val alignment = typeParameters.map { it.first.className.length }.fold(0) { l, r -> maxOf(l, r) }
             val multilineAlignment = tagMultilineAlignment(indent, alignment)
 
             if (isNotEmpty()) append("\n$indent *")
             typeParameters.filter { it.second != null }
-                .forEach { printMultilineTag("param", "<${it.first}>", it.second!!, indent, alignment, multilineAlignment) }
+                .forEach { printMultilineTag("param", "<${it.first.className}>", it.second!!, indent, alignment, multilineAlignment) }
         }
 
         if (see != null && !see.isEmpty()) {
@@ -207,7 +207,7 @@ internal fun String?.toJavaDoc(
  *
  * @since 1.0.0
  */
-internal fun JavaMethod.toJavaDoc(indent: String = ""): String? {
+internal fun JavaMethod.toJavaDoc(indent: String = "", containerType: JavaTopLevelType): String? {
     if (returnDoc == null
         && (exceptions == null || exceptions.none { it.second != null })
         && see == null
@@ -226,7 +226,7 @@ internal fun JavaMethod.toJavaDoc(indent: String = ""): String? {
                 && typeParameters?.any { it.second != null } != null) {
                 // Find maximum param name length
                 val alignment = maxOf(
-                    typeParameters.map { it.first.toString().length }.fold(0) { l, r -> maxOf(l, r) },
+                    typeParameters.map { it.first.asString(containerType).length }.fold(0) { l, r -> maxOf(l, r) },
                     parameters.map { it.name.length }.fold(0) { l, r -> maxOf(l, r) }
                 )
                 val multilineAlignment = tagMultilineAlignment(indent, alignment)
@@ -250,7 +250,7 @@ internal fun JavaMethod.toJavaDoc(indent: String = ""): String? {
 
                 if (isNotEmpty()) append("\n$indent *")
                 exceptions.filter { it.second != null }.forEach {
-                    printMultilineTag("throws", it.first.toQualifiedString(), it.second as String, indent, alignment, multilineAlignment)
+                    printMultilineTag("throws", it.first.asString(containerType), it.second as String, indent, alignment, multilineAlignment)
                 }
             }
 

@@ -29,18 +29,43 @@
  */
 package com.github.themrmilchmann.kraton.test.lang.java
 
+import com.github.themrmilchmann.kraton.*
 import com.github.themrmilchmann.kraton.lang.java.*
-import org.testng.Assert.*
-import org.testng.annotations.*
 
-class KTypeTests {
+private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java.types"
+private const val srcFolder = "lang-java/build"
+private const val srcSet = "kraton/generated"
 
-    @Test
-    fun testKotlinClassAsType() {
-        val type = Unit::class.asType
+val aMap = com.github.themrmilchmann.kraton.test.lang.java.types.a.Map::class.asType
+val aMapEntry = com.github.themrmilchmann.kraton.test.lang.java.types.a.Map.Entry::class.asType
 
-        assertEquals(type.className, "Unit")
-        assertEquals(type.packageName, "kotlin")
+val bMap = com.github.themrmilchmann.kraton.test.lang.java.types.b.Map::class.asType
+val bMapEntry = com.github.themrmilchmann.kraton.test.lang.java.types.b.Map.Entry::class.asType
+
+val TypeResolver = Profile {
+
+    javaClass(
+        "TAMBM",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
+
+        aMap("aMap", null, "")
+        bMap("bMap", null, "")
+
+    }
+
+    javaClass(
+        "TAMBE",
+        packageName,
+        srcFolder,
+        srcSet
+    ) {
+
+        aMap("aMap", null, "")
+        bMapEntry("bMapEntry", null, "")
+
     }
 
 }

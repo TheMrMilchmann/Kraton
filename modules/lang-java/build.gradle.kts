@@ -39,6 +39,10 @@ buildscript {
     }
 }
 
+plugins {
+    java
+}
+
 apply {
     plugin("org.jetbrains.kotlin.jvm")
 }
@@ -46,11 +50,9 @@ apply {
 configureKotlinProject()
 configureLangModule()
 
-val java = the<JavaPluginConvention>()
-
 tasks {
     "generateTests"(Generate::class) {
-        dependsOn("compileTestIntegrationKotlin")
+        dependsOn("compileTestIntegrationKotlin", "compileTestIntegrationJava")
 
         templatesRoot = File(projectDir, "src/test-integration/kotlin")
         outputRoot = parent!!.projectDir

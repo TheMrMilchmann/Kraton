@@ -27,20 +27,10 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.themrmilchmann.kraton.test.lang.java
+package com.github.themrmilchmann.kraton.test.lang.java.types.a;
 
-import com.github.themrmilchmann.kraton.lang.java.*
-import org.testng.Assert.*
-import org.testng.annotations.*
+public class Map {
 
-class KTypeTests {
-
-    @Test
-    fun testKotlinClassAsType() {
-        val type = Unit::class.asType
-
-        assertEquals(type.className, "Unit")
-        assertEquals(type.packageName, "kotlin")
-    }
+    public static class Entry {}
 
 }

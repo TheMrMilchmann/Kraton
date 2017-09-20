@@ -340,7 +340,7 @@ class JavaInterface internal constructor(
         if (typeParameters.isNotEmpty()) {
             print("<")
             print(StringJoiner(", ").apply {
-                typeParameters.forEach { add(it.first.toString()) }
+                typeParameters.forEach { add(it.first.asString(this@JavaInterface)) }
             })
             print(">")
         }
@@ -348,11 +348,9 @@ class JavaInterface internal constructor(
         if (superInterfaces != null) {
             print(" extends ")
             print(StringJoiner(", ").apply {
-                superInterfaces.forEach { add(it.toString()) }
+                superInterfaces.forEach { add(it.asString(this@JavaInterface)) }
             })
         }
     }
-
-    override fun toQualifiedString() = className
 
 }

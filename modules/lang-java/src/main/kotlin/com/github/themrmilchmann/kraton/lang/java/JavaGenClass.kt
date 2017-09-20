@@ -388,24 +388,22 @@ class JavaClass internal constructor(
         if (typeParameters.isNotEmpty()) {
             print("<")
             print(StringJoiner(", ").apply {
-                typeParameters.forEach { add(it.first.toString()) }
+                typeParameters.forEach { add(it.first.asString(this@JavaClass)) }
             })
             print(">")
         }
 
         if (superClass != null) {
             print(" extends ")
-            print(superClass.toString())
+            print(superClass.asString(this@JavaClass))
         }
 
         if (interfaces != null) {
             print(" implements ")
             print(StringJoiner(", ").apply {
-                interfaces.forEach { add(it.toString()) }
+                interfaces.forEach { add(it.asString(this@JavaClass)) }
             })
         }
     }
-
-    override fun toQualifiedString() = className
 
 }
