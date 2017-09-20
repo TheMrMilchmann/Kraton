@@ -39,14 +39,14 @@ class KModifierTests {
     fun testAnnotateModifier() {
         val mod = Annotate(java.lang.Override::class.asType())
 
-        assertEquals(mod.toString(), "@Override")
+        assertEquals(mod.asString(null), "@java.lang.Override")
     }
 
     @Test
     fun testAnnotateWithParamModifier() {
-        val mod = Annotate(Deprecated::class.asType(), "since = 1")
+        val mod = Annotate(java.lang.Deprecated::class.asType(), "since = 1")
 
-        assertEquals(mod.toString(), "@Deprecated(since = 1)")
+        assertEquals(mod.asString(null), "@java.lang.Deprecated(since = 1)")
     }
 
 }

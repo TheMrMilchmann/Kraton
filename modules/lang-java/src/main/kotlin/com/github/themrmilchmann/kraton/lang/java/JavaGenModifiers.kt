@@ -169,7 +169,7 @@ open class Annotate @JvmOverloads constructor(
      *
      * @since 1.0.0
      */
-    fun asString(containerType: JavaTopLevelType) =
+    fun asString(containerType: JavaTopLevelType?) =
         "@${type.asString(containerType)}${if (parameters === null) "" else "($parameters)"}"
 
 }

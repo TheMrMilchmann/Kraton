@@ -41,14 +41,14 @@ public final class JModifierTests {
     public void testAnnotateModifier() {
         Annotate mod = new Annotate(JavaTypesKt.asType(Override.class));
 
-        assertEquals(mod.toString(), "@Override");
+        assertEquals(mod.asString(null), "@java.lang.Override");
     }
 
     @Test
     public void testAnnotateWithParamModifier() {
         Annotate mod = new Annotate(JavaTypesKt.asType(Deprecated.class), "since = 1");
 
-        assertEquals(mod.toString(), "@Deprecated(since = 1)");
+        assertEquals(mod.asString(null), "@java.lang.Deprecated(since = 1)");
     }
 
 }
