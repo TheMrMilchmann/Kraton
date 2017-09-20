@@ -256,7 +256,7 @@ abstract class JavaTopLevelType(
         return false
     }
 
-    override fun toString() = className
+    override fun toString() = memberName
 
 }
 

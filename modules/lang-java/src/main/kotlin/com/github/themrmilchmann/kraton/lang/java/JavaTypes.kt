@@ -155,6 +155,8 @@ abstract class JavaReferableType internal constructor(
                 toString()
             }
 
+    override fun toString() = memberName
+
 }
 
 /**
