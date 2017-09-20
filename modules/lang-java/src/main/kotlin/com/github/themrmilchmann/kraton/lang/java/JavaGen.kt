@@ -59,7 +59,7 @@ internal fun <T: JavaTopLevelType> Profile.targetOf(type: T, packageName: String
         val imports = type.imports.flatMap { it.value.values }.filter { !it.isImplicit }
 
         if (imports.any()) {
-            imports.forEach { it.apply { printImport() } }
+            imports.sorted().forEach { it.apply { printImport() } }
             println()
         }
 
