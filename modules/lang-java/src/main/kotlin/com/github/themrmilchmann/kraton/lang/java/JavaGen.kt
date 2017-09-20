@@ -122,6 +122,8 @@ abstract class JavaTopLevelType(
         isStatic: Boolean,
         isImplicit: Boolean
     ) {
+        if (container == packageName || container == "$packageName.$className") return
+
         val containerImports = imports.getOrPut(container, ::mutableMapOf)
         if (member in containerImports && forceMode === null) return
 
