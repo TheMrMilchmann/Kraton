@@ -20,8 +20,17 @@
 <p><a href="-java-referable-type/class-name.html">className</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">className</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">className</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
 <p>the name of the type</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-java-referable-type/package-name.html">packageName</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">packageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>The name of the package containing this type. (May be <code>null</code>.)</p>
 </td>
 </tr>
 </tbody>
@@ -31,30 +40,10 @@
 <tbody>
 <tr>
 <td>
-<p><a href="-java-referable-type/to-package-string.html">toPackageString</a></p>
+<p><a href="-java-referable-type/as-string.html">asString</a></p>
 </td>
 <td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toPackageString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
-<p>Returns the name of the package containing this type (or <code>null</code> for "java.lang" and primitives types).</p>
-</td>
-</tr>
-<tr>
-<td>
-<p><a href="-java-referable-type/to-qualified-string.html">toQualifiedString</a></p>
-</td>
-<td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toQualifiedString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
-<p>Returns the qualified name of this type. That is, the name of this type dot prefixed by enclosing types.</p>
-</td>
-</tr>
-<tr>
-<td>
-<p><a href="-java-referable-type/to-string.html">toString</a></p>
-</td>
-<td>
-<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">toString</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
-<p>Returns the name of this type.</p>
-</td>
+<code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">asString</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaReferableType$asString(com.github.themrmilchmann.kraton.lang.java.JavaTopLevelType)/from">from</span><span class="symbol">:</span>&nbsp;<a href="-java-top-level-type/index.html"><span class="identifier">JavaTopLevelType</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
 </tr>
 </tbody>
 </table>
@@ -78,6 +67,13 @@
 <code><span class="keyword">fun </span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">.</span><span class="identifier">array</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$array(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.Int)/dim">dim</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">)</span><span class="symbol">: </span><a href="-java-array-type/index.html"><span class="identifier">JavaArrayType</span></a></code>
 <p>Shortcut to create a new JavaArrayType.</p>
 </td>
+</tr>
+<tr>
+<td>
+<p><a href="member.html">member</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">.</span><span class="identifier">member</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$member(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)))/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$member(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)))/typeParameters">typeParameters</span><span class="symbol">:</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-type-reference/index.html"><span class="identifier">JavaTypeReference</span></a></code></td>
 </tr>
 </tbody>
 </table>

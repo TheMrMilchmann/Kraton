@@ -43,7 +43,7 @@
 <p><a href="-java-array-type/index.html">JavaArrayType</a></p>
 </td>
 <td>
-<code><span class="keyword">class </span><span class="identifier">JavaArrayType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
+<code><span class="keyword">class </span><span class="identifier">JavaArrayType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a></code>
 <p>A type representing a java array.</p>
 </td>
 </tr>
@@ -167,7 +167,7 @@
 <p><a href="-java-type-reference/index.html">JavaTypeReference</a></p>
 </td>
 <td>
-<code><span class="keyword">class </span><span class="identifier">JavaTypeReference</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">JavaTypeReference</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-java-referable-type/index.html"><span class="identifier">JavaReferableType</span></a></code>
 <p>A reference to a java type.</p>
 </td>
 </tr>
@@ -498,6 +498,13 @@
 <code><span class="keyword">fun </span><span class="identifier">larger</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$larger(com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType, com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType)/alpha">alpha</span><span class="symbol">:</span>&nbsp;<a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$larger(com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType, com.github.themrmilchmann.kraton.lang.java.JavaPrimitiveType)/beta">beta</span><span class="symbol">:</span>&nbsp;<a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-primitive-type/index.html"><span class="identifier">JavaPrimitiveType</span></a></code>
 <p>Compares two types by size in bytes and returns the larger one.</p>
 </td>
+</tr>
+<tr>
+<td>
+<p><a href="member.html">member</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">.</span><span class="identifier">member</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$member(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)))/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$member(com.github.themrmilchmann.kraton.lang.java.IJavaType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.java.IJavaType)))/typeParameters">typeParameters</span><span class="symbol">:</span>&nbsp;<a href="-i-java-type/index.html"><span class="identifier">IJavaType</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-java-type-reference/index.html"><span class="identifier">JavaTypeReference</span></a></code></td>
 </tr>
 <tr>
 <td>
