@@ -225,7 +225,7 @@ class JavaGenericType(
         className + StringBuilder().run {
             if (bounds.isNotEmpty()) {
                 append(" ${if (upperBounds) "extends" else "super"} ")
-                append(StringJoiner(", ").run {
+                append(StringJoiner(" & ").run {
                     for (bound in bounds) append(bound.asString(from))
                     toString()
                 })
