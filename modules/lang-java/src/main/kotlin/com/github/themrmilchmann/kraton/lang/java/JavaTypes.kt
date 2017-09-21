@@ -33,44 +33,60 @@ import java.util.*
 import kotlin.reflect.*
 
 /**
- * TODO doc
+ * Creates and returns a new [IJavaType] referring to the receiver type.
+ *
+ * <b>This should be used with care. Types that are visible for the templates
+ * may not be available for the generated output and vice-versa.</b>
+ *
+ * @receiver the type to create a reference to
  *
  * @since 1.0.0
  */
-val Class<*>.asType get() = this.asType()
+val Class<*>.asType: IJavaType get() = this.asType()
 
 /**
- * Creates and returns a new [JavaTypeReference] referring to the receiver type.
+ * Creates and returns a new [IJavaType] referring to the receiver type.
  *
- * @receiver the type to create a new reference to
+ * <b>This should be used with care. Types that are visible for the templates
+ * may not be available for the generated output and vice-versa.</b>
+ *
+ * @receiver the type to create a reference to
  * @param typeParameters the type-parameters for the type
- * @return the newly created [JavaTypeReference]
+ * @return the newly created [IJavaType]
  *
  * @since 1.0.0
  */
-fun Class<*>.asType(vararg typeParameters: IJavaType): JavaTypeReference =
+fun Class<*>.asType(vararg typeParameters: IJavaType): IJavaType =
     if (this.isMemberClass)
         enclosingClass.asType.member(simpleName, *typeParameters)
     else
         JavaTypeReference(simpleName, `package`.name, *typeParameters)
 
 /**
- * TODO doc
+ * Creates and returns a new [IJavaType] referring to the receiver type.
+ *
+ * <b>This should be used with care. Types that are visible for the templates
+ * may not be available for the generated output and vice-versa.</b>
+ *
+ * @receiver the type to create a reference to
  *
  * @since 1.0.0
  */
-val KClass<*>.asType get() = java.asType
+val KClass<*>.asType: IJavaType get() = java.asType
 
 /**
- * Creates and returns a new [JavaTypeReference] referring to the receiver type.
+ * Creates and returns a new [IJavaType] referring to the receiver type.
  *
- * @receiver the type to create a new reference to
+ * <b>This should be used with care. Types that are visible for the templates
+ * may not be available for the generated output and vice-versa.</b>
+ *
+ * @receiver the type to create a reference to
  * @param typeParameters the type-parameters for the type
- * @return the newly created [JavaTypeReference]
+ * @return the newly created [IJavaType]
  *
  * @since 1.0.0
  */
-fun KClass<*>.asType(vararg typeParameters: IJavaType) =
+fun KClass<*>.asType(vararg typeParameters: IJavaType): IJavaType =
     java.asType(*typeParameters)
 
 fun IJavaType.member(className: String, vararg typeParameters: IJavaType) =
