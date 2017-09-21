@@ -234,7 +234,7 @@ class JavaArrayType(
 class JavaGenericType(
     name: String,
     private vararg val bounds: IJavaType,
-    private val upperBounds: Boolean = false
+    private val upperBounds: Boolean = true
 ): JavaReferableType(name) {
 
     override fun asString(from: JavaTopLevelType?) =
