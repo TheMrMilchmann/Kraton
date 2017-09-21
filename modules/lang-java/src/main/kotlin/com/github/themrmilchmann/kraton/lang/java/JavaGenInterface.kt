@@ -52,6 +52,7 @@ import java.util.*
  *
  * @since 1.0.0
  */
+@JvmOverloads
 fun Profile.javaInterface(
     fileName: String,
     packageName: String,
@@ -86,6 +87,7 @@ fun Profile.javaInterface(
  *
  * @since 1.0.0
  */
+@JvmOverloads
 fun JavaClass.javaInterface(
     className: String,
     documentation: String? = null,
@@ -116,6 +118,7 @@ fun JavaClass.javaInterface(
  *
  * @since 1.0.0
  */
+@JvmOverloads
 fun JavaInterface.javaInterface(
     className: String,
     documentation: String? = null,
@@ -173,6 +176,7 @@ class JavaInterface internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         name: String,
         value: String?,
@@ -213,6 +217,7 @@ class JavaInterface internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         names: Array<String>,
         documentation: String,
@@ -253,6 +258,7 @@ class JavaInterface internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         vararg entries: Pair<String, String?>,
         documentation: String,
@@ -290,6 +296,7 @@ class JavaInterface internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         name: String,
         documentation: String,
@@ -324,6 +331,7 @@ class JavaInterface internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     fun String.typeParameter(
         documentation: String? = null,
         vararg bounds: IJavaType

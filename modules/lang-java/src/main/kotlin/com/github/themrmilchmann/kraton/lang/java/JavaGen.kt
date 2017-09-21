@@ -158,6 +158,7 @@ abstract class JavaTopLevelType(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     fun import(type: String, isStatic: Boolean = false, isImplicit: Boolean = false) =
         doImport(type, IMPORT_WILDCARD, JavaImportForceMode.FORCE_WILDCARD, isStatic, isImplicit)
 
@@ -166,6 +167,7 @@ abstract class JavaTopLevelType(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     fun import(
         type: IJavaType,
         forceMode: JavaImportForceMode? = null,
@@ -179,6 +181,7 @@ abstract class JavaTopLevelType(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     fun import(
         type: IJavaType,
         member: String,

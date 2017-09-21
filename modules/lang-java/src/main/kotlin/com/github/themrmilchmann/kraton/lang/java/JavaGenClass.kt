@@ -52,6 +52,7 @@ import java.util.*
  *
  * @since 1.0.0
  */
+@JvmOverloads
 fun Profile.javaClass(
     fileName: String,
     packageName: String,
@@ -87,6 +88,7 @@ fun Profile.javaClass(
  *
  * @since 1.0.0
  */
+@JvmOverloads
 fun JavaClass.javaClass(
     className: String,
     documentation: String? = null,
@@ -118,6 +120,7 @@ fun JavaClass.javaClass(
  *
  * @since 1.0.0
  */
+@JvmOverloads
 fun JavaInterface.javaClass(
     className: String,
     documentation: String? = null,
@@ -185,6 +188,7 @@ class JavaClass internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     fun constructor(
         documentation: String,
         vararg parameters: JavaParameter,
@@ -221,6 +225,7 @@ class JavaClass internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         name: String,
         value: String?,
@@ -261,6 +266,7 @@ class JavaClass internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         names: Array<String>,
         documentation: String,
@@ -301,6 +307,7 @@ class JavaClass internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         vararg entries: Pair<String, String?>,
         documentation: String,
@@ -338,6 +345,7 @@ class JavaClass internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     operator fun IJavaType.invoke(
         name: String,
         documentation: String,
@@ -372,6 +380,7 @@ class JavaClass internal constructor(
      *
      * @since 1.0.0
      */
+    @JvmOverloads
     fun String.typeParameter(
         documentation: String? = null,
         vararg bounds: IJavaType
