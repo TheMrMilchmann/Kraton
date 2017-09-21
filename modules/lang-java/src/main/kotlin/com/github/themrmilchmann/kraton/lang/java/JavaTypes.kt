@@ -217,13 +217,14 @@ class JavaArrayType(
  */
 class JavaGenericType(
     name: String,
-    private vararg val bounds: IJavaType
+    private vararg val bounds: IJavaType,
+    private val upperBounds: Boolean = false
 ): JavaReferableType(name) {
 
     override fun asString(from: JavaTopLevelType?) =
         className + StringBuilder().run {
             if (bounds.isNotEmpty()) {
-                append(" extends ")
+                append(" ${if (upperBounds) "extends" else "super"} ")
                 append(StringJoiner(", ").run {
                     for (bound in bounds) append(bound.asString(from))
                     toString()
