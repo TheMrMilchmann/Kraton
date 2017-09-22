@@ -213,13 +213,14 @@ abstract class JavaTopLevelType(
 
             val subIndent = indent + INDENT
             var prevCategory: String? = null
+            var isFirst = true
             var wasField = false
 
             members.forEach {
                 val isField = it is JavaField
                 val cat = it.category
 
-                if ((wasField && !isField) || (cat != prevCategory)) println()
+                if ((wasField && !isField) && cat == prevCategory) println()
 
                 if (cat != null) {
                     val mCat = CATEGORY.matchEntire(cat) ?: throw IllegalArgumentException("Category name does not match pattern")
@@ -227,18 +228,20 @@ abstract class JavaTopLevelType(
 
                     if (cat != prevCategory) {
                         if (category.isNotEmpty()) {
+                            if (wasField) println()
+
                             println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
                             println("$subIndent// # $category ${CATEGORY_DIVIDER.substring(subIndent.length + category.length + 6)}")
                             println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
-                        }
-
-                        println()
+                            println()
+                        } else if (!isFirst)
+                            println()
                     }
-
                 }
 
-                wasField = isField
                 prevCategory = cat
+                isFirst = false
+                wasField = isField
 
                 it.run { printMember(subIndent, this@JavaTopLevelType) }
             }
