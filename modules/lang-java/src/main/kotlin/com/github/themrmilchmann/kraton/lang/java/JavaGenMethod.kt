@@ -69,7 +69,7 @@ open class JavaMethod internal constructor(
     override val weight: Int
         get() = if (has(static)) WEIGHT_STATIC_METHOD else WEIGHT_INSTANCE_METHOD
 
-    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType): Boolean {
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType) {
         val documentation = toJavaDoc(indent, containerType)
         if (documentation != null) println(documentation)
 
@@ -132,8 +132,6 @@ open class JavaMethod internal constructor(
         }
 
         println()
-
-        return true
     }
 
     /**

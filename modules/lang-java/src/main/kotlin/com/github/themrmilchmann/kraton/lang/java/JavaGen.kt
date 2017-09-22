@@ -212,21 +212,21 @@ abstract class JavaTopLevelType(
             println(LN)
 
             val subIndent = indent + INDENT
-            var isFirst = true
             var prevCategory: String? = null
-            var isLastLineBlank = true
+            var wasField = false
 
             members.forEach {
+                val isField = it is JavaField
                 val cat = it.category
+
+                if ((wasField && !isField) || (cat != prevCategory)) println()
 
                 if (cat != null) {
                     val mCat = CATEGORY.matchEntire(cat) ?: throw IllegalArgumentException("Category name does not match pattern")
                     val category = mCat.groupValues[2]
 
-                    if (cat != prevCategory && !(isFirst && category.isEmpty())) {
+                    if (cat != prevCategory) {
                         if (category.isNotEmpty()) {
-                            if (!isLastLineBlank) println()
-
                             println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
                             println("$subIndent// # $category ${CATEGORY_DIVIDER.substring(subIndent.length + category.length + 6)}")
                             println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
@@ -235,13 +235,15 @@ abstract class JavaTopLevelType(
                         println()
                     }
 
-                    isFirst = false
-                    prevCategory = cat
                 }
 
-                it.run { isLastLineBlank = printMember(subIndent, this@JavaTopLevelType) }
+                wasField = isField
+                prevCategory = cat
+
+                it.run { printMember(subIndent, this@JavaTopLevelType) }
             }
 
+            if (wasField) println()
             print(indent)
         }
 
@@ -257,11 +259,9 @@ abstract class JavaTopLevelType(
      */
     internal abstract fun PrintWriter.printTypeDeclaration()
 
-    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType): Boolean {
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType) {
         printType(indent)
         println(LN)
-
-        return false
     }
 
     override fun toString() = memberName
@@ -308,11 +308,9 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      * @param indent        the indent to be used
      * @param containerType the type this member will be printed in
      *
-     * @return returns whether or not this member ends with a blank line
-     *
      * @since 1.0.0
      */
-    fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType): Boolean
+    fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType)
 
 }
 
