@@ -152,8 +152,9 @@ private fun readFile(file: Path) = Files.newByteChannel(file).use {
 private class KratonWriter(out: Writer): PrintWriter(out) {
 
     /**
-     * Terminates the current line by writing the line separator string. The line separator string is always a single
-     * newline character (<code>'\n'</code>).
+     * Terminates the current line by writing the line separator string. The
+     * line separator string is always a single newline character
+     * (<code>'\n'</code>).
      */
     override fun println() = print("\n")
 

@@ -63,21 +63,25 @@ class Profile(
 /**
  * # GeneratorTarget
  * A GeneratorTarget defines a file template for the generator to process.
- * Usually end user's shouldn't need to call this class directly but use functionality of their respective language module instead.
+ * Usually end user's shouldn't need to call this class directly but use
+ * functionality of their respective language module instead.
  *
  * ## Output location
- * The Generator is built to assume that the project is using a directory layout that is similar to Kraton's. However, this behaviour is fully customizable and
- * may be altered.
+ * The Generator is built to assume that the project is using a directory layout
+ * that is similar to Kraton's. However, this behaviour is fully customizable
+ * and may be altered.
  *
  * The path of the file is constructed as follows:
  * `srcFolder/srcSet/language/packageName/fileName.appendix`
  *
- * @property fileName the name for the file
- * @property language the language to be used
- * @property packageName the package in which the generated output is to be placed
- * @property srcFolder the source folder for the generated output
- * @property srcSet the source set for the generated output
- * @property appendix the file ending (defaults to the language)
+ * @property fileName       the name for the file
+ * @property language       the language to be used
+ * @property packageName    the package in which the generated output is to be
+ *                          placed
+ * @property srcFolder      the source folder for the generated output
+ * @property srcSet         the source set for the generated output
+ * @property appendix       the file ending (defaults to the language)
+ *
  * @constructor Creates a new GeneratorTarget.
  *
  * @since 1.0.0
