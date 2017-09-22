@@ -245,7 +245,7 @@ internal fun JavaMethod.toJavaDoc(indent: String = "", containerType: JavaTopLev
             }
 
             if (exceptions != null && exceptions.any { it.second != null }) {
-                val alignment = exceptions.map { it.second?.length ?: 0 }.fold(0) { left, right -> maxOf(left, right) }
+                val alignment = exceptions.map { it.first.asString(containerType).length }.fold(0) { left, right -> maxOf(left, right) }
                 val multilineAlignment = tagMultilineAlignment(indent, alignment)
 
                 if (isNotEmpty()) append("\n$indent *")
