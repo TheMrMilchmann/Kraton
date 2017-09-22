@@ -95,7 +95,7 @@ class JavaField internal constructor(
             })
         }
 
-        println(";$LN")
+        println(";")
 
         return false
     }
