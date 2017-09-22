@@ -140,11 +140,15 @@ private fun String.layoutJavadoc(indent: String = INDENT): String {
  * Formats the receiver documentation and adds the given attributes.
  *
  * @receiver the documentation to be formatted
- * @param indent the indent for the documentation
- * @param typeParameters the type parameters to be included in the documentation
- * @param see the references to be included in the documentation
- * @param authors the authors to be listed in the documentation
- * @param since the value for the `@since` tag to be used in the documentation
+ *
+ * @param indent            the indent for the documentation
+ * @param typeParameters    the type parameters to be included in the
+ *                          documentation
+ * @param see               the references to be included in the documentation
+ * @param authors           the authors to be listed in the documentation
+ * @param since             the value for the `@since` tag to be used in the
+ *                          documentation
+ *
  * @return the formatted documentation string or `null` if the documentation is empty
  *
  * @since 1.0.0
@@ -202,7 +206,9 @@ internal fun String?.toJavaDoc(
  * Formats the receiver method's documentation and adds the given attributes.
  *
  * @receiver the method which's documentation is to be formatted
+ *
  * @param indent the indent for the documentation
+ *
  * @return the formatted documentation string or `null` if the documentation is empty
  *
  * @since 1.0.0

@@ -33,8 +33,10 @@ package com.github.themrmilchmann.kraton.lang.java
  * Shortcut to create a new JavaParameter.
  *
  * @receiver the type for the parameter
- * @param name the name for the parameter
+ *
+ * @param name          the name for the parameter
  * @param documentation the documentation to be attached to the parameter
+ *
  * @return a new JavaParameter with the given properties.
  *
  * @since 1.0.0
@@ -47,9 +49,10 @@ fun IJavaType.PARAM(
 /**
  * A parameter to be used in java methods (or constructors).
  *
- * @property type the type for the parameter
- * @property name the name for the parameter
- * @property documentation the documentation to be attached to the parameter
+ * @property type           the type for the parameter
+ * @property name           the name for the parameter
+ * @property documentation  the documentation to be attached to the parameter
+ *
  * @constructor Create a new JavaParameter with the given properties.
  *
  * @since 1.0.0

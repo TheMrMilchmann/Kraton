@@ -86,9 +86,10 @@ internal class JavaGeneratorTarget(
 /**
  * A java top-level type.
  *
- * @property className the name of this type
- * @property packageName the name of the package containing this type
- * @property documentation the documentation of this type
+ * @property className      the name of this type
+ * @property packageName    the name of the package containing this type
+ * @property documentation  the documentation of this type
+ *
  * @constructor Creates a new java top-level type.
  *
  * @since 1.0.0
@@ -303,8 +304,10 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      * Prints this java object to the given PrintWriter.
      *
      * @receiver the receiver to which this member will be printed
-     * @param indent the indent to be used
+     *
+     * @param indent        the indent to be used
      * @param containerType the type this member will be printed in
+     *
      * @return returns whether or not this member ends with a blank line
      *
      * @since 1.0.0

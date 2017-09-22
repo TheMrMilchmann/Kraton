@@ -51,7 +51,9 @@ val Class<*>.asType: IJavaType get() = this.asType()
  * may not be available for the generated output and vice-versa.</b>
  *
  * @receiver the type to create a reference to
+ *
  * @param typeParameters the type-parameters for the type
+ *
  * @return the newly created [IJavaType]
  *
  * @since 1.0.0
@@ -81,7 +83,9 @@ val KClass<*>.asType: IJavaType get() = java.asType
  * may not be available for the generated output and vice-versa.</b>
  *
  * @receiver the type to create a reference to
+ *
  * @param typeParameters the type-parameters for the type
+ *
  * @return the newly created [IJavaType]
  *
  * @since 1.0.0
@@ -145,6 +149,7 @@ interface IJavaType {
  * A reference to a java type.
  *
  * @property className the name of the type
+ *
  * @constructor Creates a new reference to a java type.
  *
  * @since 1.0.0
@@ -194,7 +199,9 @@ open class JavaTypeReference(
  * Creates a new array representing type with the given type and dimensions.
  *
  * @receiver the type of the array
+ *
  * @param dim the dimensions of the array (defaults to one)
+ *
  * @return the representing type
  *
  * @since 1.0.0
@@ -204,8 +211,9 @@ fun IJavaType.array(dim: Int = 1) = JavaArrayType(this, dim)
 /**
  * A type representing a java array.
  *
- * @property type the type of the array
- * @property dim the dimensions of the array (defaults to one)
+ * @property type   the type of the array
+ * @property dim    the dimensions of the array (defaults to one)
+ *
  * @constructor Creates a new array representing type with the given type and dimensions.
  *
  * @since 1.0.0
@@ -226,7 +234,7 @@ class JavaArrayType(
 /**
  * A java generic type.
  *
- * @param name the name of the generic type
+ * @param name      the name of the generic type
  * @property bounds the bounds of this type
  *
  * @since 1.0.0
@@ -255,10 +263,10 @@ class JavaGenericType(
 /**
  * A JavaPrimitiveType represents a primitive type.
  *
- * @property boxedType the boxed type of this primitive type
- * @property className the name of this type
- * @property nullValue the `null`-value of this primitive type
- * @property size the size (in bytes) of this type
+ * @property boxedType  the boxed type of this primitive type
+ * @property className  the name of this type
+ * @property nullValue  the `null`-value of this primitive type
+ * @property size       the size (in bytes) of this type
  * @property abbrevName a commonly used abbreviation of this type's name
  *
  * @since 1.0.0
@@ -279,9 +287,10 @@ class JavaPrimitiveType private constructor(
 /**
  * Casts a value to another type (excluding unnecessary casts).
  *
- * @param from the initial type
- * @param to the desired type
+ * @param from  the initial type
+ * @param to    the desired type
  * @param value the value to be cast
+ *
  * @return the casted value
  *
  * @since 1.0.0
@@ -318,9 +327,10 @@ fun cast(from: JavaReferableType, to: JavaReferableType, value: String): String 
 /**
  * Converts a value to another type.
  *
- * @param from the initial type
- * @param to the desired type
+ * @param from  the initial type
+ * @param to    the desired type
  * @param value the value to be converted
+ *
  * @return the converted value
  *
  * @since 1.0.0
@@ -360,7 +370,8 @@ fun convert(from: JavaReferableType, to: JavaReferableType, value: String): Stri
  * Compares two types by size in bytes and returns the smaller one.
  *
  * @param alpha type to be compared
- * @param beta type to be compared
+ * @param beta  type to be compared
+ *
  * @return the type which size in bytes is smaller (`alpha` is also returned if there is no difference)
  *
  * @since 1.0.0
@@ -371,7 +382,8 @@ fun smaller(alpha: JavaPrimitiveType, beta: JavaPrimitiveType) = if (alpha.size 
  * Compares two types by size in bytes and returns the larger one.
  *
  * @param alpha type to be compared
- * @param beta type to be compared
+ * @param beta  type to be compared
+ *
  * @return the type which size in bytes is larger (`alpha` is also returned if there is no difference)
  *
  * @since 1.0.0

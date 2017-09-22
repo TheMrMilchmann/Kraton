@@ -325,7 +325,7 @@ class JavaInterface internal constructor(
      * @receiver the name for the type parameter
      *
      * @param documentation the documentation for the type parameter
-     * @param bounds the bounds for the type parameter
+     * @param bounds        the bounds for the type parameter
      *
      * @return the newly created and registered JavaGenericType object
      *
