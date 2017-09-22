@@ -76,6 +76,16 @@ open class JavaMethod internal constructor(
         printAnnotations(indent, containerType)
         print(indent)
         printModifiers()
+
+        if (typeParameters != null) {
+            print("<")
+            print(StringJoiner(", ").run {
+                typeParameters.forEach { add(it.first.asString(containerType)) }
+                toString()
+            })
+            print("> ")
+        }
+
         printMethodHead(containerType)
         print("(")
 
