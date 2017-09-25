@@ -1,5 +1,4 @@
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/TheMrMilchmann/Kraton/blob/master/LICENSE.md)
-![Size](http://reposs.herokuapp.com/?path=TheMrMilchmann/Kraton)
 [![Build Status](https://travis-ci.org/TheMrMilchmann/Kraton.svg?branch=master)](https://travis-ci.org/TheMrMilchmann/Kraton)
 
 Kraton
