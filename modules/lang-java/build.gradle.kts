@@ -30,7 +30,6 @@
 import build.*
 import com.github.themrmilchmann.kraton.gradle.tasks.*
 import org.gradle.kotlin.dsl.*
-import org.jetbrains.kotlin.gradle.tasks.*
 import java.io.*
 
 buildscript {
