@@ -67,4 +67,27 @@ public final class JTypeTests {
         assertEquals(JavaTypesKt.asString(type, null), "java.util.List<java.lang.String>");
     }
 
+    @Test
+    public void testJavaClassWithParamsAsNullableType() {
+        IJvmType typeParam = JvmTypesKt.asType(String.class);
+        IJvmType type = JvmTypesKt.asType(java.util.List.class, typeParam);
+        IJvmType nullable = type.nullable();
+
+        assertEquals(type.getClassName(), "List");
+        assertEquals(type.getPackageName(), "java.util");
+        assertEquals(JavaTypesKt.asString(type, null), "java.util.List<java.lang.String>");
+        assertEquals(JavaTypesKt.asString(nullable, null), "java.util.List<java.lang.String>");
+    }
+
+    @Test
+    public void testJavaArrayAsNullableType() {
+        IJvmType type = JvmTypesKt.array(JvmTypesKt.asType(String.class));
+        IJvmType nullable = type.nullable();
+
+        assertFalse(type.isNullable());
+        assertTrue(nullable.isNullable());
+        assertEquals(JavaTypesKt.asString(type, null), "java.lang.String[]");
+        assertEquals(JavaTypesKt.asString(nullable, null), "java.lang.String[]");
+    }
+
 }
