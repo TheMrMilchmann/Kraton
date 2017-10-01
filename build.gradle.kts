@@ -208,7 +208,8 @@ project(":modules").subprojects {
 
 val sourceProjects = listOf(
     project(":modules:base"),
-    project(":modules:lang-java")
+    project(":modules:lang-java"),
+    project(":modules:lang-jvm-base")
 )
 
 tasks {
