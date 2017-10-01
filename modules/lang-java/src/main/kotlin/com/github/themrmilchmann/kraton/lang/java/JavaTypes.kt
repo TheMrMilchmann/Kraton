@@ -69,7 +69,7 @@ private fun JvmPrimitiveType.stringValueOfPrimitiveType() = when(this) {
     int     -> "int"
     long    -> "long"
     short   -> "short"
-    else -> throw UnsupportedOperationException()
+    else    -> throw UnsupportedOperationException()
 }
 
 private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when(this) {
@@ -81,7 +81,7 @@ private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when(this) {
     int.box     -> "Int"
     long.box    -> "Long"
     short.box   -> "Short"
-    else -> throw UnsupportedOperationException()
+    else        -> throw UnsupportedOperationException()
 }
 
 private fun AbstractJvmType.stringValueOfAbstractJvmType(from: JavaTopLevelType?): String {
