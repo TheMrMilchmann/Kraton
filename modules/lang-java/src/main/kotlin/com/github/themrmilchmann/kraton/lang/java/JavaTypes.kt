@@ -61,12 +61,26 @@ private fun JvmGenericType.stringValueOfJvmGenericType(from: JavaTopLevelType?) 
     }
 
 private fun JvmPrimitiveType.stringValueOfPrimitiveType() = when(this) {
-    int -> ""
+    boolean -> "boolean"
+    byte    -> "byte"
+    char    -> "char"
+    double  -> "double"
+    float   -> "float"
+    int     -> "int"
+    long    -> "long"
+    short   -> "short"
     else -> throw UnsupportedOperationException()
 }
 
 private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when(this) {
-    int.box -> ""
+    boolean.box -> "Boolean"
+    byte.box    -> "Byte"
+    char.box    -> "Char"
+    double.box  -> "Double"
+    float.box   -> "Float"
+    int.box     -> "Int"
+    long.box    -> "Long"
+    short.box   -> "Short"
     else -> throw UnsupportedOperationException()
 }
 
