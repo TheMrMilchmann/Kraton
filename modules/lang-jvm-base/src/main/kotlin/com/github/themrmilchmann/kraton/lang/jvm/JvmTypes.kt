@@ -98,7 +98,7 @@ val KClass<*>.asType: IJvmType get() = java.asType
 
 /**
  * Creates and returns a new `IJvmType` which holds a reference to the receiver
- * type of this function.
+ * type.
  *
  * <b>This should be used with care. Types that are visible for the templates
  * may not be available for the generated output and vice-versa.</b>
@@ -117,7 +117,16 @@ fun KClass<*>.asType(vararg typeParameters: IJvmType, nullable: Boolean = false)
     java.asType(*typeParameters, nullable = nullable)
 
 /**
- * TODO doc
+ * Creates and returns a new `IJvmType` which holds a reference to a member of
+ * the receiver type.
+ *
+ * @receiver the type that contains the member to create a reference to
+ *
+ * @param className         the name of the member to be referenced
+ * @param typeParameters    the type-parameters for the type
+ * @param nullable          whether or not the referenced type is nullable
+ *
+ * @return the newly created `IJvmType`
  *
  * @since 1.0.0
  */
@@ -145,21 +154,21 @@ class JvmMemberType internal constructor(
 interface IJvmType {
 
     /**
-     * TODO doc
+     * The enclosing type of this type, if any.
      *
      * @since 1.0.0
      */
     val enclosingType: IJvmType? get() = null
 
     /**
-     * TODO doc
+     * The name of the package in which this type is located.
      *
      * @since 1.0.0
      */
     val packageName: String? get() = enclosingType?.packageName
 
     /**
-     * TODO doc
+     * The immediate name of the class of the represented type.
      *
      * @since 1.0.0
      */
@@ -189,12 +198,21 @@ interface IJvmType {
      */
     val isNullable: Boolean get() = false
 
+    /**
+     * Returns a nullable version of this `IJVMType`.
+     *
+     * If the current type is already nullable, it should simply be returned.
+     *
+     * @return a nullable version of this type
+     *
+     * @since 1.0.0
+     */
     fun nullable(): IJvmType
 
 }
 
 /**
- * TODO doc
+ * A reference to a java type.
  *
  * @property className the name of the type
  *
@@ -213,7 +231,9 @@ abstract class AbstractJvmType internal constructor(
 }
 
 /**
- * TODO doc
+ * A reference to a java type.
+ *
+ * @param nullable whether or not the referenced type is nullable
  *
  * @property packageName the name of the package of the represented type
  *
@@ -235,7 +255,7 @@ open class JvmTypeReference(
 }
 
 /**
- * TODO doc
+ * Shortcut to create a new `JvmArrayType`.
  *
  * Creates a new array representing type with the given type and dimensions.
  *
@@ -252,7 +272,7 @@ open class JvmTypeReference(
 fun IJvmType.array(dim: Int = 1, nullable: Boolean = isNullable) = JvmArrayType(this, dim, nullable)
 
 /**
- * TODO doc
+ * A type representing an array.
  *
  * @property type       the type of the array
  * @property dimensions the dimensions of the array (defaults to one)
@@ -277,7 +297,7 @@ class JvmArrayType(
 }
 
 /**
- * TODO doc
+ * A type representing generic type.
  *
  * @since 1.0.0
  */
@@ -297,7 +317,7 @@ class JvmGenericType(
 }
 
 /**
- * A JvmPrimitive type represents a primitive type.
+ * A `JvmPrimitive` type represents a primitive type.
  **
  * @property nullValue  the `null`-value of this primitive type
  * @property size       the size (in bytes) of this type
@@ -331,7 +351,9 @@ class JvmPrimitiveType private constructor(
 }
 
 /**
- * TODO doc
+ * A `JvmPrimitiveBoxType` represents the boxed version of a primitive type.
+ *
+ * @param name the name of the boxed type to represent
  *
  * @since 1.0.0
  */
