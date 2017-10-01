@@ -29,6 +29,7 @@
  */
 package build
 
+import kotlinVersion
 import org.gradle.api.*
 import org.gradle.api.file.*
 import org.gradle.api.internal.*
@@ -38,7 +39,7 @@ import org.jetbrains.kotlin.gradle.plugin.*
 
 fun Project.configureKotlinProject(stdlib: Boolean = true) {
     dependencies {
-        if (stdlib) "compile"(kotlin("stdlib-jre8"))
+        if (stdlib) "compile"(kotlin("stdlib-jre8", kotlinVersion))
     }
 }
 
