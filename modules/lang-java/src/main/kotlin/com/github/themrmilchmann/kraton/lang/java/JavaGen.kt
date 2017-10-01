@@ -263,6 +263,8 @@ abstract class JavaTopLevelType(
      */
     internal abstract fun PrintWriter.printTypeDeclaration()
 
+    override fun nullable() = JvmTypeReference(className, packageName, nullable = true)
+
     override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType) {
         printType(indent)
         println(LN)
