@@ -1,0 +1,109 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>void - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.github.themrmilchmann.kraton.lang.jvm</a>&nbsp;/&nbsp;<a href=".">void</a><br/>
+<br/>
+<h1>void</h1>
+<code><span class="keyword">object </span><span class="identifier">void</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-abstract-jvm-type/index.html"><span class="identifier">AbstractJvmType</span></a></code> <a href="https://github.com/TheMrMilchmann/Kraton/blob/master/modules/lang-jvm-base/src/main/kotlin/com/github/themrmilchmann/kraton/lang/jvm/JvmGlobalTypes.kt#L37">(source)</a>
+<p>The <code>void</code> type.</p>
+<p><strong>Since</strong><br/>
+1.0.0</p>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-abstract-jvm-type/class-name.html">className</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">className</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>the name of the type</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-abstract-jvm-type/is-nullable.html">isNullable</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">isNullable</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Whether or not the referenced type is nullable.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-abstract-jvm-type/package-name.html">packageName</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">val </span><span class="identifier">packageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>The name of the package in which this type is located.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-abstract-jvm-type/type-parameters.html">typeParameters</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">typeParameters</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html"><span class="identifier">Array</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="../-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">&gt;</span><span class="symbol">?</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="nullable.html">nullable</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">nullable</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-abstract-jvm-type/index.html"><span class="identifier">AbstractJvmType</span></a></code>
+<p>Returns a nullable version of this <code>IJVMType</code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../../com.github.themrmilchmann.kraton.lang.java/-p-a-r-a-m.html">PARAM</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">.</span><span class="identifier">PARAM</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$PARAM(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$PARAM(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.String)/documentation">documentation</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="../../com.github.themrmilchmann.kraton.lang.java/-java-parameter/index.html"><span class="identifier">JavaParameter</span></a></code>
+<p>Shortcut to create a new JavaParameter.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../array.html">array</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">.</span><span class="identifier">array</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$array(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.Int, kotlin.Boolean)/dim">dim</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$array(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.Int, kotlin.Boolean)/nullable">nullable</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;isNullable<span class="symbol">)</span><span class="symbol">: </span><a href="../-jvm-array-type/index.html"><span class="identifier">JvmArrayType</span></a></code>
+<p>Shortcut to create a new <code>JvmArrayType</code>.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../../com.github.themrmilchmann.kraton.lang.java/as-string.html">asString</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">.</span><span class="identifier">asString</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java$asString(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, com.github.themrmilchmann.kraton.lang.java.JavaTopLevelType)/from">from</span><span class="symbol">:</span>&nbsp;<a href="../../com.github.themrmilchmann.kraton.lang.java/-java-top-level-type/index.html"><span class="identifier">JavaTopLevelType</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../member.html">member</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="../-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">.</span><span class="identifier">member</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$member(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.jvm.IJvmType)), kotlin.Boolean)/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$member(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.jvm.IJvmType)), kotlin.Boolean)/typeParameters">typeParameters</span><span class="symbol">:</span>&nbsp;<a href="../-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$member(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.jvm.IJvmType)), kotlin.Boolean)/nullable">nullable</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="../-jvm-member-type/index.html"><span class="identifier">JvmMemberType</span></a></code>
+<p>Creates and returns a new <code>IJvmType</code> which holds a reference to a member of
+the receiver type.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,243 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>com.github.themrmilchmann.kraton.lang.jvm - </title>
+<link rel="stylesheet" href="../style.css">
+</HEAD>
+<BODY>
+<a href=".">com.github.themrmilchmann.kraton.lang.jvm</a><br/>
+<br/>
+<h2>Package com.github.themrmilchmann.kraton.lang.jvm</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-abstract-jvm-type/index.html">AbstractJvmType</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">AbstractJvmType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a></code>
+<p>A reference to a java type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-i-jvm-type/index.html">IJvmType</a></p>
+</td>
+<td>
+<code><span class="keyword">interface </span><span class="identifier">IJvmType</span></code>
+<p>An <code>IJvmType</code> represents a type that may be used in a JVM language.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-jvm-array-type/index.html">JvmArrayType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JvmArrayType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a></code>
+<p>A type representing an array.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-jvm-generic-type/index.html">JvmGenericType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JvmGenericType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-abstract-jvm-type/index.html"><span class="identifier">AbstractJvmType</span></a></code>
+<p>A type representing generic type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-jvm-member-type/index.html">JvmMemberType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JvmMemberType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-jvm-type-reference/index.html"><span class="identifier">JvmTypeReference</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="-jvm-primitive-box-type/index.html">JvmPrimitiveBoxType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JvmPrimitiveBoxType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-abstract-jvm-type/index.html"><span class="identifier">AbstractJvmType</span></a></code>
+<p>A <code>JvmPrimitiveBoxType</code> represents the boxed version of a primitive type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-jvm-primitive-type/index.html">JvmPrimitiveType</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">JvmPrimitiveType</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-abstract-jvm-type/index.html"><span class="identifier">AbstractJvmType</span></a></code>
+<p>A <code>JvmPrimitive</code> type represents a primitive type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-jvm-type-reference/index.html">JvmTypeReference</a></p>
+</td>
+<td>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">JvmTypeReference</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-abstract-jvm-type/index.html"><span class="identifier">AbstractJvmType</span></a></code>
+<p>A reference to a java type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="void/index.html">void</a></p>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">void</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-abstract-jvm-type/index.html"><span class="identifier">AbstractJvmType</span></a></code>
+<p>The <code>void</code> type.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Extensions for External Classes</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="java.lang.-class/index.html">java.lang.Class</a></p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="kotlin.reflect.-k-class/index.html">kotlin.reflect.KClass</a></p>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="boolean.html">boolean</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">boolean</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>boolean</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="byte.html">byte</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">byte</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>byte</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="char.html">char</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">char</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>char</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="double.html">double</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">double</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>double</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="float.html">float</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">float</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>float</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="int.html">int</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">int</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>int</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="long.html">long</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">long</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>long</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="short.html">short</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">short</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>The <code>short</code> type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="string.html">string</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">string</span><span class="symbol">: </span><a href="-jvm-type-reference/index.html"><span class="identifier">JvmTypeReference</span></a></code>
+<p>The <code>String</code> type.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="array.html">array</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">.</span><span class="identifier">array</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$array(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.Int, kotlin.Boolean)/dim">dim</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a>&nbsp;<span class="symbol">=</span>&nbsp;1<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$array(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.Int, kotlin.Boolean)/nullable">nullable</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;isNullable<span class="symbol">)</span><span class="symbol">: </span><a href="-jvm-array-type/index.html"><span class="identifier">JvmArrayType</span></a></code>
+<p>Shortcut to create a new <code>JvmArrayType</code>.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="larger.html">larger</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">larger</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$larger(com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType, com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType)/alpha">alpha</span><span class="symbol">:</span>&nbsp;<a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$larger(com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType, com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType)/beta">beta</span><span class="symbol">:</span>&nbsp;<a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>Compares two types by size in bytes and returns the larger one.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="member.html">member</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><a href="-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">.</span><span class="identifier">member</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$member(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.jvm.IJvmType)), kotlin.Boolean)/className">className</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$member(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.jvm.IJvmType)), kotlin.Boolean)/typeParameters">typeParameters</span><span class="symbol">:</span>&nbsp;<a href="-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$member(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, kotlin.Array((com.github.themrmilchmann.kraton.lang.jvm.IJvmType)), kotlin.Boolean)/nullable">nullable</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="-jvm-member-type/index.html"><span class="identifier">JvmMemberType</span></a></code>
+<p>Creates and returns a new <code>IJvmType</code> which holds a reference to a member of
+the receiver type.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="smaller.html">smaller</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">smaller</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$smaller(com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType, com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType)/alpha">alpha</span><span class="symbol">:</span>&nbsp;<a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.jvm$smaller(com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType, com.github.themrmilchmann.kraton.lang.jvm.JvmPrimitiveType)/beta">beta</span><span class="symbol">:</span>&nbsp;<a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="-jvm-primitive-type/index.html"><span class="identifier">JvmPrimitiveType</span></a></code>
+<p>Compares two types by size in bytes and returns the smaller one.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
