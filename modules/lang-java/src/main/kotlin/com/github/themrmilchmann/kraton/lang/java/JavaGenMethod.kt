@@ -29,6 +29,7 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.io.*
 import java.util.*
 
@@ -53,16 +54,16 @@ import java.util.*
  * @since 1.0.0
  */
 open class JavaMethod internal constructor(
-    val returnType: IJavaType,
+    val returnType: IJvmType,
     override val name: String,
     val documentation: String,
     val parameters: Array<out JavaParameter>,
     val returnDoc: String?,
     val since: String?,
     override val category: String?,
-    val exceptions: Array<out Pair<IJavaType, String?>>?,
+    val exceptions: Array<out Pair<IJvmType, String?>>?,
     val see: Array<out String>?,
-    val typeParameters: Array<out Pair<JavaGenericType, String?>>?,
+    val typeParameters: Array<out Pair<JvmGenericType, String?>>?,
     private val body: String?
 ): JavaModifierTarget(), JavaBodyMember {
 
@@ -157,15 +158,15 @@ open class JavaMethod internal constructor(
  * @since 1.0.0
  */
 class JavaConstructor internal constructor(
-    returnType: IJavaType,
+    returnType: IJvmType,
     documentation: String,
     parameters: Array<out JavaParameter>,
     returnDoc: String?,
     since: String?,
     category: String?,
-    exceptions: Array<out Pair<IJavaType, String?>>?,
+    exceptions: Array<out Pair<IJvmType, String?>>?,
     see: Array<out String>?,
-    typeParameters: Array<out Pair<JavaGenericType, String?>>?,
+    typeParameters: Array<out Pair<JvmGenericType, String?>>?,
     body: String?
 ): JavaMethod(returnType, returnType.className, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body) {
 

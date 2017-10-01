@@ -30,6 +30,7 @@
 package com.github.themrmilchmann.kraton.lang.java
 
 import com.github.themrmilchmann.kraton.*
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.io.*
 import java.util.*
 
@@ -60,8 +61,8 @@ fun Profile.javaClass(
     srcSet: String,
     documentation: String? = null,
     since: String? = null,
-    superClass: IJavaType? = null,
-    interfaces: Array<out IJavaType>? = null,
+    superClass: IJvmType? = null,
+    interfaces: Array<out IJvmType>? = null,
     sorted: Boolean = false,
     copyrightHeader: String? = null,
     init: JavaClass.() -> Unit
@@ -93,8 +94,8 @@ fun JavaClass.javaClass(
     className: String,
     documentation: String? = null,
     since: String? = null,
-    superClass: IJavaType? = null,
-    interfaces: Array<out IJavaType>? = null,
+    superClass: IJvmType? = null,
+    interfaces: Array<out IJvmType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaClass.() -> Unit
@@ -125,8 +126,8 @@ fun JavaInterface.javaClass(
     className: String,
     documentation: String? = null,
     since: String? = null,
-    superClass: IJavaType? = null,
-    interfaces: Array<out IJavaType>? = null,
+    superClass: IJvmType? = null,
+    interfaces: Array<out IJvmType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaClass.() -> Unit
@@ -147,8 +148,8 @@ class JavaClass internal constructor(
     packageName: String,
     documentation: String?,
     since: String?,
-    val superClass: IJavaType?,
-    val interfaces: Array<out IJavaType>?,
+    val superClass: IJvmType?,
+    val interfaces: Array<out IJvmType>?,
     sorted: Boolean,
     override val category: String?,
     containerType: JavaTopLevelType?
@@ -195,9 +196,9 @@ class JavaClass internal constructor(
         returnDoc: String? = null,
         since: String? = null,
         category: String? = null,
-        exceptions: Array<out Pair<IJavaType, String?>>? = null,
+        exceptions: Array<out Pair<IJvmType, String?>>? = null,
         see: Array<out String>? = null,
-        typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
+        typeParameters: Array<out Pair<JvmGenericType, String?>>? = null,
         body: String? = null
     ) = JavaConstructor(this, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
         .also {
@@ -226,7 +227,7 @@ class JavaClass internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         name: String,
         value: String?,
         documentation: String,
@@ -267,7 +268,7 @@ class JavaClass internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         names: Array<String>,
         documentation: String,
         since: String? = null,
@@ -308,7 +309,7 @@ class JavaClass internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         vararg entries: Pair<String, String?>,
         documentation: String,
         since: String? = null,
@@ -346,16 +347,16 @@ class JavaClass internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         name: String,
         documentation: String,
         vararg parameters: JavaParameter,
         returnDoc: String? = null,
         since: String? = null,
         category: String? = null,
-        exceptions: Array<out Pair<IJavaType, String?>>? = null,
+        exceptions: Array<out Pair<IJvmType, String?>>? = null,
         see: Array<out String>? = null,
-        typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
+        typeParameters: Array<out Pair<JvmGenericType, String?>>? = null,
         body: String? = null
     ) = JavaMethod(this, name, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
         .also {
@@ -383,8 +384,8 @@ class JavaClass internal constructor(
     @JvmOverloads
     fun String.typeParameter(
         documentation: String? = null,
-        vararg bounds: IJavaType
-    ) = JavaGenericType(this, *bounds)
+        vararg bounds: IJvmType
+    ) = JvmGenericType(this, *bounds)
         .also {
             bounds.forEach { import(it) }
             typeParameters.add(it to documentation)

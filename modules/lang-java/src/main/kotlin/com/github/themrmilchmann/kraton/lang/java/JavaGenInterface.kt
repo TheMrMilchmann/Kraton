@@ -30,6 +30,7 @@
 package com.github.themrmilchmann.kraton.lang.java
 
 import com.github.themrmilchmann.kraton.*
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.io.*
 import java.util.*
 
@@ -60,7 +61,7 @@ fun Profile.javaInterface(
     srcSet: String,
     documentation: String? = null,
     since: String? = null,
-    superInterfaces: Array<out IJavaType>? = null,
+    superInterfaces: Array<out IJvmType>? = null,
     sorted: Boolean = false,
     copyrightHeader: String? = null,
     init: JavaInterface.() -> Unit
@@ -92,7 +93,7 @@ fun JavaClass.javaInterface(
     className: String,
     documentation: String? = null,
     since: String? = null,
-    superInterfaces: Array<out IJavaType>? = null,
+    superInterfaces: Array<out IJvmType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaInterface.() -> Unit
@@ -123,7 +124,7 @@ fun JavaInterface.javaInterface(
     className: String,
     documentation: String? = null,
     since: String? = null,
-    superInterfaces: Array<out IJavaType>? = null,
+    superInterfaces: Array<out IJvmType>? = null,
     sorted: Boolean = false,
     category: String? = null,
     init: JavaInterface.() -> Unit
@@ -143,7 +144,7 @@ class JavaInterface internal constructor(
     packageName: String,
     documentation: String?,
     since: String?,
-    val superInterfaces: Array<out IJavaType>?,
+    val superInterfaces: Array<out IJvmType>?,
     sorted: Boolean,
     override val category: String?,
     containerType: JavaTopLevelType?
@@ -177,7 +178,7 @@ class JavaInterface internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         name: String,
         value: String?,
         documentation: String,
@@ -218,7 +219,7 @@ class JavaInterface internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         names: Array<String>,
         documentation: String,
         since: String? = null,
@@ -259,7 +260,7 @@ class JavaInterface internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         vararg entries: Pair<String, String?>,
         documentation: String,
         since: String? = null,
@@ -297,16 +298,16 @@ class JavaInterface internal constructor(
      * @since 1.0.0
      */
     @JvmOverloads
-    operator fun IJavaType.invoke(
+    operator fun IJvmType.invoke(
         name: String,
         documentation: String,
         vararg parameters: JavaParameter,
         returnDoc: String? = null,
         since: String? = null,
         category: String? = null,
-        exceptions: Array<out Pair<IJavaType, String?>>? = null,
+        exceptions: Array<out Pair<IJvmType, String?>>? = null,
         see: Array<out String>? = null,
-        typeParameters: Array<out Pair<JavaGenericType, String?>>? = null,
+        typeParameters: Array<out Pair<JvmGenericType, String?>>? = null,
         body: String? = null
     ) = JavaMethod(this, name, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
         .also {
@@ -334,8 +335,8 @@ class JavaInterface internal constructor(
     @JvmOverloads
     fun String.typeParameter(
         documentation: String? = null,
-        vararg bounds: IJavaType
-    ) = JavaGenericType(this, *bounds)
+        vararg bounds: IJvmType
+    ) = JvmGenericType(this, *bounds)
         .also {
             bounds.forEach { import(it) }
             typeParameters.add(it to documentation)

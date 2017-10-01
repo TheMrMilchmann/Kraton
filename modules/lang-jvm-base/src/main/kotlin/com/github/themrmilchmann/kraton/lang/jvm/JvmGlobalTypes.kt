@@ -27,46 +27,73 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.themrmilchmann.kraton.test.lang.java
+package com.github.themrmilchmann.kraton.lang.jvm
 
-import com.github.themrmilchmann.kraton.*
-import com.github.themrmilchmann.kraton.lang.java.*
-import com.github.themrmilchmann.kraton.lang.jvm.*
+/**
+ * The `void` type.
+ *
+ * @since 1.0.0
+ */
+object void: AbstractJvmType("void")
 
-private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java.types"
-private const val srcFolder = "lang-java/build"
-private const val srcSet = "kraton/generated"
+/** The `boolean` type.
+ *
+ * @since 1.0.0
+ */
+val boolean = JvmPrimitiveType("Boolean", "false", -1)
 
-val aMap = com.github.themrmilchmann.kraton.test.lang.java.types.a.Map::class.asType
-val aMapEntry = com.github.themrmilchmann.kraton.test.lang.java.types.a.Map.Entry::class.asType
+/**
+ * The `byte` type.
+ *
+ * @since 1.0.0
+ */
+val byte = JvmPrimitiveType("Byte", "0", 8)
 
-val bMap = com.github.themrmilchmann.kraton.test.lang.java.types.b.Map::class.asType
-val bMapEntry = com.github.themrmilchmann.kraton.test.lang.java.types.b.Map.Entry::class.asType
+/**
+ * The `short` type.
+ *
+ * @since 1.0.0
+ */
+val short = JvmPrimitiveType("Short", "0", 16)
 
-val TypeResolver = Profile {
+/**
+ * The `char` type.
+ *
+ * @since 1.0.0
+ */
+val char = JvmPrimitiveType("Character", "'\\u0000'", 32, "Char")
 
-    javaClass(
-        "TAMBM",
-        packageName,
-        srcFolder,
-        srcSet
-    ) {
+/**
+ * The `int` type.
+ *
+ * @since 1.0.0
+ */
+val int = JvmPrimitiveType("Integer", "0", 32, "Int")
 
-        aMap("aMap", null, "")
-        bMap("bMap", null, "")
+/**
+ * The `float` type.
+ *
+ * @since 1.0.0
+ */
+val float = JvmPrimitiveType("Float", "0F", 32)
 
-    }
+/**
+ * The `long` type.
+ *
+ * @since 1.0.0
+ */
+val long = JvmPrimitiveType("Long", "0L", 64)
 
-    javaClass(
-        "TAMBE",
-        packageName,
-        srcFolder,
-        srcSet
-    ) {
+/**
+ * The `double` type.
+ *
+ * @since 1.0.0
+ */
+val double = JvmPrimitiveType("Double", "0D", 64)
 
-        aMap("aMap", null, "")
-        bMapEntry("bMapEntry", null, "")
-
-    }
-
-}
+/**
+ * The `String` type.
+ *
+ * @since 1.0.0
+ */
+val string = JvmTypeReference("String", "java.lang")

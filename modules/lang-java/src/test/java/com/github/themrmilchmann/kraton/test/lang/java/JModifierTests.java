@@ -30,7 +30,7 @@
 package com.github.themrmilchmann.kraton.test.lang.java;
 
 import com.github.themrmilchmann.kraton.lang.java.Annotate;
-import com.github.themrmilchmann.kraton.lang.java.JavaTypesKt;
+import com.github.themrmilchmann.kraton.lang.jvm.JvmTypesKt;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -39,14 +39,14 @@ public final class JModifierTests {
 
     @Test
     public void testAnnotateModifier() {
-        Annotate mod = new Annotate(JavaTypesKt.asType(Override.class));
+        Annotate mod = new Annotate(JvmTypesKt.asType(Override.class));
 
         assertEquals(mod.asString(null), "@java.lang.Override");
     }
 
     @Test
     public void testAnnotateWithParamModifier() {
-        Annotate mod = new Annotate(JavaTypesKt.asType(Deprecated.class), "since = 1");
+        Annotate mod = new Annotate(JvmTypesKt.asType(Deprecated.class), "since = 1");
 
         assertEquals(mod.asString(null), "@java.lang.Deprecated(since = 1)");
     }

@@ -30,6 +30,7 @@
 package com.github.themrmilchmann.kraton.lang.java
 
 import com.github.themrmilchmann.kraton.*
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.io.*
 import java.util.*
 import kotlin.collections.LinkedHashSet
@@ -101,7 +102,7 @@ abstract class JavaTopLevelType(
     val since: String?,
     sorted: Boolean,
     private val containerType: JavaTopLevelType?
-): JavaModifierTarget(), JavaBodyMember, IJavaType {
+): JavaModifierTarget(), JavaBodyMember, IJvmType {
 
     override val enclosingType get() = containerType
 
@@ -109,7 +110,7 @@ abstract class JavaTopLevelType(
     internal val imports: MutableMap<String, MutableMap<String, JavaImport>> get() = containerType?.imports ?: _imports
 
     internal val members: MutableSet<JavaBodyMember> = if (sorted) TreeSet() else LinkedHashSet()
-    internal val typeParameters = mutableListOf<Pair<JavaGenericType, String?>>()
+    internal val typeParameters = mutableListOf<Pair<JvmGenericType, String?>>()
 
     private val _authors: MutableList<String> by lazy(::mutableListOf)
     private val authors: MutableList<String> get() = containerType?.authors ?: _authors
@@ -170,7 +171,7 @@ abstract class JavaTopLevelType(
      */
     @JvmOverloads
     fun import(
-        type: IJavaType,
+        type: IJvmType,
         forceMode: JavaImportForceMode? = null,
         isImplicit: Boolean = false
     ) {
@@ -184,7 +185,7 @@ abstract class JavaTopLevelType(
      */
     @JvmOverloads
     fun import(
-        type: IJavaType,
+        type: IJvmType,
         member: String,
         forceMode: JavaImportForceMode? = null,
         isImplicit: Boolean = false
@@ -192,10 +193,10 @@ abstract class JavaTopLevelType(
         type.packageName?.let { doImport("$it.$type", member, forceMode, true, isImplicit) }
     }
 
-    fun isImported(type: IJavaType) =
+    fun isImported(type: IJvmType) =
         imports[type.packageName]?.any { it.value.member === IMPORT_WILDCARD || it.value.member == type.className } ?: false
 
-    fun isResolved(type: IJavaType) =
+    fun isResolved(type: IJvmType) =
         isImported(type) || type.packageName == packageName
 
     internal fun PrintWriter.printType(indent: String) {
@@ -266,8 +267,6 @@ abstract class JavaTopLevelType(
         printType(indent)
         println(LN)
     }
-
-    override fun toString() = memberName
 
 }
 

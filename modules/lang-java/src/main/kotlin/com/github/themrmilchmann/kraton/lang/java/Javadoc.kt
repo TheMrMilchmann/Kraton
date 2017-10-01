@@ -32,6 +32,8 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.jvm.*
+
 /**
  * The `{@inheritDoc}` tag.
  *
@@ -155,7 +157,7 @@ private fun String.layoutJavadoc(indent: String = INDENT): String {
  */
 internal fun String?.toJavaDoc(
     indent: String,
-    typeParameters: List<Pair<JavaGenericType, String?>>? = null,
+    typeParameters: List<Pair<JvmGenericType, String?>>? = null,
     see: List<String>? = null,
     authors: List<String>? = null,
     since: String? = null

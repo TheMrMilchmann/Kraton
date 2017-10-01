@@ -47,7 +47,7 @@ apply {
 }
 
 configureKotlinProject()
-configureLangModule()
+configureLangModule("java")
 
 tasks {
     "generateTests"(Generate::class) {
@@ -63,4 +63,8 @@ tasks {
         dependsOn(tasks["generateTests"])
     }
 
+}
+
+dependencies {
+    compile(project(":modules:lang-jvm-base"))
 }

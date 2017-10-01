@@ -27,73 +27,25 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.themrmilchmann.kraton.lang.java
+import build.*
+import com.github.themrmilchmann.kraton.gradle.tasks.*
+import org.gradle.kotlin.dsl.*
+import org.jetbrains.kotlin.gradle.tasks.*
+import java.io.*
 
-/**
- * The `void` type.
- *
- * @since 1.0.0
- */
-object void: JavaReferableType("void")
+buildscript {
+    dependencies {
+        classpath("${kraton()}:kraton-gradle:$kratonVersion")
+    }
+}
 
-/** The `boolean` type.
- *
- * @since 1.0.0
- */
-val boolean = JavaPrimitiveType("Boolean", "boolean", "false", -1)
+plugins {
+    java
+}
 
-/**
- * The `byte` type.
- *
- * @since 1.0.0
- */
-val byte = JavaPrimitiveType("Byte", "byte", "0", 8)
+apply {
+    plugin("org.jetbrains.kotlin.jvm")
+}
 
-/**
- * The `short` type.
- *
- * @since 1.0.0
- */
-val short = JavaPrimitiveType("Short", "short", "0", 16)
-
-/**
- * The `char` type.
- *
- * @since 1.0.0
- */
-val char = JavaPrimitiveType("Character", "char", "'\\u0000'", 32, "Char")
-
-/**
- * The `int` type.
- *
- * @since 1.0.0
- */
-val int = JavaPrimitiveType("Integer", "int", "0", 32, "Int")
-
-/**
- * The `float` type.
- *
- * @since 1.0.0
- */
-val float = JavaPrimitiveType("Float", "float", "0F", 32)
-
-/**
- * The `long` type.
- *
- * @since 1.0.0
- */
-val long = JavaPrimitiveType("Long", "long", "0L", 64)
-
-/**
- * The `double` type.
- *
- * @since 1.0.0
- */
-val double = JavaPrimitiveType("Double", "double", "0D", 64)
-
-/**
- * The `String` type.
- *
- * @since 1.0.0
- */
-val string = JavaTypeReference("String", null)
+configureKotlinProject()
+configureLangModule("jvm-base", withUnitTests = false, withIntegrationTests = false)

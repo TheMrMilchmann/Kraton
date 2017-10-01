@@ -36,7 +36,7 @@ import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.*
 import testNGVersion
 
-fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTests: Boolean = true) {
+fun Project.configureLangModule(module: String, withUnitTests: Boolean = true, withIntegrationTests: Boolean = true) {
     val test: Test by tasks.getting
     test.useTestNG()
 
@@ -56,10 +56,6 @@ fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTe
         }
 
         tasks {
-            "compileTestIntegrationKotlin"(KotlinCompile::class) {
-                dependsOn("compileKotlin")
-            }
-
             val testInteg = "test-integration"(Test::class) {
                 useTestNG()
 
@@ -67,6 +63,7 @@ fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTe
                 classpath = testInteg.runtimeClasspath
 
                 systemProperty("rootDir", rootProject.projectDir.absolutePath)
+                systemProperty("module", module)
             }
 
             "check" {
@@ -81,7 +78,7 @@ fun Project.configureLangModule(withUnitTests: Boolean = true, withIntegrationTe
 
     dependencies {
         "compile"(project(":modules:base"))
-        "testCompile"("org.testng", "testng", testNGVersion)
-        "testIntegrationCompile"(project(":modules:internal-test"))
+        if (withUnitTests) "testCompile"("org.testng", "testng", testNGVersion)
+        if (withIntegrationTests) "testIntegrationCompile"(project(":modules:internal-test"))
     }
 }

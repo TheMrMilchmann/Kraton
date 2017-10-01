@@ -30,6 +30,8 @@
 package com.github.themrmilchmann.kraton.test.lang.java;
 
 import com.github.themrmilchmann.kraton.lang.java.*;
+import com.github.themrmilchmann.kraton.lang.jvm.IJvmType;
+import com.github.themrmilchmann.kraton.lang.jvm.JvmTypesKt;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -38,7 +40,7 @@ public final class JTypeTests {
 
     @Test
     public void testJavaClassAsType() {
-        IJavaType type = JavaTypesKt.asType(Object.class);
+        IJvmType type = JvmTypesKt.asType(Object.class);
 
         assertEquals(type.getClassName(), "Object");
         assertEquals(type.getPackageName(), "java.lang");
@@ -46,23 +48,23 @@ public final class JTypeTests {
 
     @Test
     public void testJavaInnerClassAsType() {
-        IJavaType type = JavaTypesKt.asType(java.util.Map.Entry.class);
+        IJvmType type = JvmTypesKt.asType(java.util.Map.Entry.class);
 
         assertEquals(type.getClassName(), "Entry");
         assertEquals(type.getMemberName(), "Map.Entry");
         assertEquals(type.getContainerName(), "Map");
         assertEquals(type.getPackageName(), "java.util");
-        assertEquals(type.asString(null), "java.util.Map.Entry");
+        assertEquals(JavaTypesKt.asString(type, null), "java.util.Map.Entry");
     }
 
     @Test
     public void testJavaClassWithParamsAsType() {
-        IJavaType typeParam = JavaTypesKt.asType(String.class);
-        IJavaType type = JavaTypesKt.asType(java.util.List.class, typeParam);
+        IJvmType typeParam = JvmTypesKt.asType(String.class);
+        IJvmType type = JvmTypesKt.asType(java.util.List.class, typeParam);
 
         assertEquals(type.getClassName(), "List");
         assertEquals(type.getPackageName(), "java.util");
-        assertEquals(type.asString(null), "java.util.List<java.lang.String>");
+        assertEquals(JavaTypesKt.asString(type, null), "java.util.List<java.lang.String>");
     }
 
 }

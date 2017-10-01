@@ -44,145 +44,138 @@ import org.testng.annotations.*;
 public final class KratonTests {
 
     @Factory
-    @Parameters("rootDir")
-    public Object[] generateLangModuleTests(String rootDir) {
+    @Parameters({"rootDir", "module"})
+    public Object[] generateLangModuleTests(String rootDir, String module) {
+        Path projectRoot = Paths.get(rootDir, "/modules/");
+        List<String> testOutputFiles = new CopyOnWriteArrayList<>();
+        List<String> testResultFiles = new CopyOnWriteArrayList<>();
+
+        Path moduleDir = projectRoot.resolve("lang-" + module);
+        Path testSourceDir = moduleDir.resolve("src/test-integration/kotlin");
+        if (!Files.exists(testSourceDir)) return new Object[] {};
+
+        Path testOutputDir = moduleDir.resolve("build/kraton/generated");
+        if (!Files.exists(testOutputDir)) {
+            return new Object[] { new ITest() {
+
+                @Override
+                public String getTestName() {
+                    return "NoTestOutputDir";
+                }
+
+                @Test
+                public void test() throws IOException {
+                    throw new TestNGException(testOutputDir.toAbsolutePath() + " does not exist!");
+                }
+
+            }};
+        }
+
+        Path testResultDir = moduleDir.resolve("src/test-integration/resources");
+        List<Object> tests = new ArrayList<>(16);
+
         try {
-            Path projectRoot = Paths.get(rootDir, "/modules/");
-            List<String> testOutputFiles = new CopyOnWriteArrayList<>();
-            List<String> testResultFiles = new CopyOnWriteArrayList<>();
+            Files.walkFileTree(testOutputDir, new SimpleFileVisitor<Path>() {
 
-            return Files.list(projectRoot)
-                .filter(it -> it.getFileName().toString().matches("lang-[a-z]*"))
-                .flatMap(it -> {
-                    Path testOutputDir = it.resolve("build/kraton/generated");
-                    if (!Files.exists(testOutputDir)) {
-                        return Arrays.stream(new Object[] {
-                            new ITest() {
-
-                                @Override
-                                public String getTestName() {
-                                    return "Error";
-                                }
-
-                                @Test
-                                public void test() throws IOException {
-                                    throw new TestNGException(testOutputDir.toAbsolutePath() + " does not exist!");
-                                }
-
-                            }
-                        });
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
+                    if (Files.isRegularFile(file)) {
+                        testOutputFiles.add(testOutputDir.relativize(file).toString());
                     }
 
-                    Path testResultDir = it.resolve("src/test-integration/resources");
+                    return FileVisitResult.CONTINUE;
+                }
 
-                    List<Object> tests = new ArrayList<>(16);
+            });
 
-                    try {
-                        Files.walkFileTree(testOutputDir, new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(testResultDir, new SimpleFileVisitor<Path>() {
 
-                            @Override
-                            public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
-                                if (Files.isRegularFile(file)) {
-                                    testOutputFiles.add(testOutputDir.relativize(file).toString());
-                                }
-
-                                return FileVisitResult.CONTINUE;
-                            }
-
-                        });
-
-                        Files.walkFileTree(testResultDir, new SimpleFileVisitor<Path>() {
-
-                            @Override
-                            public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
-                                if (Files.isRegularFile(file)) {
-                                    testResultFiles.add(testResultDir.relativize(file).toString());
-                                }
-
-                                return FileVisitResult.CONTINUE;
-                            }
-
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
+                    if (Files.isRegularFile(file)) {
+                        testResultFiles.add(testResultDir.relativize(file).toString());
                     }
 
-                    for (String testFileName : testOutputFiles) {
-                        testOutputFiles.remove(testFileName);
+                    return FileVisitResult.CONTINUE;
+                }
 
-                        if (testResultFiles.contains(testFileName)) {
-                            testResultFiles.remove(testFileName);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-                            tests.add(new ITest() {
+        for (String testFileName : testOutputFiles) {
+            testOutputFiles.remove(testFileName);
 
-                                @Override
-                                public String getTestName() {
-                                    return testFileName;
-                                }
+            if (testResultFiles.contains(testFileName)) {
+                testResultFiles.remove(testFileName);
 
-                                @Test
-                                public void test() throws IOException {
-                                    BufferedReader testOutputReader = Files.newBufferedReader(testOutputDir.resolve(testFileName));
-                                    BufferedReader testResultReader = Files.newBufferedReader(testResultDir.resolve(testFileName));
+                tests.add(new ITest() {
 
-                                    String testOutputLine,
-                                        testResultLine = null;
-                                    int line = 0;
+                    @Override
+                    public String getTestName() {
+                        return testFileName;
+                    }
 
-                                    while (((testOutputLine = testOutputReader.readLine()) != null) && ((testResultLine = testResultReader.readLine()) != null)) {
-                                        line++;
+                    @Test
+                    public void test() throws IOException {
+                        BufferedReader testOutputReader = Files.newBufferedReader(testOutputDir.resolve(testFileName));
+                        BufferedReader testResultReader = Files.newBufferedReader(testResultDir.resolve(testFileName));
 
-                                        if (!testOutputLine.contentEquals(testResultLine)) {
-                                            throw new TestException(String.format("Line %d of output file '%s' does not match the expected result.", line, testFileName));
-                                        }
-                                    }
+                        String testOutputLine,
+                            testResultLine = null;
+                        int line = 0;
 
-                                    if (testOutputLine != null) {
-                                        throw new TestException(String.format("The output file '%s' contains more lines than expected.", testFileName));
-                                    } else if (testResultReader.readLine() != null) {
-                                        throw new TestException(String.format("The output file '%s' is shorter than expected.", testFileName));
-                                    }
-                                }
+                        while (((testOutputLine = testOutputReader.readLine()) != null) && ((testResultLine = testResultReader.readLine()) != null)) {
+                            line++;
 
-                            });
-                        } else {
-                            tests.add(new ITest() {
+                            if (!testOutputLine.contentEquals(testResultLine)) {
+                                throw new TestException(String.format("Line %d of output file '%s' does not match the expected result.", line, testFileName));
+                            }
+                        }
 
-                                @Override
-                                public String getTestName() {
-                                    return testFileName;
-                                }
-
-                                @Test
-                                public void test() {
-                                    throw new TestException(String.format("The output file '%s' was generated unexpectedly.", testFileName));
-                                }
-
-                            });
+                        if (testOutputLine != null) {
+                            throw new TestException(String.format("The output file '%s' contains more lines than expected.", testFileName));
+                        } else if (testResultReader.readLine() != null) {
+                            throw new TestException(String.format("The output file '%s' is shorter than expected.", testFileName));
                         }
                     }
 
-                    for (String testResultFile : testResultFiles) {
-                        tests.add(new ITest() {
+                });
+            } else {
+                tests.add(new ITest() {
 
-                            @Override
-                            public String getTestName() {
-                                return testResultFile;
-                            }
-
-                            @Test
-                            public void test() {
-                                throw new TestException(String.format("The expected output file '%s' has not been generated.", testResultFile));
-                            }
-
-                        });
+                    @Override
+                    public String getTestName() {
+                        return testFileName;
                     }
 
-                    return tests.stream();
-                }).toArray();
-        } catch (IOException e) {
-            throw new TestException(e);
+                    @Test
+                    public void test() {
+                        throw new TestException(String.format("The output file '%s' was generated unexpectedly.", testFileName));
+                    }
+
+                });
+            }
         }
+
+        for (String testResultFile : testResultFiles) {
+            tests.add(new ITest() {
+
+                @Override
+                public String getTestName() {
+                    return testResultFile;
+                }
+
+                @Test
+                public void test() {
+                    throw new TestException(String.format("The expected output file '%s' has not been generated.", testResultFile));
+                }
+
+            });
+        }
+
+        return tests.toArray();
     }
 
 }

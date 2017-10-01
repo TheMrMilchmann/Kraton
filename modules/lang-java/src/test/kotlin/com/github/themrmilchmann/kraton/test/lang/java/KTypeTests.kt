@@ -29,7 +29,7 @@
  */
 package com.github.themrmilchmann.kraton.test.lang.java
 
-import com.github.themrmilchmann.kraton.lang.java.*
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import org.testng.Assert.*
 import org.testng.annotations.*
 

@@ -31,6 +31,7 @@ includeBuild 'integration/gradle'
 
 include 'modules:base',
         'modules:lang-java',
+        'modules:lang-jvm-base',
 
         'modules:internal-test'
 

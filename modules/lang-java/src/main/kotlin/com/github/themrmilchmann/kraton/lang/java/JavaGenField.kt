@@ -29,6 +29,7 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.io.*
 import java.util.*
 
@@ -48,7 +49,7 @@ import java.util.*
  * @since 1.0.0
  */
 class JavaField internal constructor(
-    val type: IJavaType,
+    val type: IJvmType,
     val entries: Array<out Pair<String, String?>>,
     val documentation: String,
     val since: String?,

@@ -29,6 +29,7 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.io.*
 import java.util.*
 import kotlin.reflect.*
@@ -126,7 +127,7 @@ class Deprecated(
     private val since: String? = null,
     private val forRemoval: Boolean? = null
 ): Annotate(
-    JavaTypeReference("Deprecated", null),
+    JvmTypeReference("Deprecated", "java.lang"),
     if (since != null || forRemoval != null)
         StringJoiner(", ").run {
             if (since != null) add("since=$since")
@@ -154,7 +155,7 @@ val Override = Annotate(Override::class.asType)
  * @since 1.0.0
  */
 open class Annotate @JvmOverloads constructor(
-    private val type: IJavaType,
+    private val type: IJvmType,
     private val parameters: String? = null
 ): JavaModifier({ import(type) }) {
 

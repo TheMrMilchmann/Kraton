@@ -29,6 +29,8 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.jvm.*
+
 /**
  * Shortcut to create a new JavaParameter.
  *
@@ -41,7 +43,7 @@ package com.github.themrmilchmann.kraton.lang.java
  *
  * @since 1.0.0
  */
-fun IJavaType.PARAM(
+fun IJvmType.PARAM(
     name: String,
     documentation: String
 ) = JavaParameter(this, name, documentation)
@@ -58,7 +60,7 @@ fun IJavaType.PARAM(
  * @since 1.0.0
  */
 class JavaParameter internal constructor(
-    val type: IJavaType,
+    val type: IJvmType,
     val name: String,
     val documentation: String
 ): JavaModifierTarget()

@@ -29,260 +29,72 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.util.*
-import kotlin.reflect.*
 
-/**
- * Creates and returns a new [IJavaType] referring to the receiver type.
- *
- * <b>This should be used with care. Types that are visible for the templates
- * may not be available for the generated output and vice-versa.</b>
- *
- * @receiver the type to create a reference to
- *
- * @since 1.0.0
- */
-val Class<*>.asType: IJavaType get() = this.asType()
+fun IJvmType.asString(from: JavaTopLevelType?): String = when {
+    this is JvmArrayType -> stringValueOfJvmArrayType(from)
+    this is JvmGenericType -> stringValueOfJvmGenericType(from)
+    this is JvmPrimitiveType -> stringValueOfPrimitiveType()
+    this is JvmPrimitiveBoxType -> stringValueOfPrimitiveBoxType()
+    this is AbstractJvmType -> stringValueOfAbstractJvmType(from)
+    else -> stringValueOfIJvmType(from)
+}
 
-/**
- * Creates and returns a new [IJavaType] referring to the receiver type.
- *
- * <b>This should be used with care. Types that are visible for the templates
- * may not be available for the generated output and vice-versa.</b>
- *
- * @receiver the type to create a reference to
- *
- * @param typeParameters the type-parameters for the type
- *
- * @return the newly created [IJavaType]
- *
- * @since 1.0.0
- */
-fun Class<*>.asType(vararg typeParameters: IJavaType): IJavaType =
-    if (this.isMemberClass)
-        enclosingClass.asType.member(simpleName, *typeParameters)
-    else
-        JavaTypeReference(simpleName, `package`.name, *typeParameters)
-
-/**
- * Creates and returns a new [IJavaType] referring to the receiver type.
- *
- * <b>This should be used with care. Types that are visible for the templates
- * may not be available for the generated output and vice-versa.</b>
- *
- * @receiver the type to create a reference to
- *
- * @since 1.0.0
- */
-val KClass<*>.asType: IJavaType get() = java.asType
-
-/**
- * Creates and returns a new [IJavaType] referring to the receiver type.
- *
- * <b>This should be used with care. Types that are visible for the templates
- * may not be available for the generated output and vice-versa.</b>
- *
- * @receiver the type to create a reference to
- *
- * @param typeParameters the type-parameters for the type
- *
- * @return the newly created [IJavaType]
- *
- * @since 1.0.0
- */
-fun KClass<*>.asType(vararg typeParameters: IJavaType): IJavaType =
-    java.asType(*typeParameters)
-
-fun IJavaType.member(className: String, vararg typeParameters: IJavaType) =
-    object: JavaTypeReference(className, "", *typeParameters) {
-
-        override val enclosingType get() = this@member
-        override val packageName get() = enclosingType.packageName
-
+private fun JvmArrayType.stringValueOfJvmArrayType(from: JavaTopLevelType?) =
+    type.asString(from) + StringBuilder().run {
+        for (i in 0 until dimensions) append("[]")
+        toString()
     }
 
-/**
- * A reference to a java type.
- *
- * @since 1.0.0
- */
-interface IJavaType {
-
-    val enclosingType: IJavaType? get() = null
-
-    /**
-     * The name of the package containing this type. (May be `null`.)
-     *
-     * @since 1.0.0
-     */
-    val packageName: String? get() = enclosingType?.packageName
-    /**
-     * The simple name of the class represented by this type.
-     *
-     * @since 1.0.0
-     */
-    val className: String
-
-    /**
-     * The class name of the outermost enclosing type.
-     *
-     * @since 1.0.0
-     */
-    val containerName: String get() = enclosingType?.className ?: className
-    /**
-     * The name of this class dot prefixed with the name of it's enclosing type.
-     *
-     * @since 1.0.0
-     */
-    val memberName: String get() = enclosingType?.memberName?.plus(".$className") ?: className
-
-    fun asString(from: JavaTopLevelType?) =
-        if (from != null && from.isResolved(this)) {
-            memberName
-        } else {
-            packageName?.plus(".$memberName") ?: memberName
-        }
-
-}
-
-/**
- * A reference to a java type.
- *
- * @property className the name of the type
- *
- * @constructor Creates a new reference to a java type.
- *
- * @since 1.0.0
- */
-abstract class JavaReferableType internal constructor(
-    override val className: String,
-    private val typeParameters: Array<out IJavaType>? = null
-): IJavaType {
-
-    override val packageName: String? = null
-
-    override fun asString(from: JavaTopLevelType?) =
-        if (typeParameters == null || typeParameters.isEmpty())
-            super.asString(from)
-        else
-            StringBuilder().run {
-                append(super.asString(from))
-                append("<")
-                append(StringJoiner(",").run {
-                    typeParameters.forEach { add(it.asString(from)) }
-                    toString()
-                })
-                append(">")
+private fun JvmGenericType.stringValueOfJvmGenericType(from: JavaTopLevelType?) =
+    className + StringBuilder().run {
+        if (bounds.isNotEmpty()) {
+            append(" ${if (upperBounds) "extends" else "super"} ")
+            append(StringJoiner(" & ").run {
+                for (bound in bounds) append(bound.asString(from))
                 toString()
-            }
-
-    override fun toString() = memberName
-
-}
-
-/**
- * A reference to a java type.
- *
- * @property packageName the name of the package of the represented type
- *
- * @since 1.0.0
- */
-open class JavaTypeReference(
-    className: String,
-    override val packageName: String?,
-    vararg typeParameters: IJavaType
-): JavaReferableType(className, typeParameters)
-
-/**
- * Shortcut to create a new JavaArrayType.
- *
- * Creates a new array representing type with the given type and dimensions.
- *
- * @receiver the type of the array
- *
- * @param dim the dimensions of the array (defaults to one)
- *
- * @return the representing type
- *
- * @since 1.0.0
- */
-fun IJavaType.array(dim: Int = 1) = JavaArrayType(this, dim)
-
-/**
- * A type representing a java array.
- *
- * @property type   the type of the array
- * @property dim    the dimensions of the array (defaults to one)
- *
- * @constructor Creates a new array representing type with the given type and dimensions.
- *
- * @since 1.0.0
- */
-class JavaArrayType(
-    val type: IJavaType,
-    val dim: Int = 1
-): IJavaType by type {
-
-    override fun asString(from: JavaTopLevelType?) =
-        super.asString(from) + StringBuilder().run {
-            for (i in 0 until dim) append("[]")
-            toString()
+            })
         }
 
+        toString()
+    }
+
+private fun JvmPrimitiveType.stringValueOfPrimitiveType() = when(this) {
+    int -> ""
+    else -> throw UnsupportedOperationException()
 }
 
-/**
- * A java generic type.
- *
- * @param name      the name of the generic type
- * @property bounds the bounds of this type
- *
- * @since 1.0.0
- */
-class JavaGenericType(
-    name: String,
-    private vararg val bounds: IJavaType,
-    private val upperBounds: Boolean = true
-): JavaReferableType(name) {
+private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when(this) {
+    int.box -> ""
+    else -> throw UnsupportedOperationException()
+}
 
-    override fun asString(from: JavaTopLevelType?) =
-        className + StringBuilder().run {
-            if (bounds.isNotEmpty()) {
-                append(" ${if (upperBounds) "extends" else "super"} ")
-                append(StringJoiner(" & ").run {
-                    for (bound in bounds) append(bound.asString(from))
-                    toString()
-                })
-            }
+private fun AbstractJvmType.stringValueOfAbstractJvmType(from: JavaTopLevelType?): String {
+    val typeParameters = this.typeParameters
+    val superString = stringValueOfIJvmType(from)
 
+    return if (typeParameters == null || typeParameters.isEmpty())
+        superString
+    else
+        StringBuilder().run {
+            append(superString)
+            append("<")
+            append(StringJoiner(",").run {
+                typeParameters.forEach { add(it.asString(from)) }
+                toString()
+            })
+            append(">")
             toString()
         }
-
 }
 
-/**
- * A JavaPrimitiveType represents a primitive type.
- *
- * @property boxedType  the boxed type of this primitive type
- * @property className  the name of this type
- * @property nullValue  the `null`-value of this primitive type
- * @property size       the size (in bytes) of this type
- * @property abbrevName a commonly used abbreviation of this type's name
- *
- * @since 1.0.0
- */
-class JavaPrimitiveType private constructor(
-    val boxedType: JavaReferableType,
-    className: String,
-    val nullValue: String,
-    val size: Int,
-    val abbrevName: String
-): JavaReferableType(className) {
-
-    internal constructor(boxedType: String, className: String, nullValue: String, size: Int = -1, abbrevName: String = boxedType):
-        this(JavaTypeReference(boxedType, null), className, nullValue, size, abbrevName)
-
-}
+private fun IJvmType.stringValueOfIJvmType(from: JavaTopLevelType?) =
+    if (from != null && from.isResolved(this)) {
+        memberName
+    } else {
+        packageName?.plus(".$memberName") ?: memberName
+    }
 
 /**
  * Casts a value to another type (excluding unnecessary casts).
@@ -295,8 +107,8 @@ class JavaPrimitiveType private constructor(
  *
  * @since 1.0.0
  */
-fun cast(from: JavaReferableType, to: JavaReferableType, value: String): String {
-    if (from is JavaPrimitiveType && to is JavaPrimitiveType) {
+fun cast(from: AbstractJvmType, to: AbstractJvmType, value: String): String {
+    if (from is JvmPrimitiveType && to is JvmPrimitiveType) {
         when (to) {
             byte -> when (from) {
                 short, int, char, long -> return "($to) $value"
@@ -335,8 +147,8 @@ fun cast(from: JavaReferableType, to: JavaReferableType, value: String): String 
  *
  * @since 1.0.0
  */
-fun convert(from: JavaReferableType, to: JavaReferableType, value: String): String {
-    if (from is JavaPrimitiveType && to is JavaPrimitiveType) {
+fun convert(from: AbstractJvmType, to: AbstractJvmType, value: String): String {
+    if (from is JvmPrimitiveType && to is JvmPrimitiveType) {
         when (from) {
             boolean -> when (to) {
                 byte, short, int, float, double, long -> return cast(int, to, "($value ? 1 : ${to.nullValue})")
@@ -365,27 +177,3 @@ fun convert(from: JavaReferableType, to: JavaReferableType, value: String): Stri
 
     return cast(from, to, value)
 }
-
-/**
- * Compares two types by size in bytes and returns the smaller one.
- *
- * @param alpha type to be compared
- * @param beta  type to be compared
- *
- * @return the type which size in bytes is smaller (`alpha` is also returned if there is no difference)
- *
- * @since 1.0.0
- */
-fun smaller(alpha: JavaPrimitiveType, beta: JavaPrimitiveType) = if (alpha.size > beta.size) beta else alpha
-
-/**
- * Compares two types by size in bytes and returns the larger one.
- *
- * @param alpha type to be compared
- * @param beta  type to be compared
- *
- * @return the type which size in bytes is larger (`alpha` is also returned if there is no difference)
- *
- * @since 1.0.0
- */
-fun larger(alpha: JavaPrimitiveType, beta: JavaPrimitiveType) = if (alpha.size < beta.size) beta else alpha

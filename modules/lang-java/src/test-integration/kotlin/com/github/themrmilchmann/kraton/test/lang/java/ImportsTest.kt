@@ -31,18 +31,19 @@ package com.github.themrmilchmann.kraton.test.lang.java
 
 import com.github.themrmilchmann.kraton.*
 import com.github.themrmilchmann.kraton.lang.java.*
+import com.github.themrmilchmann.kraton.lang.jvm.*
 
 private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java.imports"
 private const val srcFolder = "lang-java/build"
 private const val srcSet = "kraton/generated"
 
 // Types used to test the imports
-private val file = JavaTypeReference("File", "java.io")
-private val filereader = JavaTypeReference("FileReader", "java.io")
-private val fis = JavaTypeReference("FileInputStream", "java.io")
-private val fos = JavaTypeReference("FileOutputStream", "java.io")
-private val ioe = JavaTypeReference("IOException", "java.io")
-private val eof = JavaTypeReference("EOFException", "java.io")
+private val file = JvmTypeReference("File", "java.io")
+private val filereader = JvmTypeReference("FileReader", "java.io")
+private val fis = JvmTypeReference("FileInputStream", "java.io")
+private val fos = JvmTypeReference("FileOutputStream", "java.io")
+private val ioe = JvmTypeReference("IOException", "java.io")
+private val eof = JvmTypeReference("EOFException", "java.io")
 
 val Imports = Profile {
 
