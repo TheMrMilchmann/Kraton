@@ -31,8 +31,25 @@ package com.github.themrmilchmann.kraton.lang.jvm
 
 import kotlin.reflect.*
 
+/*
+ * The classes in this file are used to represent types that may be used by any
+ * JVM language module. Since a type's source representation may differ from
+ * language to language the `lang-jvm-base` module does not provide any
+ * capabilities that could be used to make types printable. Such capabilities
+ * should be located in a `[Language]Types` module within the respective
+ * module's primary package.
+ * (See: `com.github.themrmilchmann.kraton.lang.java.JavaTypes.kt`)
+ *
+ * Global type definitions (type definitions for primitives and frequently used
+ * types) may be found in `JvmGlobalTypes.kt`.
+ *
+ * Note that these types are not to be confused with types that are visible by
+ * the JVM itself, but rather by any language built on top of the JVM.
+ */
+
 /**
- * Creates and returns a new [IJvmType] referring to the receiver type.
+ * Creates and returns a new `IJvmType` which holds a reference to the receiver
+ * type of this property.
  *
  * <b>This should be used with care. Types that are visible for the templates
  * may not be available for the generated output and vice-versa.</b>
@@ -44,27 +61,31 @@ import kotlin.reflect.*
 val Class<*>.asType: IJvmType get() = this.asType()
 
 /**
- * Creates and returns a new [IJvmType] referring to the receiver type.
+ * Creates and returns a new `IJvmType` which holds a reference to the receiver
+ * type of this function.
  *
  * <b>This should be used with care. Types that are visible for the templates
  * may not be available for the generated output and vice-versa.</b>
  *
  * @receiver the type to create a reference to
  *
- * @param typeParameters the type-parameters for the type
+ * @param typeParameters    the type-parameters for the type
+ * @param nullable          whether or not the referenced type is nullable
  *
- * @return the newly created [IJvmType]
+ * @return the newly created `IJvmType`
  *
  * @since 1.0.0
  */
-fun Class<*>.asType(vararg typeParameters: IJvmType): IJvmType =
+@JvmOverloads
+fun Class<*>.asType(vararg typeParameters: IJvmType, nullable: Boolean = false): IJvmType =
     if (this.isMemberClass)
-        enclosingClass.asType.member(simpleName, *typeParameters)
+        enclosingClass.asType.member(simpleName, *typeParameters, nullable = nullable)
     else
-        JvmTypeReference(simpleName, `package`.name, *typeParameters)
+        JvmTypeReference(simpleName, `package`.name, *typeParameters, nullable = nullable)
 
 /**
- * Creates and returns a new [IJvmType] referring to the receiver type.
+ * Creates and returns a new `IJvmType` which holds a reference to the receiver
+ * type of this property.
  *
  * <b>This should be used with care. Types that are visible for the templates
  * may not be available for the generated output and vice-versa.</b>
@@ -76,24 +97,32 @@ fun Class<*>.asType(vararg typeParameters: IJvmType): IJvmType =
 val KClass<*>.asType: IJvmType get() = java.asType
 
 /**
- * Creates and returns a new [IJvmType] referring to the receiver type.
+ * Creates and returns a new `IJvmType` which holds a reference to the receiver
+ * type of this function.
  *
  * <b>This should be used with care. Types that are visible for the templates
  * may not be available for the generated output and vice-versa.</b>
  *
  * @receiver the type to create a reference to
  *
- * @param typeParameters the type-parameters for the type
+ * @param typeParameters    the type-parameters for the type
+ * @param nullable          whether or not the referenced type is nullable
  *
- * @return the newly created [IJvmType]
+ * @return the newly created `IJvmType`
  *
  * @since 1.0.0
  */
-fun KClass<*>.asType(vararg typeParameters: IJvmType): IJvmType =
-    java.asType(*typeParameters)
+@JvmOverloads
+fun KClass<*>.asType(vararg typeParameters: IJvmType, nullable: Boolean = false): IJvmType =
+    java.asType(*typeParameters, nullable = nullable)
 
-fun IJvmType.member(className: String, vararg typeParameters: IJvmType) =
-    object: JvmTypeReference(className, "", *typeParameters) {
+/**
+ * TODO doc
+ *
+ * @since 1.0.0
+ */
+fun IJvmType.member(className: String, vararg typeParameters: IJvmType, nullable: Boolean = false) =
+    object: JvmTypeReference(className, "", *typeParameters, nullable = nullable) {
 
         override val enclosingType get() = this@member
         override val packageName get() = enclosingType.packageName
@@ -101,7 +130,7 @@ fun IJvmType.member(className: String, vararg typeParameters: IJvmType) =
     }
 
 /**
- * TODO doc
+ * An `IJvmType` represents a type that may be used in a JVM language.
  *
  * @since 1.0.0
  */
@@ -143,13 +172,19 @@ interface IJvmType {
     val memberName: String get() = enclosingType?.memberName?.plus(".$className") ?: className
 
     /**
-     * TODO doc
+     * Whether or not the referenced type is nullable.
+     *
+     * This may or may not impact the resulting output depending on language and
+     * configuration.
      *
      * @since 1.0.0
      */
     val isNullable: Boolean get() = false
 
+    fun nullable(): IJvmType
+
 }
+
 /**
  * TODO doc
  *
@@ -161,7 +196,8 @@ interface IJvmType {
  */
 abstract class AbstractJvmType internal constructor(
     override val className: String,
-    val typeParameters: Array<out IJvmType>? = null
+    val typeParameters: Array<out IJvmType>? = null,
+    override val isNullable: Boolean = false
 ): IJvmType {
 
     override val packageName: String? = null
@@ -179,8 +215,16 @@ open class JvmTypeReference(
     className: String,
     override val packageName: String?,
     vararg typeParameters: IJvmType,
-    override val isNullable: Boolean = false
-): AbstractJvmType(className, typeParameters)
+    nullable: Boolean = false
+): AbstractJvmType(className, typeParameters, nullable) {
+
+    override fun nullable() =
+        if (isNullable)
+            this
+        else
+            JvmTypeReference(className, packageName, *typeParameters!!, nullable = true)
+
+}
 
 /**
  * TODO doc
@@ -189,13 +233,15 @@ open class JvmTypeReference(
  *
  * @receiver the type of the array
  *
- * @param dim the dimensions of the array (defaults to one)
+ * @param dim       the dimensions of the array (defaults to one)
+ * @param nullable  whether or not the referenced type is nullable
  *
  * @return the representing type
  *
  * @since 1.0.0
  */
-fun IJvmType.array(dim: Int = 1) = JvmArrayType(this, dim)
+@JvmOverloads
+fun IJvmType.array(dim: Int = 1, nullable: Boolean = isNullable) = JvmArrayType(this, dim, nullable)
 
 /**
  * TODO doc
@@ -210,8 +256,17 @@ fun IJvmType.array(dim: Int = 1) = JvmArrayType(this, dim)
  */
 class JvmArrayType(
     val type: IJvmType,
-    val dimensions: Int
-): IJvmType by type
+    val dimensions: Int,
+    override val isNullable: Boolean = type.isNullable
+): IJvmType by type {
+
+    override fun nullable() =
+        if (isNullable)
+            this
+        else
+            JvmArrayType(type, dimensions, true)
+
+}
 
 /**
  * TODO doc
@@ -221,8 +276,17 @@ class JvmArrayType(
 class JvmGenericType(
     name: String,
     vararg val bounds: IJvmType,
-    val upperBounds: Boolean = true
-): AbstractJvmType(name)
+    val upperBounds: Boolean = true,
+    override val isNullable: Boolean = false
+): AbstractJvmType(name) {
+
+    override fun nullable() =
+        if (isNullable)
+            this
+        else
+            JvmGenericType(className, *bounds, upperBounds = upperBounds, isNullable = true)
+
+}
 
 /**
  * A JvmPrimitive type represents a primitive type.
@@ -235,22 +299,48 @@ class JvmGenericType(
  *
  * @since 1.0.0
  */
-class JvmPrimitiveType internal constructor(
+class JvmPrimitiveType private constructor(
     name: String,
     val nullValue: String,
     val size: Int,
-    val abbrevName: String = name
+    val abbrevName: String,
+    override val isNullable: Boolean
 ): AbstractJvmType(name) {
+
+    constructor(name: String, nullValue: String, size: Int, abbrevName: String = name):
+        this(name, nullValue, size, abbrevName, false)
 
     val box = JvmPrimitiveBoxType(name)
 
     override val packageName = "java.lang"
 
+    override fun nullable() =
+        if (isNullable)
+            this
+        else
+            JvmPrimitiveType(className, nullValue, size, abbrevName, true)
+
 }
 
-class JvmPrimitiveBoxType internal constructor(
-    name: String
-): AbstractJvmType(name)
+/**
+ * TODO doc
+ *
+ * @since 1.0.0
+ */
+class JvmPrimitiveBoxType private constructor(
+    name: String,
+    override val isNullable: Boolean
+): AbstractJvmType(name) {
+
+    constructor(name: String): this(name, false)
+
+    override fun nullable() =
+        if (isNullable)
+            this
+        else
+            JvmPrimitiveBoxType(className, true)
+
+}
 
 /**
  * Compares two types by size in bytes and returns the smaller one.
