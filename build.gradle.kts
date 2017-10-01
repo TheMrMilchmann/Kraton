@@ -59,6 +59,10 @@ project(":modules").subprojects {
         else
             "kraton-${this@subprojects.name.replace('.', '-')}"
 
+        plugins {
+            kotlin("jvm", kotlinVersion) apply false
+        }
+
         apply {
             plugin("java")
             plugin("maven")
