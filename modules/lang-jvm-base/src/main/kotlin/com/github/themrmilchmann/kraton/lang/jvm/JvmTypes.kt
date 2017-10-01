@@ -122,12 +122,20 @@ fun KClass<*>.asType(vararg typeParameters: IJvmType, nullable: Boolean = false)
  * @since 1.0.0
  */
 fun IJvmType.member(className: String, vararg typeParameters: IJvmType, nullable: Boolean = false) =
-    object: JvmTypeReference(className, "", *typeParameters, nullable = nullable) {
+    JvmMemberType(this, className, typeParameters, nullable)
 
-        override val enclosingType get() = this@member
-        override val packageName get() = enclosingType.packageName
+// Cannot inline (potentially related to KT-10835)
+class JvmMemberType internal constructor(
+    container: IJvmType,
+    className: String,
+    typeParameters: Array<out IJvmType>,
+    nullable: Boolean
+): JvmTypeReference(className, "", *typeParameters, nullable = nullable) {
 
-    }
+    override val enclosingType = container
+    override val packageName = enclosingType.packageName
+
+}
 
 /**
  * An `IJvmType` represents a type that may be used in a JVM language.
