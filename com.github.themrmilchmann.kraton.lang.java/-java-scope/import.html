@@ -1,0 +1,58 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>JavaScope.import - </title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">com.github.themrmilchmann.kraton.lang.java</a>&nbsp;/&nbsp;<a href="index.html">JavaScope</a>&nbsp;/&nbsp;<a href=".">import</a><br/>
+<br/>
+<h1>import</h1>
+<a name="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(kotlin.String, kotlin.Boolean, kotlin.Boolean)"></a>
+<code><span class="identifier">@JvmOverloads</span> <span class="keyword">fun </span><span class="identifier">import</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(kotlin.String, kotlin.Boolean, kotlin.Boolean)/type">type</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(kotlin.String, kotlin.Boolean, kotlin.Boolean)/isStatic">isStatic</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(kotlin.String, kotlin.Boolean, kotlin.Boolean)/isImplicit">isImplicit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code> <a href="https://github.com/TheMrMilchmann/Kraton/blob/master/modules/lang-java/src/main/kotlin/com/github/themrmilchmann/kraton/lang/java/JavaGenScope.kt#L51">(source)</a>
+<p>Imports all types that are directly underneath the given <code>type</code> using
+a wildcard import.</p>
+<h3>Parameters</h3>
+<p><a name="type"></a>
+<code>type</code> - </p>
+<p><a name="isStatic"></a>
+<code>isStatic</code> - </p>
+<p><a name="isImplicit"></a>
+<code>isImplicit</code> - </p>
+<p><strong>Since</strong><br/>
+1.0.0</p>
+<a name="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)"></a>
+<code><span class="identifier">@JvmOverloads</span> <span class="keyword">fun </span><span class="identifier">import</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)/type">type</span><span class="symbol">:</span>&nbsp;<a href="../../com.github.themrmilchmann.kraton.lang.jvm/-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)/forceMode">forceMode</span><span class="symbol">:</span>&nbsp;<a href="../-java-import-force-mode/index.html"><span class="identifier">JavaImportForceMode</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)/isImplicit">isImplicit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">?</span></code> <a href="https://github.com/TheMrMilchmann/Kraton/blob/master/modules/lang-java/src/main/kotlin/com/github/themrmilchmann/kraton/lang/java/JavaGenScope.kt#L68">(source)</a>
+<p>Imports the given type.</p>
+<p>When no import mode is forced (= <code>forceMode</code> is <code>null</code>), the import may
+be a wildcard import depending on the configuration.</p>
+<h3>Parameters</h3>
+<p><a name="type"></a>
+<code>type</code> - the type to import</p>
+<p><a name="forceMode"></a>
+<code>forceMode</code> - the</p>
+<p><a name="isImplicit"></a>
+<code>isImplicit</code> - whether or not the import is implicit (implicit
+    imports are not printed)</p>
+<p><strong>Since</strong><br/>
+1.0.0</p>
+<a name="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)"></a>
+<code><span class="identifier">@JvmOverloads</span> <span class="keyword">fun </span><span class="identifier">import</span><span class="symbol">(</span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)/type">type</span><span class="symbol">:</span>&nbsp;<a href="../../com.github.themrmilchmann.kraton.lang.jvm/-i-jvm-type/index.html"><span class="identifier">IJvmType</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)/member">member</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)/forceMode">forceMode</span><span class="symbol">:</span>&nbsp;<a href="../-java-import-force-mode/index.html"><span class="identifier">JavaImportForceMode</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="com.github.themrmilchmann.kraton.lang.java.JavaScope$import(com.github.themrmilchmann.kraton.lang.jvm.IJvmType, kotlin.String, com.github.themrmilchmann.kraton.lang.java.JavaImportForceMode, kotlin.Boolean)/isImplicit">isImplicit</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">?</span></code> <a href="https://github.com/TheMrMilchmann/Kraton/blob/master/modules/lang-java/src/main/kotlin/com/github/themrmilchmann/kraton/lang/java/JavaGenScope.kt#L91">(source)</a>
+<p>Statically imports the given member type.</p>
+<p>This should be used for methods and fields only.</p>
+<p>When no import mode is forced (= <code>forceMode</code> is <code>null</code>), the import may
+be a wildcard import depending on the configuration.</p>
+<h3>Parameters</h3>
+<p><a name="type"></a>
+<code>type</code> - the type to import</p>
+<p><a name="member"></a>
+<code>member</code> - the member to import</p>
+<p><a name="forceMode"></a>
+<code>forceMode</code> - the</p>
+<p><a name="isImplicit"></a>
+<code>isImplicit</code> - whether or not the import is implicit (implicit
+    imports are not printed)</p>
+<p><strong>Since</strong><br/>
+1.0.0</p>
+</BODY>
+</HTML>
