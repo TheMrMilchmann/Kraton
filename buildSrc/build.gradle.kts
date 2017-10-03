@@ -34,6 +34,8 @@ import java.io.*
 import java.util.*
 import org.jetbrains.kotlin.gradle.plugin.*
 
+val kotlinVersion = "1.1.51"
+
 plugins {
     `kotlin-dsl`
 }
@@ -58,6 +60,8 @@ tasks {
                     load(it)
                 }
             }
+
+            properties["kotlinVersion"] = kotlinVersion
 
             File(projectDir, "src/main-generated/kotlin/KratonConstantProperties.kt").apply {
                 parentFile.mkdirs()
@@ -98,5 +102,5 @@ repositories {
 }
 
 dependencies {
-    compile("org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-3")
+    compile("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
 }
