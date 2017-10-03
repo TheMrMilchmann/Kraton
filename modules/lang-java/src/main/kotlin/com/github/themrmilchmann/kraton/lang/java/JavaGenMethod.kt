@@ -60,17 +60,13 @@ open class JavaMethod internal constructor(
     val parameters: Array<out JavaParameter>,
     val returnDoc: String?,
     val since: String?,
-    override val category: String?,
     val exceptions: Array<out Pair<IJvmType, String?>>?,
     val see: Array<out String>?,
     val typeParameters: Array<out Pair<JvmGenericType, String?>>?,
     private val body: String?
 ): JavaModifierTarget(), JavaBodyMember {
 
-    override val weight: Int
-        get() = if (has(static)) WEIGHT_STATIC_METHOD else WEIGHT_INSTANCE_METHOD
-
-    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType) {
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType<*, *>) {
         val documentation = toJavaDoc(indent, containerType)
         if (documentation != null) println(documentation)
 
@@ -142,7 +138,7 @@ open class JavaMethod internal constructor(
      *
      * @since 1.0.0
      */
-    internal open fun PrintWriter.printMethodHead(containerType: JavaTopLevelType) {
+    internal open fun PrintWriter.printMethodHead(containerType: JavaTopLevelType<*, *>) {
         print(returnType.asString(containerType))
         print(" ")
         print(name)
@@ -163,12 +159,11 @@ class JavaConstructor internal constructor(
     parameters: Array<out JavaParameter>,
     returnDoc: String?,
     since: String?,
-    category: String?,
     exceptions: Array<out Pair<IJvmType, String?>>?,
     see: Array<out String>?,
     typeParameters: Array<out Pair<JvmGenericType, String?>>?,
     body: String?
-): JavaMethod(returnType, returnType.className, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body) {
+): JavaMethod(returnType, returnType.className, documentation, parameters, returnDoc, since, exceptions, see, typeParameters, body) {
 
     /**
      * Prints the head of this constructor.
@@ -177,7 +172,7 @@ class JavaConstructor internal constructor(
      *
      * @since 1.0.0
      */
-    override fun PrintWriter.printMethodHead(containerType: JavaTopLevelType) {
+    override fun PrintWriter.printMethodHead(containerType: JavaTopLevelType<*, *>) {
         print(returnType.asString(containerType))
     }
 

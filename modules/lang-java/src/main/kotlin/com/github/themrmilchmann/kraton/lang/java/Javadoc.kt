@@ -215,7 +215,7 @@ internal fun String?.toJavaDoc(
  *
  * @since 1.0.0
  */
-internal fun JavaMethod.toJavaDoc(indent: String = "", containerType: JavaTopLevelType): String? {
+internal fun JavaMethod.toJavaDoc(indent: String = "", containerType: JavaTopLevelType<*, *>): String? {
     if (returnDoc == null
         && (exceptions == null || exceptions.none { it.second != null })
         && see == null

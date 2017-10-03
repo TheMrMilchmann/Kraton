@@ -35,21 +35,48 @@ import java.io.*
 import java.util.*
 import kotlin.collections.LinkedHashSet
 
-private val CATEGORY = "(\\d+)\\Q_\\E(.*)".toRegex()
-
-internal const val CATEGORY_DIVIDER = "################################################################################################################################################################"
 internal const val INDENT = "    "
 internal const val LN = "\n"
 internal const val IMPORT_WILDCARD = "*"
 
-internal const val WEIGHT_CONSTANT_FIELD = 0
-internal const val WEIGHT_STATIC_FIELD = 1
-internal const val WEIGHT_STATIC_METHOD = 2
-internal const val WEIGHT_INSTANCE_FIELD = 3
-internal const val WEIGHT_INSTANCE_METHOD = 5
-internal const val WEIGHT_TOPLEVEL = Int.MAX_VALUE
+class JavaBodyMemberGroup<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>> internal constructor(
+    override val name: String = "",
+    sortingStrategy: Comparator<JavaBodyMember>? = null,
+    private val headerPrinter: (PrintWriter.(indent: String, group: JavaBodyMemberGroup<*, *>) -> Unit)? = null
+): JavaBodyMember {
 
-internal fun <T: JavaTopLevelType> Profile.targetOf(type: T, packageName: String, srcFolder: String, srcSet: String, copyrightHeader: String?) =
+    internal constructor(
+        containerType: T,
+        name: String,
+        sortingStrategy: Comparator<JavaBodyMember>?,
+        headerPrinter: (PrintWriter.(indent: String, group: JavaBodyMemberGroup<*, *>) -> Unit)?,
+        init: S.() -> Unit
+    ): this(name, sortingStrategy, headerPrinter) {
+        containerType.scope(members, init)
+    }
+
+    internal val members: MutableSet<JavaBodyMember> = if (sortingStrategy != null) TreeSet(sortingStrategy) else LinkedHashSet()
+
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType<*, *>) {
+        headerPrinter?.invoke(this, indent, this@JavaBodyMemberGroup)
+
+        val subIndent = indent + INDENT
+        var wasField = false
+
+        members.forEach {
+            val isField = it is JavaField
+            if ((wasField && !isField)) println()
+            wasField = isField
+
+            it.run { printMember(subIndent, containerType) }
+        }
+
+        if (wasField) println()
+    }
+
+}
+
+internal fun <T: JavaTopLevelType<T, *>> Profile.targetOf(type: T, packageName: String, srcFolder: String, srcSet: String, copyrightHeader: String?) =
     JavaGeneratorTarget(type.className, packageName, srcFolder, srcSet, {
         if (copyrightHeader != null) println(copyrightHeader)
         print("package ")
@@ -95,13 +122,12 @@ internal class JavaGeneratorTarget(
  *
  * @since 1.0.0
  */
-abstract class JavaTopLevelType(
+abstract class JavaTopLevelType<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>>(
     override val className: String,
     override val packageName: String,
     val documentation: String?,
     val since: String?,
-    sorted: Boolean,
-    private val containerType: JavaTopLevelType?
+    private val containerType: JavaTopLevelType<*, *>?
 ): JavaModifierTarget(), JavaBodyMember, IJvmType {
 
     override val enclosingType get() = containerType
@@ -109,7 +135,9 @@ abstract class JavaTopLevelType(
     private val _imports by lazy { mutableMapOf<String, MutableMap<String, JavaImport>>() }
     internal val imports: MutableMap<String, MutableMap<String, JavaImport>> get() = containerType?.imports ?: _imports
 
-    internal val members: MutableSet<JavaBodyMember> = if (sorted) TreeSet() else LinkedHashSet()
+    private val rootGroup = JavaBodyMemberGroup<T, S>()
+    internal val members get() = rootGroup.members
+
     internal val typeParameters = mutableListOf<Pair<JvmGenericType, String?>>()
 
     private val _authors: MutableList<String> by lazy(::mutableListOf)
@@ -151,47 +179,21 @@ abstract class JavaTopLevelType(
         }
     }
 
-    /**
-     * TODO doc
-     *
-     * @param type
-     * @param isStatic
-     * @param isImplicit
-     *
-     * @since 1.0.0
-     */
-    @JvmOverloads
-    fun import(type: String, isStatic: Boolean = false, isImplicit: Boolean = false) =
+    internal fun import(type: String, isStatic: Boolean = false, isImplicit: Boolean = false) =
         doImport(type, IMPORT_WILDCARD, JavaImportForceMode.FORCE_WILDCARD, isStatic, isImplicit)
 
-    /**
-     * TODO doc
-     *
-     * @since 1.0.0
-     */
-    @JvmOverloads
-    fun import(
+    internal fun import(
         type: IJvmType,
         forceMode: JavaImportForceMode? = null,
         isImplicit: Boolean = false
-    ) {
-        type.packageName?.let { doImport(it, type.containerName, forceMode, false, isImplicit) }
-    }
+    ) = type.packageName?.let { doImport(it, type.containerName, forceMode, false, isImplicit) }
 
-    /**
-     * TODO doc
-     *
-     * @since 1.0.0
-     */
-    @JvmOverloads
-    fun import(
+    internal fun import(
         type: IJvmType,
         member: String,
         forceMode: JavaImportForceMode? = null,
         isImplicit: Boolean = false
-    ) {
-        type.packageName?.let { doImport("$it.$type", member, forceMode, true, isImplicit) }
-    }
+    ) = type.packageName?.let { doImport("$it.$type", member, forceMode, true, isImplicit) }
 
     fun isImported(type: IJvmType) =
         imports[type.packageName]?.any { it.value.member === IMPORT_WILDCARD || it.value.member == type.className } ?: false
@@ -209,50 +211,16 @@ abstract class JavaTopLevelType(
         printTypeDeclaration()
         print(" {")
 
-        if (members.isNotEmpty()) {
+        if (rootGroup.members.isNotEmpty()) {
             println(LN)
-
-            val subIndent = indent + INDENT
-            var prevCategory: String? = null
-            var isFirst = true
-            var wasField = false
-
-            members.forEach {
-                val isField = it is JavaField
-                val cat = it.category
-
-                if ((wasField && !isField) && cat == prevCategory) println()
-
-                if (cat != null) {
-                    val mCat = CATEGORY.matchEntire(cat) ?: throw IllegalArgumentException("Category name does not match pattern")
-                    val category = mCat.groupValues[2]
-
-                    if (cat != prevCategory) {
-                        if (category.isNotEmpty()) {
-                            if (wasField) println()
-
-                            println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
-                            println("$subIndent// # $category ${CATEGORY_DIVIDER.substring(subIndent.length + category.length + 6)}")
-                            println("$subIndent// ${CATEGORY_DIVIDER.substring(subIndent.length + 3)}")
-                            println()
-                        } else if (!isFirst)
-                            println()
-                    }
-                }
-
-                prevCategory = cat
-                isFirst = false
-                wasField = isField
-
-                it.run { printMember(subIndent, this@JavaTopLevelType) }
-            }
-
-            if (wasField) println()
+            rootGroup.apply { printMember(indent, this@JavaTopLevelType) }
             print(indent)
         }
 
         print("}")
     }
+
+    abstract fun scope(members: MutableSet<JavaBodyMember>, init: S.() -> Unit): S
 
     /**
      * Prints the declaration of this top-level type.
@@ -265,14 +233,14 @@ abstract class JavaTopLevelType(
 
     override fun nullable() = JvmTypeReference(className, packageName, nullable = true)
 
-    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType) {
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType<*, *>) {
         printType(indent)
         println(LN)
     }
 
 }
 
-internal interface JavaBodyMember : Comparable<JavaBodyMember> {
+interface JavaBodyMember : Comparable<JavaBodyMember> {
 
     /**
      * The name of this java object.
@@ -281,28 +249,7 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      */
     val name: String
 
-    /**
-     * The weight used to sort this java object.
-     *
-     * @since 1.0.0
-     */
-    val weight: Int
-
-    /**
-     * The category declaration for this object.
-     *
-     * @since 1.0.0
-     */
-    val category: String?
-
-    override fun compareTo(other: JavaBodyMember) = when(this.weight.compareTo(other.weight)) {
-        -1 -> -1
-        1 -> 1
-        else -> when (name.compareTo(other.name)) {
-            -1 -> -1
-            else -> 1
-        }
-    }
+    override fun compareTo(other: JavaBodyMember) = name.compareTo(other.name)
 
     /**
      * Prints this java object to the given PrintWriter.
@@ -314,7 +261,7 @@ internal interface JavaBodyMember : Comparable<JavaBodyMember> {
      *
      * @since 1.0.0
      */
-    fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType)
+    fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType<*, *>)
 
 }
 

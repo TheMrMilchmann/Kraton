@@ -53,22 +53,12 @@ class JavaField internal constructor(
     val entries: Array<out Pair<String, String?>>,
     val documentation: String,
     val since: String?,
-    override val category: String?,
     val see: List<String>?
 ): JavaModifierTarget(), JavaBodyMember {
 
     override val name = entries.first().first
 
-    override val weight: Int
-        get() = if (has(static))
-            if (has(final))
-                WEIGHT_CONSTANT_FIELD
-            else
-                WEIGHT_STATIC_FIELD
-        else
-            WEIGHT_INSTANCE_FIELD
-
-    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType) {
+    override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType<*, *>) {
         val documentation = documentation.toJavaDoc(indent, see = see, since = since)
         if (documentation != null) println(documentation)
 

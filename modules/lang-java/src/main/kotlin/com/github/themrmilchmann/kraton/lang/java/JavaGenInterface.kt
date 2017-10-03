@@ -46,8 +46,6 @@ import java.util.*
  * @param documentation     the documentation for the interface
  * @param since             the value for the interface's `@since` tag
  * @param superInterfaces   the interfaces for the interface to extend
- * @param sorted            whether or not the interface's content will be
- *                          sorted
  *
  * @return the newly created and registered JavaInterface object
  *
@@ -62,75 +60,11 @@ fun Profile.javaInterface(
     documentation: String? = null,
     since: String? = null,
     superInterfaces: Array<out IJvmType>? = null,
-    sorted: Boolean = false,
     copyrightHeader: String? = null,
-    init: JavaInterface.() -> Unit
-) = JavaInterface(fileName, packageName, documentation, since, superInterfaces, sorted, null, null)
-    .apply { import("java.lang", false, true) }
-    .also(init)
+    init: JavaInterfaceScope.() -> Unit
+) = JavaInterface(fileName, packageName, documentation, since, superInterfaces, null)
+    .apply { scope(members, init) }
     .run { targetOf(this, packageName, srcFolder, srcSet, copyrightHeader) }
-
-/**
- * Creates, registers and returns an object representing a Java interface.
- *
- * @receiver the enclosing type of which the interface will be a member of
- *
- * @param className         the name for the interface
- * @param documentation     the documentation for the interface
- * @param since             the value for the interface's `@since` tag
- * @param superInterfaces   the interfaces for the interface to extend
- * @param sorted            whether or not the interface's content will be
- *                          sorted
- * @param category          the category under which this interface will be
- *                          registered in the enclosing type
- *
- * @return the newly created and registered JavaInterface object
- *
- * @since 1.0.0
- */
-@JvmOverloads
-fun JavaClass.javaInterface(
-    className: String,
-    documentation: String? = null,
-    since: String? = null,
-    superInterfaces: Array<out IJvmType>? = null,
-    sorted: Boolean = false,
-    category: String? = null,
-    init: JavaInterface.() -> Unit
-) = JavaInterface(className, this.packageName, documentation, since, superInterfaces, sorted, category, this)
-    .apply(init)
-    .also { members.add(it) }
-
-/**
- * Creates, registers and returns an object representing a Java interface.
- *
- * @receiver the enclosing type of which the interface will be a member of
- *
- * @param className         the name for the interface
- * @param documentation     the documentation for the interface
- * @param since             the value for the interface's `@since` tag
- * @param superInterfaces   the interfaces for the interface to extend
- * @param sorted            whether or not the interface's content will be
- *                          sorted
- * @param category          the category under which this interface will be
- *                          registered in the enclosing type
- *
- * @return the newly created and registered JavaInterface object
- *
- * @since 1.0.0
- */
-@JvmOverloads
-fun JavaInterface.javaInterface(
-    className: String,
-    documentation: String? = null,
-    since: String? = null,
-    superInterfaces: Array<out IJvmType>? = null,
-    sorted: Boolean = false,
-    category: String? = null,
-    init: JavaInterface.() -> Unit
-) = JavaInterface(className, this.packageName, documentation, since, superInterfaces, sorted, category, this)
-    .apply(init)
-    .also { members.add(it) }
 
 /**
  * An object representing a Java interface.
@@ -145,20 +79,46 @@ class JavaInterface internal constructor(
     documentation: String?,
     since: String?,
     val superInterfaces: Array<out IJvmType>?,
-    sorted: Boolean,
-    override val category: String?,
-    containerType: JavaTopLevelType?
-): JavaTopLevelType(className, packageName, documentation, since, sorted, containerType) {
+    containerType: JavaTopLevelType<*, *>?
+): JavaTopLevelType<JavaInterface, JavaInterfaceScope>(className, packageName, documentation, since, containerType) {
 
-    override val name: String
-        get() = className
-
-    override val weight: Int = WEIGHT_TOPLEVEL
+    override val name get() = className
 
     init {
+        import("java.lang", isImplicit = true)
         modifiers.forEach { it.value.applyImports.invoke(this) }
         superInterfaces?.forEach { import(it) }
     }
+
+    override fun scope(members: MutableSet<JavaBodyMember>, init: JavaInterfaceScope.() -> Unit) =
+        JavaInterfaceScope(this, members).also(init)
+
+    override fun PrintWriter.printTypeDeclaration() {
+        print("interface ")
+        print(className)
+
+        if (typeParameters.isNotEmpty()) {
+            print("<")
+            print(StringJoiner(", ").apply {
+                typeParameters.forEach { add(it.first.asString(this@JavaInterface)) }
+            })
+            print(">")
+        }
+
+        if (superInterfaces != null) {
+            print(" extends ")
+            print(StringJoiner(", ").apply {
+                superInterfaces.forEach { add(it.asString(this@JavaInterface)) }
+            })
+        }
+    }
+
+}
+
+class JavaInterfaceScope internal constructor(
+    scopeRoot: JavaInterface,
+    members: MutableSet<JavaBodyMember>
+): JavaScope<JavaInterface, JavaInterfaceScope>(scopeRoot, members) {
 
     /**
      * Creates, registers and returns an object representing a Java field.
@@ -168,8 +128,6 @@ class JavaInterface internal constructor(
      * @param name          the name for the field
      * @param documentation the documentation for the field
      * @param since         the documentation for the field's `@since` tag
-     * @param category      the category under which the field will be
-     *                      generated within the interface
      * @param see           the references to be in the documentation of the
      *                      field
      *
@@ -183,11 +141,10 @@ class JavaInterface internal constructor(
         value: String?,
         documentation: String,
         since: String? = null,
-        category: String? = null,
         see: List<String>? = null
-    ) = JavaField(this, arrayOf(name to value), documentation, since, category, see)
+    ) = JavaField(this, arrayOf(name to value), documentation, since, see)
+        .apply { modifiers.forEach { it.value.applyImports.invoke(scopeRoot) } }
         .also {
-            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
             import(this)
             members.add(it)
         }
@@ -209,8 +166,6 @@ class JavaInterface internal constructor(
      * @param documentation the documentation for the field/s
      * @param since         the documentation for the field's/fields' `@since`
      *                      tag
-     * @param category      the category under which the field/s will be
-     *                      generated within the interface
      * @param see           the references to be in the documentation of the
      *                      field/s
      *
@@ -223,11 +178,10 @@ class JavaInterface internal constructor(
         names: Array<String>,
         documentation: String,
         since: String? = null,
-        category: String? = null,
         see: List<String>? = null
-    ) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, category, see)
+    ) = JavaField(this, names.map { it to null as String? }.toTypedArray(), documentation, since, see)
+        .apply { modifiers.forEach { it.value.applyImports.invoke(scopeRoot) } }
         .also {
-            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
             import(this)
             members.add(it)
         }
@@ -250,8 +204,6 @@ class JavaInterface internal constructor(
      * @param documentation the documentation for the field/s
      * @param since         the documentation for the field's/fields' `@since`
      *                      tag
-     * @param category      the category under which the field/s will be
-     *                      generated within the interface
      * @param see           the references to be in the documentation of the
      *                      field/s
      *
@@ -264,11 +216,10 @@ class JavaInterface internal constructor(
         vararg entries: Pair<String, String?>,
         documentation: String,
         since: String? = null,
-        category: String? = null,
         see: List<String>? = null
-    ) = JavaField(this, entries, documentation, since, category, see)
+    ) = JavaField(this, entries, documentation, since, see)
+        .apply { modifiers.forEach { it.value.applyImports.invoke(scopeRoot) } }
         .also {
-            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
             import(this)
             members.add(it)
         }
@@ -284,8 +235,6 @@ class JavaInterface internal constructor(
      * @param returnDoc         the documentation for the method's `@returnDoc`
      *                          tag
      * @param since             the documentation for the method's `@since` tag
-     * @param category          the category under which this method will be
-     *                          generated within the interface
      * @param exceptions        the exceptions that may be thrown by the method
      *                          and their respective documentation entries
      * @param see               the objects to be referenced in the method's
@@ -304,14 +253,13 @@ class JavaInterface internal constructor(
         vararg parameters: JavaParameter,
         returnDoc: String? = null,
         since: String? = null,
-        category: String? = null,
         exceptions: Array<out Pair<IJvmType, String?>>? = null,
         see: Array<out String>? = null,
         typeParameters: Array<out Pair<JvmGenericType, String?>>? = null,
         body: String? = null
-    ) = JavaMethod(this, name, documentation, parameters, returnDoc, since, category, exceptions, see, typeParameters, body)
+    ) = JavaMethod(this, name, documentation, parameters, returnDoc, since, exceptions, see, typeParameters, body)
+        .apply { modifiers.forEach { it.value.applyImports.invoke(scopeRoot) } }
         .also {
-            modifiers.forEach { it.value.applyImports.invoke(this@JavaInterface) }
             import(this)
             parameters.forEach { import(it.type) }
             exceptions?.forEach { import(it.first) }
@@ -337,29 +285,7 @@ class JavaInterface internal constructor(
         documentation: String? = null,
         vararg bounds: IJvmType
     ) = JvmGenericType(this, *bounds)
-        .also {
-            bounds.forEach { import(it) }
-            typeParameters.add(it to documentation)
-        }
-
-    override fun PrintWriter.printTypeDeclaration() {
-        print("interface ")
-        print(className)
-
-        if (typeParameters.isNotEmpty()) {
-            print("<")
-            print(StringJoiner(", ").apply {
-                typeParameters.forEach { add(it.first.asString(this@JavaInterface)) }
-            })
-            print(">")
-        }
-
-        if (superInterfaces != null) {
-            print(" extends ")
-            print(StringJoiner(", ").apply {
-                superInterfaces.forEach { add(it.asString(this@JavaInterface)) }
-            })
-        }
-    }
+        .apply { bounds.forEach { import(it) } }
+        .also { scopeRoot.typeParameters.add(it to documentation) }
 
 }

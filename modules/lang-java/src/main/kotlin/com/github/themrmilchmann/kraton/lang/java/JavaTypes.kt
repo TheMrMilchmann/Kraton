@@ -32,7 +32,7 @@ package com.github.themrmilchmann.kraton.lang.java
 import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.util.*
 
-fun IJvmType.asString(from: JavaTopLevelType?): String = when {
+fun IJvmType.asString(from: JavaTopLevelType<*, *>?): String = when {
     this is JvmArrayType -> stringValueOfJvmArrayType(from)
     this is JvmGenericType -> stringValueOfJvmGenericType(from)
     this is JvmPrimitiveType -> stringValueOfPrimitiveType()
@@ -41,13 +41,13 @@ fun IJvmType.asString(from: JavaTopLevelType?): String = when {
     else -> stringValueOfIJvmType(from)
 }
 
-private fun JvmArrayType.stringValueOfJvmArrayType(from: JavaTopLevelType?) =
+private fun JvmArrayType.stringValueOfJvmArrayType(from: JavaTopLevelType<*, *>?) =
     type.asString(from) + StringBuilder().run {
         for (i in 0 until dimensions) append("[]")
         toString()
     }
 
-private fun JvmGenericType.stringValueOfJvmGenericType(from: JavaTopLevelType?) =
+private fun JvmGenericType.stringValueOfJvmGenericType(from: JavaTopLevelType<*, *>?) =
     className + StringBuilder().run {
         if (bounds.isNotEmpty()) {
             append(" ${if (upperBounds) "extends" else "super"} ")
@@ -84,7 +84,7 @@ private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when(this) {
     else        -> throw UnsupportedOperationException()
 }
 
-private fun AbstractJvmType.stringValueOfAbstractJvmType(from: JavaTopLevelType?): String {
+private fun AbstractJvmType.stringValueOfAbstractJvmType(from: JavaTopLevelType<*, *>?): String {
     val typeParameters = this.typeParameters
     val superString = stringValueOfIJvmType(from)
 
@@ -103,7 +103,7 @@ private fun AbstractJvmType.stringValueOfAbstractJvmType(from: JavaTopLevelType?
         }
 }
 
-private fun IJvmType.stringValueOfIJvmType(from: JavaTopLevelType?) =
+private fun IJvmType.stringValueOfIJvmType(from: JavaTopLevelType<*, *>?) =
     if (from != null && from.isResolved(this)) {
         memberName
     } else {

@@ -170,7 +170,7 @@ open class Annotate @JvmOverloads constructor(
      *
      * @since 1.0.0
      */
-    fun asString(containerType: JavaTopLevelType?) =
+    fun asString(containerType: JavaTopLevelType<*, *>?) =
         "@${type.asString(containerType)}${if (parameters === null) "" else "($parameters)"}"
 
 }
@@ -203,7 +203,7 @@ open class JavaVisibilityModifier internal constructor(
  * @since 1.0.0
  */
 abstract class JavaModifier internal constructor(
-    val applyImports: JavaTopLevelType.() -> Unit = {}
+    internal val applyImports: JavaTopLevelType<*, *>.() -> Unit = {}
 ) {
 
     /**
@@ -237,7 +237,7 @@ abstract class JavaModifierTarget {
     internal inline fun <reified M : JavaModifier> has() = modifiers.containsKey(M::class)
     internal inline fun <reified M : JavaModifier> get() = modifiers[M::class] as M
 
-    internal fun PrintWriter.printAnnotations(indent: String, containerType: JavaTopLevelType) {
+    internal fun PrintWriter.printAnnotations(indent: String, containerType: JavaTopLevelType<*, *>) {
         if (annotations.isNotEmpty()) {
             print(indent)
             print(StringJoiner(LN + indent).run {
@@ -248,7 +248,7 @@ abstract class JavaModifierTarget {
         }
     }
 
-    internal fun printAnnotationsInline(containerType: JavaTopLevelType) =
+    internal fun printAnnotationsInline(containerType: JavaTopLevelType<*, *>) =
         if (annotations.isNotEmpty()) {
             val annotations = StringJoiner(" ").run {
                 annotations.forEach { add(it.asString(containerType)) }
