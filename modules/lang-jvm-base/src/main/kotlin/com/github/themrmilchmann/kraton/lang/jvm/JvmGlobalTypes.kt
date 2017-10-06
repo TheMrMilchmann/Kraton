@@ -34,10 +34,10 @@ package com.github.themrmilchmann.kraton.lang.jvm
  *
  * @since 1.0.0
  */
-object void: AbstractJvmType("void") {
+object void : AbstractJvmType("void") {
 
     override fun nullable() =
-        object: AbstractJvmType("void") {
+        object : AbstractJvmType("void") {
             override val isNullable = true
             override fun nullable() = this
         }

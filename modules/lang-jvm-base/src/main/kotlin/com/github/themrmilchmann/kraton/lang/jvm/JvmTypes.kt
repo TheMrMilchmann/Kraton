@@ -139,7 +139,7 @@ class JvmMemberType internal constructor(
     className: String,
     typeParameters: Array<out IJvmType>,
     nullable: Boolean
-): JvmTypeReference(className, "", *typeParameters, nullable = nullable) {
+) : JvmTypeReference(className, "", *typeParameters, nullable = nullable) {
 
     override val enclosingType = container
     override val packageName = enclosingType.packageName
@@ -224,7 +224,7 @@ abstract class AbstractJvmType internal constructor(
     override val className: String,
     val typeParameters: Array<out IJvmType>? = null,
     override val isNullable: Boolean = false
-): IJvmType {
+) : IJvmType {
 
     override val packageName: String? = null
 
@@ -244,7 +244,7 @@ open class JvmTypeReference(
     override val packageName: String?,
     vararg typeParameters: IJvmType,
     nullable: Boolean = false
-): AbstractJvmType(className, typeParameters, nullable) {
+) : AbstractJvmType(className, typeParameters, nullable) {
 
     override fun nullable() =
         if (isNullable)
@@ -286,7 +286,7 @@ class JvmArrayType(
     val type: IJvmType,
     val dimensions: Int,
     override val isNullable: Boolean = type.isNullable
-): IJvmType by type {
+) : IJvmType by type {
 
     override fun nullable() =
         if (isNullable)
@@ -306,7 +306,7 @@ class JvmGenericType(
     vararg val bounds: IJvmType,
     val upperBounds: Boolean = true,
     override val isNullable: Boolean = false
-): AbstractJvmType(name) {
+) : AbstractJvmType(name) {
 
     override fun nullable() =
         if (isNullable)
@@ -333,9 +333,9 @@ class JvmPrimitiveType private constructor(
     val size: Int,
     val abbrevName: String,
     override val isNullable: Boolean
-): AbstractJvmType(name) {
+) : AbstractJvmType(name) {
 
-    constructor(name: String, nullValue: String, size: Int, abbrevName: String = name):
+    constructor(name: String, nullValue: String, size: Int, abbrevName: String = name) :
         this(name, nullValue, size, abbrevName, false)
 
     val box = JvmPrimitiveBoxType(name)
@@ -360,9 +360,9 @@ class JvmPrimitiveType private constructor(
 class JvmPrimitiveBoxType private constructor(
     name: String,
     override val isNullable: Boolean
-): AbstractJvmType(name) {
+) : AbstractJvmType(name) {
 
-    constructor(name: String): this(name, false)
+    constructor(name: String) : this(name, false)
 
     override fun nullable() =
         if (isNullable)
