@@ -29,8 +29,13 @@
  */
 import build.*
 
-apply {
-    plugin("org.jetbrains.kotlin.jvm")
+plugins {
+    java
+    maven
+    signing
+
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.dokka")
 }
 
 configureKotlinProject()

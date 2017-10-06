@@ -40,10 +40,11 @@ buildscript {
 
 plugins {
     java
-}
+    maven
+    signing
 
-apply {
-    plugin("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.dokka")
 }
 
 configureKotlinProject()

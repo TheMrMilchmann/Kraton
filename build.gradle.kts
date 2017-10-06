@@ -59,18 +59,6 @@ project(":modules").subprojects {
         else
             "kraton-${this@subprojects.name.replace('.', '-')}"
 
-        plugins {
-            kotlin("jvm", kotlinVersion) apply false
-        }
-
-        apply {
-            plugin("java")
-            plugin("maven")
-            plugin("signing")
-
-            plugin("org.jetbrains.dokka")
-        }
-
         val java = the<JavaPluginConvention>()
         val signing = the<SigningExtension>()
 
