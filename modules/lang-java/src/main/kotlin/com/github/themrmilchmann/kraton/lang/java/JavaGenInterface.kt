@@ -80,7 +80,7 @@ class JavaInterface internal constructor(
     since: String?,
     val superInterfaces: Array<out IJvmType>?,
     containerType: JavaTopLevelType<*, *>?
-): JavaTopLevelType<JavaInterface, JavaInterfaceScope>(className, packageName, documentation, since, containerType) {
+) : JavaTopLevelType<JavaInterface, JavaInterfaceScope>(className, packageName, documentation, since, containerType) {
 
     override val name get() = className
 
@@ -118,7 +118,7 @@ class JavaInterface internal constructor(
 class JavaInterfaceScope internal constructor(
     scopeRoot: JavaInterface,
     members: MutableSet<JavaBodyMember>
-): JavaScope<JavaInterface, JavaInterfaceScope>(scopeRoot, members) {
+) : JavaScope<JavaInterface, JavaInterfaceScope>(scopeRoot, members) {
 
     /**
      * Creates, registers and returns an object representing a Java field.

@@ -64,7 +64,7 @@ open class JavaMethod internal constructor(
     val see: Array<out String>?,
     val typeParameters: Array<out Pair<JvmGenericType, String?>>?,
     private val body: String?
-): JavaModifierTarget(), JavaBodyMember {
+) : JavaModifierTarget(), JavaBodyMember {
 
     override fun PrintWriter.printMember(indent: String, containerType: JavaTopLevelType<*, *>) {
         val documentation = toJavaDoc(indent, containerType)
@@ -163,7 +163,7 @@ class JavaConstructor internal constructor(
     see: Array<out String>?,
     typeParameters: Array<out Pair<JvmGenericType, String?>>?,
     body: String?
-): JavaMethod(returnType, returnType.className, documentation, parameters, returnDoc, since, exceptions, see, typeParameters, body) {
+) : JavaMethod(returnType, returnType.className, documentation, parameters, returnDoc, since, exceptions, see, typeParameters, body) {
 
     /**
      * Prints the head of this constructor.

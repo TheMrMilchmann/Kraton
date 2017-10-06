@@ -84,7 +84,7 @@ class JavaClass internal constructor(
     val superClass: IJvmType?,
     val interfaces: Array<out IJvmType>?,
     containerType: JavaTopLevelType<*, *>?
-): JavaTopLevelType<JavaClass, JavaClassScope>(className, packageName, documentation, since, containerType) {
+) : JavaTopLevelType<JavaClass, JavaClassScope>(className, packageName, documentation, since, containerType) {
 
     override val name get() = className
 
@@ -128,7 +128,7 @@ class JavaClass internal constructor(
 class JavaClassScope internal constructor(
     scopeRoot: JavaClass,
     members: MutableSet<JavaBodyMember>
-): JavaScope<JavaClass, JavaClassScope>(scopeRoot, members) {
+) : JavaScope<JavaClass, JavaClassScope>(scopeRoot, members) {
 
     @JvmOverloads
     fun constructor(

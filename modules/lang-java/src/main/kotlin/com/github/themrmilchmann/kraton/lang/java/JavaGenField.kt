@@ -54,7 +54,7 @@ class JavaField internal constructor(
     val documentation: String,
     val since: String?,
     val see: List<String>?
-): JavaModifierTarget(), JavaBodyMember {
+) : JavaModifierTarget(), JavaBodyMember {
 
     override val name = entries.first().first
 

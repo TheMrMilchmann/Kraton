@@ -39,11 +39,11 @@ internal const val INDENT = "    "
 internal const val LN = "\n"
 internal const val IMPORT_WILDCARD = "*"
 
-class JavaBodyMemberGroup<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>> internal constructor(
+class JavaBodyMemberGroup<T : JavaTopLevelType<T, S>, S : JavaScope<T, S>> internal constructor(
     override val name: String = "",
     sortingStrategy: Comparator<JavaBodyMember>? = null,
     private val headerPrinter: (PrintWriter.(indent: String, group: JavaBodyMemberGroup<*, *>) -> Unit)? = null
-): JavaBodyMember {
+) : JavaBodyMember {
 
     internal constructor(
         containerType: T,
@@ -51,7 +51,7 @@ class JavaBodyMemberGroup<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>> interna
         sortingStrategy: Comparator<JavaBodyMember>?,
         headerPrinter: (PrintWriter.(indent: String, group: JavaBodyMemberGroup<*, *>) -> Unit)?,
         init: S.() -> Unit
-    ): this(name, sortingStrategy, headerPrinter) {
+    ) : this(name, sortingStrategy, headerPrinter) {
         containerType.scope(members, init)
     }
 
@@ -76,7 +76,7 @@ class JavaBodyMemberGroup<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>> interna
 
 }
 
-internal fun <T: JavaTopLevelType<T, *>> Profile.targetOf(type: T, packageName: String, srcFolder: String, srcSet: String, copyrightHeader: String?) =
+internal fun <T : JavaTopLevelType<T, *>> Profile.targetOf(type: T, packageName: String, srcFolder: String, srcSet: String, copyrightHeader: String?) =
     JavaGeneratorTarget(type.className, packageName, srcFolder, srcSet, {
         if (copyrightHeader != null) println(copyrightHeader)
         print("package ")
@@ -103,7 +103,7 @@ internal class JavaGeneratorTarget(
     srcFolder: String,
     srcSet: String,
     private val print: PrintWriter.() -> Unit
-): GeneratorTarget(fileName, "java", packageName, srcFolder, srcSet) {
+) : GeneratorTarget(fileName, "java", packageName, srcFolder, srcSet) {
 
     override fun PrintWriter.printTarget() {
         this.apply(print)
@@ -122,13 +122,13 @@ internal class JavaGeneratorTarget(
  *
  * @since 1.0.0
  */
-abstract class JavaTopLevelType<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>>(
+abstract class JavaTopLevelType<T : JavaTopLevelType<T, S>, S : JavaScope<T, S>>(
     override val className: String,
     override val packageName: String,
     val documentation: String?,
     val since: String?,
     private val containerType: JavaTopLevelType<*, *>?
-): JavaModifierTarget(), JavaBodyMember, IJvmType {
+) : JavaModifierTarget(), JavaBodyMember, IJvmType {
 
     override val enclosingType get() = containerType
 
@@ -142,10 +142,10 @@ abstract class JavaTopLevelType<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>>(
 
     private val _authors: MutableList<String> by lazy(::mutableListOf)
     private val authors: MutableList<String> get() = containerType?.authors ?: _authors
-    fun authors(vararg authors: String) { this.authors.addAll(authors) }
+    fun authors(vararg authors: String) =this.authors.addAll(authors)
 
     private val references = mutableListOf<String>()
-    fun see(ref: String) { this.references.add(ref) }
+    fun see(ref: String) = this.references.add(ref)
 
     private fun doImport(
         container: String,
@@ -276,7 +276,7 @@ internal class JavaImport(
     val forceMode: JavaImportForceMode?,
     val isStatic: Boolean,
     val isImplicit: Boolean
-): Comparable<JavaImport> {
+) : Comparable<JavaImport> {
 
     override fun compareTo(other: JavaImport): Int {
         if (isStatic) {

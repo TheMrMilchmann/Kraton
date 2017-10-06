@@ -32,7 +32,7 @@ package com.github.themrmilchmann.kraton.lang.java
 import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.io.*
 
-abstract class JavaScope<T: JavaTopLevelType<T, S>, S: JavaScope<T, S>>(
+abstract class JavaScope<T : JavaTopLevelType<T, S>, S : JavaScope<T, S>>(
     val scopeRoot: T,
     val members: MutableSet<JavaBodyMember>
 ) {

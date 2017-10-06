@@ -126,7 +126,7 @@ object strictfp : JavaVisibilityModifier("strictfp")
 class Deprecated(
     private val since: String? = null,
     private val forRemoval: Boolean? = null
-): Annotate(
+) : Annotate(
     JvmTypeReference("Deprecated", "java.lang"),
     if (since != null || forRemoval != null)
         StringJoiner(", ").run {
@@ -157,7 +157,7 @@ val Override = Annotate(Override::class.asType)
 open class Annotate @JvmOverloads constructor(
     private val type: IJvmType,
     private val parameters: String? = null
-): JavaModifier({ import(type) }) {
+) : JavaModifier({ import(type) }) {
 
     override fun applyTo(target: JavaModifierTarget) {
         target.annotations.add(this)
@@ -184,7 +184,7 @@ open class Annotate @JvmOverloads constructor(
  */
 open class JavaVisibilityModifier internal constructor(
     internal val name: String
-): JavaModifier() {
+) : JavaModifier() {
 
     /**
      * Returns the name of this modifier.
@@ -291,14 +291,14 @@ abstract class JavaModifierTarget {
  *
  * @since 1.0.0
  */
-operator fun <T : JavaModifier, R: JavaModifierTarget> T.rangeTo(trg: R) = trg.apply { setModifiers(this@rangeTo) }
+operator fun <T : JavaModifier, R : JavaModifierTarget> T.rangeTo(trg: R) = trg.apply { setModifiers(this@rangeTo) }
 
 /**
  * Utility method to chain modifiers using the rangeTo operator.
  *
  * @since 1.0.0
  */
-operator fun <T : JavaModifier, R: JavaModifierTarget> Array<T>.rangeTo(trg: R) = trg.apply { setModifiers(*this@rangeTo) }
+operator fun <T : JavaModifier, R : JavaModifierTarget> Array<T>.rangeTo(trg: R) = trg.apply { setModifiers(*this@rangeTo) }
 
 /**
  * Utility method to chain modifiers using the rangeTo operator.

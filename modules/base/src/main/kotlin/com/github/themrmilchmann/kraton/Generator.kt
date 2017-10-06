@@ -149,7 +149,7 @@ private fun readFile(file: Path) = Files.newByteChannel(file).use {
     buffer
 }
 
-private class KratonWriter(out: Writer): PrintWriter(out) {
+private class KratonWriter(out: Writer) : PrintWriter(out) {
 
     /**
      * Terminates the current line by writing the line separator string. The

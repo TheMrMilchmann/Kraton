@@ -51,7 +51,7 @@ data class GeneratorConfiguration(
         @JvmStatic
         internal fun resolve(args: Array<String>) =
             OptionParser().run {
-                val pathConverter = object: ValueConverter<Path> {
+                val pathConverter = object : ValueConverter<Path> {
 
                     override fun convert(value: String?) = if (value != null) Paths.get(value) else null
                     override fun valuePattern() = null
@@ -73,13 +73,13 @@ data class GeneratorConfiguration(
                 val cliLogMode = accepts("level")
                     .withRequiredArg()
                     .ofType(LogMode::class.java)
-                    .withValuesConvertedBy(object: ValueConverter<LogMode> {
+                    .withValuesConvertedBy(object : ValueConverter<LogMode> {
 
-                    override fun convert(value: String?) = if (value != null) LogMode.fromString(value) else null
-                    override fun valuePattern() = null
-                    override fun valueType() = LogMode::class.java
+                        override fun convert(value: String?) = if (value != null) LogMode.fromString(value) else null
+                        override fun valuePattern() = null
+                        override fun valueType() = LogMode::class.java
 
-                })
+                    })
                 val cliOutputDir = acceptsAll(listOf("o", "output-dir"))
                     .withRequiredArg()
                     .withValuesConvertedBy(pathConverter)
@@ -126,10 +126,10 @@ data class GeneratorConfiguration(
                 fun methodFilter(method: Method, javaClass: Class<*>) =
                     // static
                     method.modifiers and Modifier.STATIC != 0 &&
-                        // returns Profile
-                        method.returnType === javaClass &&
-                        // has no arguments
-                        method.parameterTypes.isEmpty()
+                    // returns Profile
+                    method.returnType === javaClass &&
+                    // has no arguments
+                    method.parameterTypes.isEmpty()
 
                 val NO_METHODS = emptyList<Method>()
 
@@ -144,13 +144,13 @@ data class GeneratorConfiguration(
                                 Files.walk(templateRoot)
                                     .filter {
                                         Files.isReadable(it) && Files.isRegularFile(it)
-                                            && TEMPLATE_PATH_MATCHER.matches(it)
+                                        && TEMPLATE_PATH_MATCHER.matches(it)
                                     }.map {
-                                        it to templateRoot.relativize(it)
-                                            .toString()
-                                            .replace(File.separatorChar, '.')
-                                            .removePrefix(".") // Probably not needed on most environments (if at all).
-                                            .substringBeforeLast('.') // Removes the file extensions (.java, .kt, etc.)
+                                    it to templateRoot.relativize(it)
+                                        .toString()
+                                        .replace(File.separatorChar, '.')
+                                        .removePrefix(".") // Probably not needed on most environments (if at all).
+                                        .substringBeforeLast('.') // Removes the file extensions (.java, .kt, etc.)
                                 }
                             }
                     ).flatMap {
@@ -192,9 +192,13 @@ data class GeneratorConfiguration(
                                     .map { source to it }
                             }
                         }
-                    }.map { (sourcePath, method) -> { (method.invoke(null) as Profile).apply {
-                        source = sourcePath
-                    }}}
+                    }.map { (sourcePath, method) ->
+                        {
+                            (method.invoke(null) as Profile).apply {
+                                source = sourcePath
+                            }
+                        }
+                    }
                         .toList()
 
                 GeneratorConfiguration(isForce, isWerror, logMode, outputDir, profiles, generatorSource)

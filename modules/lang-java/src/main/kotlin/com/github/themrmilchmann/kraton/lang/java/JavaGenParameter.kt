@@ -63,4 +63,4 @@ class JavaParameter internal constructor(
     val type: IJvmType,
     val name: String,
     val documentation: String
-): JavaModifierTarget()
+) : JavaModifierTarget()

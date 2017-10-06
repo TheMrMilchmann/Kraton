@@ -33,12 +33,12 @@ import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.util.*
 
 fun IJvmType.asString(from: JavaTopLevelType<*, *>?): String = when {
-    this is JvmArrayType -> stringValueOfJvmArrayType(from)
-    this is JvmGenericType -> stringValueOfJvmGenericType(from)
-    this is JvmPrimitiveType -> stringValueOfPrimitiveType()
+    this is JvmArrayType        -> stringValueOfJvmArrayType(from)
+    this is JvmGenericType      -> stringValueOfJvmGenericType(from)
+    this is JvmPrimitiveType    -> stringValueOfPrimitiveType()
     this is JvmPrimitiveBoxType -> stringValueOfPrimitiveBoxType()
-    this is AbstractJvmType -> stringValueOfAbstractJvmType(from)
-    else -> stringValueOfIJvmType(from)
+    this is AbstractJvmType     -> stringValueOfAbstractJvmType(from)
+    else                        -> stringValueOfIJvmType(from)
 }
 
 private fun JvmArrayType.stringValueOfJvmArrayType(from: JavaTopLevelType<*, *>?) =
@@ -60,7 +60,7 @@ private fun JvmGenericType.stringValueOfJvmGenericType(from: JavaTopLevelType<*,
         toString()
     }
 
-private fun JvmPrimitiveType.stringValueOfPrimitiveType() = when(this) {
+private fun JvmPrimitiveType.stringValueOfPrimitiveType() = when (this) {
     boolean -> "boolean"
     byte    -> "byte"
     char    -> "char"
@@ -72,7 +72,7 @@ private fun JvmPrimitiveType.stringValueOfPrimitiveType() = when(this) {
     else    -> throw UnsupportedOperationException()
 }
 
-private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when(this) {
+private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when (this) {
     boolean.box -> "Boolean"
     byte.box    -> "Byte"
     char.box    -> "Char"
@@ -124,19 +124,19 @@ private fun IJvmType.stringValueOfIJvmType(from: JavaTopLevelType<*, *>?) =
 fun cast(from: AbstractJvmType, to: AbstractJvmType, value: String): String {
     if (from is JvmPrimitiveType && to is JvmPrimitiveType) {
         when (to) {
-            byte -> when (from) {
+            byte  -> when (from) {
                 short, int, char, long -> return "($to) $value"
             }
             short -> when (from) {
                 int, char, long -> return "($to) $value"
             }
-            int -> when (from) {
+            int   -> when (from) {
                 long, float, double -> return "($to) $value"
             }
-            char -> when(from) {
+            char  -> when (from) {
                 byte, short, int, long, float, double -> return "($to) $value"
             }
-            long -> when (from) {
+            long  -> when (from) {
                 float, double -> return "($to) $value"
             }
             float -> when (from) {
@@ -166,24 +166,24 @@ fun convert(from: AbstractJvmType, to: AbstractJvmType, value: String): String {
         when (from) {
             boolean -> when (to) {
                 byte, short, int, float, double, long -> return cast(int, to, "($value ? 1 : ${to.nullValue})")
-                char -> return "$value ? '\\u0001' : ${to.nullValue}"
+                char                                  -> return "$value ? '\\u0001' : ${to.nullValue}"
             }
-            float -> when (to) {
+            float   -> when (to) {
                 byte, short -> return convert(int, to, "Float.floatToRawIntBits($value)")
-                int, long -> return "Float.floatToRawIntBits($value)"
+                int, long   -> return "Float.floatToRawIntBits($value)"
             }
-            double -> when (to) {
+            double  -> when (to) {
                 byte, short, int -> return convert(long, to, "Double.doubleToRawLongBits($value)")
-                long -> return "Double.doubleToRawLongBits($value)"
+                long             -> return "Double.doubleToRawLongBits($value)"
             }
         }
 
         when (to) {
             boolean -> return "$value != ${from.nullValue}"
-            float -> when (from) {
+            float   -> when (from) {
                 byte, short, int, char -> return "Float.intBitsToFloat($value)"
             }
-            double -> when (from) {
+            double  -> when (from) {
                 byte, short, int, char, long -> return "Double.longBitsToDouble($value)"
             }
         }
