@@ -37,6 +37,9 @@ abstract class JavaScope<T : JavaTopLevelType<T, S>, S : JavaScope<T, S>>(
     val members: MutableSet<JavaBodyMember>
 ) {
 
+    fun authors(vararg authors: String) = scopeRoot.authors(*authors)
+    fun see(ref: String) = scopeRoot.see(ref)
+
     /**
      * Imports all types that are directly underneath the given `type` using
      * a wildcard import.
