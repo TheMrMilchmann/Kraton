@@ -30,6 +30,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+@file:JvmName("Javadoc")
+
 package com.github.themrmilchmann.kraton.lang.java
 
 import com.github.themrmilchmann.kraton.lang.jvm.*
@@ -300,4 +302,5 @@ private fun StringBuilder.printMultilineTag(tag: String, name: String, documenta
     append(" " + documentation.cleanup(multilineAligment))
 }
 
+@Suppress("NOTHING_TO_INLINE")
 private inline fun List<*>?.isNullOrEmpty() = (this === null || isEmpty())
