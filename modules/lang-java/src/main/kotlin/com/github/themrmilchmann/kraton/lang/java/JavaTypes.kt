@@ -78,7 +78,7 @@ private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when (this) {
     char.box    -> "Char"
     double.box  -> "Double"
     float.box   -> "Float"
-    int.box     -> "Int"
+    int.box     -> "Integer"
     long.box    -> "Long"
     short.box   -> "Short"
     else        -> throw UnsupportedOperationException()
