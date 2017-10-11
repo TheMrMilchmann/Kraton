@@ -75,7 +75,7 @@ private fun JvmPrimitiveType.stringValueOfPrimitiveType() = when (this) {
 private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when (this) {
     boolean.box -> "Boolean"
     byte.box    -> "Byte"
-    char.box    -> "Char"
+    char.box    -> "Character"
     double.box  -> "Double"
     float.box   -> "Float"
     int.box     -> "Integer"
