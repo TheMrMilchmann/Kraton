@@ -39,84 +39,168 @@ import kotlin.reflect.*
  *
  * @since 1.0.0
  */
-object public : JavaVisibilityModifier("public")
+val public = JavaVisibilityModifier("public")
+
+/**
+ * The `public` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val PUBLIC = public
 
 /**
  * The `protected` modifier.
  *
  * @since 1.0.0
  */
-object protected : JavaVisibilityModifier("protected")
+val protected = JavaVisibilityModifier("protected")
+
+/**
+ * The `protected` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val PROTECTED = protected
 
 /**
  * The `private` modifier.
  *
  * @since 1.0.0
  */
-object private : JavaVisibilityModifier("private")
+val private = JavaVisibilityModifier("private")
+
+/**
+ * The `private` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val PRIVATE = private
 
 /**
  * The `static` modifier.
  *
  * @since 1.0.0
  */
-object static : JavaVisibilityModifier("static")
+val static = JavaVisibilityModifier("static")
+
+/**
+ * The `static` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val STATIC = static
 
 /**
  * The `abstract` modifier.
  *
  * @since 1.0.0
  */
-object abstract : JavaVisibilityModifier("abstract")
+val abstract = JavaVisibilityModifier("abstract")
+
+/**
+ * The `abstract` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val ABSTRACT = abstract
 
 /**
  * The `final` modifier.
  *
  * @since 1.0.0
  */
-object final : JavaVisibilityModifier("final")
+val final = JavaVisibilityModifier("final")
+
+/**
+ * The `final` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val FINAL = final
 
 /**
  * The `transient` modifier.
  *
  * @since 1.0.0
  */
-object transient : JavaVisibilityModifier("transient")
+val transient = JavaVisibilityModifier("transient")
+
+/**
+ * The `transient` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val TRANSIENT = transient
 
 /**
  * The `volatile` modifier.
  *
  * @since 1.0.0
  */
-object volatile : JavaVisibilityModifier("volatile")
+val volatile = JavaVisibilityModifier("volatile")
+
+/**
+ * The `volatile` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val VOLATILE = volatile
 
 /**
  * The `default` modifier.
  *
  * @since 1.0.0
  */
-object default : JavaVisibilityModifier("default")
+val default = JavaVisibilityModifier("default")
+
+/**
+ * The `default` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val DEFAULT = default
 
 /**
  * The `synchronized` modifier.
  *
  * @since 1.0.0
  */
-object synchronized : JavaVisibilityModifier("synchronized")
+val synchronized = JavaVisibilityModifier("synchronized")
+
+/**
+ * The `synchronized` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val SYNCHRONIZED = synchronized
 
 /**
  * The `native` modifier.
  *
  * @since 1.0.0
  */
-object native : JavaVisibilityModifier("native")
+val native = JavaVisibilityModifier("native")
+
+/**
+ * The `native` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val NATIVE = native
 
 /**
  * The `strictfp` modifier.
  *
  * @since 1.0.0
  */
-object strictfp : JavaVisibilityModifier("strictfp")
+val strictfp = JavaVisibilityModifier("strictfp")
+
+/**
+ * The `strictfp` modifier.
+ *
+ * @since 1.0.0
+ */
+@JvmField val STRICTFP = strictfp
 
 /**
  * The `@Deprecated` annotation.
@@ -182,7 +266,7 @@ open class Annotate @JvmOverloads constructor(
  *
  * @since 1.0.0
  */
-open class JavaVisibilityModifier internal constructor(
+class JavaVisibilityModifier internal constructor(
     internal val name: String
 ) : JavaModifier() {
 
