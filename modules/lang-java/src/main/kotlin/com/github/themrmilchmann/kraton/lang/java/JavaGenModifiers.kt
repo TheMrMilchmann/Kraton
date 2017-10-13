@@ -39,7 +39,7 @@ import kotlin.reflect.*
  *
  * @since 1.0.0
  */
-val public = object : JavaVisibilityModifier("public") {}
+object public : JavaVisibilityModifier("public")
 
 /**
  * The `public` modifier.
@@ -53,7 +53,7 @@ val public = object : JavaVisibilityModifier("public") {}
  *
  * @since 1.0.0
  */
-val protected = object : JavaVisibilityModifier("protected") {}
+object protected : JavaVisibilityModifier("protected")
 
 /**
  * The `protected` modifier.
@@ -67,7 +67,7 @@ val protected = object : JavaVisibilityModifier("protected") {}
  *
  * @since 1.0.0
  */
-val private = object : JavaVisibilityModifier("private") {}
+object private : JavaVisibilityModifier("private")
 
 /**
  * The `private` modifier.
@@ -81,7 +81,7 @@ val private = object : JavaVisibilityModifier("private") {}
  *
  * @since 1.0.0
  */
-val static = object : JavaVisibilityModifier("static") {}
+object static : JavaVisibilityModifier("static")
 
 /**
  * The `static` modifier.
@@ -95,7 +95,7 @@ val static = object : JavaVisibilityModifier("static") {}
  *
  * @since 1.0.0
  */
-val abstract = object : JavaVisibilityModifier("abstract") {}
+object abstract : JavaVisibilityModifier("abstract")
 
 /**
  * The `abstract` modifier.
@@ -109,7 +109,7 @@ val abstract = object : JavaVisibilityModifier("abstract") {}
  *
  * @since 1.0.0
  */
-val final = object : JavaVisibilityModifier("final") {}
+object final : JavaVisibilityModifier("final")
 
 /**
  * The `final` modifier.
@@ -123,7 +123,7 @@ val final = object : JavaVisibilityModifier("final") {}
  *
  * @since 1.0.0
  */
-val transient = object : JavaVisibilityModifier("transient") {}
+object transient : JavaVisibilityModifier("transient")
 
 /**
  * The `transient` modifier.
@@ -137,7 +137,7 @@ val transient = object : JavaVisibilityModifier("transient") {}
  *
  * @since 1.0.0
  */
-val volatile = object : JavaVisibilityModifier("volatile") {}
+object volatile : JavaVisibilityModifier("volatile")
 
 /**
  * The `volatile` modifier.
@@ -151,7 +151,7 @@ val volatile = object : JavaVisibilityModifier("volatile") {}
  *
  * @since 1.0.0
  */
-val default = object : JavaVisibilityModifier("default") {}
+object default : JavaVisibilityModifier("default")
 
 /**
  * The `default` modifier.
@@ -165,7 +165,7 @@ val default = object : JavaVisibilityModifier("default") {}
  *
  * @since 1.0.0
  */
-val synchronized = object : JavaVisibilityModifier("synchronized") {}
+object synchronized : JavaVisibilityModifier("synchronized")
 
 /**
  * The `synchronized` modifier.
@@ -179,7 +179,7 @@ val synchronized = object : JavaVisibilityModifier("synchronized") {}
  *
  * @since 1.0.0
  */
-val native = object : JavaVisibilityModifier("native") {}
+object native : JavaVisibilityModifier("native")
 
 /**
  * The `native` modifier.
@@ -193,7 +193,7 @@ val native = object : JavaVisibilityModifier("native") {}
  *
  * @since 1.0.0
  */
-val strictfp = object : JavaVisibilityModifier("strictfp") {}
+object strictfp : JavaVisibilityModifier("strictfp")
 
 /**
  * The `strictfp` modifier.
