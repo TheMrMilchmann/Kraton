@@ -3,9 +3,8 @@
 
 Kraton
 ======
-Kraton is a highly modular code generation tool that may be used to generate
-code based on type-safe templates written in Kotlin (or other compatible JVM
-languages).
+Kraton is a modular code generation tool that may be used to generate code based
+on type-safe templates written in Kotlin.
 
 *Kraton is a forked version of the code generator previously used in
 [Osmerion](https://github.com/TheMrMilchmann/Osmerion) which itself is a 
