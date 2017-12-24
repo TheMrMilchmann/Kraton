@@ -1,21 +1,24 @@
-.gradle
-.idea
-
-/buildSrc/build
-/buildSrc/src/*-generated/
+/.gradle
+/.idea
 /build
 
-/integration/*/build
-/integration/*/out
-/integration/*/buildSrc/build
-/integration/*/buildSrc/out
-/integration/*/buildSrc/src/*-generated
-/integration/*/buildSrc/src/*-implicit
+/buildSrc/build
+/buildSrc/out
+/buildSrc/src/*-generated
 
 /modules/*/build
 /modules/*/out
 /modules/*/src/*-generated
 
+/runners/build
+/runners/*/build
+/runners/*/out
+/runners/**/*-generated
+
 /samples/build
 /samples/*/build
+/samples/*/out
 /samples/**/*-generated
+
+/tests/*/build
+/tests/*/out

@@ -5,32 +5,34 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- *  Redistributions of source code must retain the above copyright notice, this
- *   list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
  *
- *  Redistributions in binary form must reproduce the above copyright notice,
- *   this list of conditions and the following disclaimer in the documentation
- *   and/or other materials provided with the distribution.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
  *
- *  Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from
- *   this software without specific prior written permission.
+ * 3. Neither the name of the copyright holder nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 package com.github.themrmilchmann.kraton.test.lang.java
 
-import com.github.themrmilchmann.kraton.*
+import com.github.themrmilchmann.kraton.lang.*
 import com.github.themrmilchmann.kraton.lang.java.*
+import com.github.themrmilchmann.kraton.lang.java.impl.model.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
 private const val packageName = "com.github.themrmilchmann.kraton.test.lang.java.imports"
@@ -45,121 +47,116 @@ private val fos = JvmTypeReference("FileOutputStream", "java.io")
 private val ioe = JvmTypeReference("IOException", "java.io")
 private val eof = JvmTypeReference("EOFException", "java.io")
 
-val Imports = Profile {
+val Imports = TemplateFile {
 
     // Test imports in classes
 
     public..final..javaClass(
         "I2FN1FWClass",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(ioe, JavaImportForceMode.FORCE_WILDCARD)
+        import(ioe, ImportType.WILDCARD)
 
         file(
             "test",
-            "",
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null,
                 ioe to null
-            ),
-            body = "return null;"
-        )
+            )
+        ) {
+            +"return null;"
+        }
 
     }
 
     public..final..javaClass(
         "I1FQ1FWClass",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(file, JavaImportForceMode.FORCE_QUALIFIED)
-        import(eof, JavaImportForceMode.FORCE_WILDCARD)
+        import(file, ImportType.QUALIFIED)
+        import(eof, ImportType.WILDCARD)
 
         file(
             "test",
-            "",
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null
-            ),
-            body = "return null;"
-        )
+            )
+        ) {
+            +"return null;"
+        }
 
     }
 
     public..final..javaClass(
         "I1FW1FNClass",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(eof, JavaImportForceMode.FORCE_WILDCARD)
+        import(eof, ImportType.WILDCARD)
 
         file(
             "test",
-            "",
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null
-            ),
-            body = "return null;"
-        )
+            )
+        ) {
+            +"return null;"
+        }
 
     }
 
     public..final..javaClass(
         "I3FQ1FNClass",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(file, JavaImportForceMode.FORCE_QUALIFIED)
-        import(eof, JavaImportForceMode.FORCE_QUALIFIED)
-        import(ioe, JavaImportForceMode.FORCE_QUALIFIED)
+        import(file, ImportType.QUALIFIED)
+        import(eof, ImportType.QUALIFIED)
+        import(ioe, ImportType.QUALIFIED)
 
         file(
             "test",
-            "",
 
-            filereader.PARAM("par0", ""),
+            filereader.param("par0", ""),
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null,
                 ioe to null
-            ),
-            body = "return null;"
-        )
+            )
+        ) {
+            +"return null;"
+        }
 
     }
 
     public..final..javaClass(
         "I3FQ3FNClass",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(file, JavaImportForceMode.FORCE_QUALIFIED)
-        import(eof, JavaImportForceMode.FORCE_QUALIFIED)
-        import(ioe, JavaImportForceMode.FORCE_QUALIFIED)
+        import(file, ImportType.QUALIFIED)
+        import(eof, ImportType.QUALIFIED)
+        import(ioe, ImportType.QUALIFIED)
 
         file(
             "test",
-            "",
 
-            filereader.PARAM("par0", ""),
-            fis.PARAM("par1", ""),
-            fos.PARAM("par2", ""),
+            filereader.param("par0", ""),
+            fis.param("par1", ""),
+            fos.param("par2", ""),
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null,
                 ioe to null
-            ),
-            body = "return null;"
-        )
+            )
+        ) {
+            +"return null;"
+        }
 
     }
 
@@ -168,16 +165,14 @@ val Imports = Profile {
     public..javaInterface(
         "I2FN1FWInterface",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(ioe, JavaImportForceMode.FORCE_WILDCARD)
+        import(ioe, ImportType.WILDCARD)
 
         file(
             "test",
-            "",
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null,
                 ioe to null
             )
@@ -188,17 +183,15 @@ val Imports = Profile {
     public..javaInterface(
         "I1FQ1FWInterface",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(file, JavaImportForceMode.FORCE_QUALIFIED)
-        import(eof, JavaImportForceMode.FORCE_WILDCARD)
+        import(file, ImportType.QUALIFIED)
+        import(eof, ImportType.WILDCARD)
 
         file(
             "test",
-            "",
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null
             )
         )
@@ -208,40 +201,37 @@ val Imports = Profile {
     public..javaInterface(
         "I1FW1FNInterface",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(eof, JavaImportForceMode.FORCE_WILDCARD)
+        import(eof, ImportType.WILDCARD)
 
         file(
             "test",
-            "",
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null
-            ),
-            body = "return null;"
-        )
+            )
+        ) {
+            +"return null;"
+        }
 
     }
 
     public..javaInterface(
         "I3FQ1FNInterface",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(file, JavaImportForceMode.FORCE_QUALIFIED)
-        import(eof, JavaImportForceMode.FORCE_QUALIFIED)
-        import(ioe, JavaImportForceMode.FORCE_QUALIFIED)
+        import(file, ImportType.QUALIFIED)
+        import(eof, ImportType.QUALIFIED)
+        import(ioe, ImportType.QUALIFIED)
 
         file(
             "test",
-            "",
 
-            filereader.PARAM("par0", ""),
+            filereader.param("par0", ""),
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null,
                 ioe to null
             )
@@ -252,22 +242,20 @@ val Imports = Profile {
     public..javaInterface(
         "I3FQ3FNInterface",
         packageName,
-        srcFolder,
-        srcSet
+        "$srcFolder/$srcSet"
     ) {
-        import(file, JavaImportForceMode.FORCE_QUALIFIED)
-        import(eof, JavaImportForceMode.FORCE_QUALIFIED)
-        import(ioe, JavaImportForceMode.FORCE_QUALIFIED)
+        import(file, ImportType.QUALIFIED)
+        import(eof, ImportType.QUALIFIED)
+        import(ioe, ImportType.QUALIFIED)
 
         file(
             "test",
-            "",
 
-            filereader.PARAM("par0", ""),
-            fis.PARAM("par1", ""),
-            fos.PARAM("par2", ""),
+            filereader.param("par0", ""),
+            fis.param("par1", ""),
+            fos.param("par2", ""),
 
-            exceptions = arrayOf(
+            exceptions = listOf(
                 eof to null,
                 ioe to null
             )
@@ -278,23 +266,13 @@ val Imports = Profile {
     // Test imports in nested types
     // NOTE: This is just a simple test to see if the redirection is working properly.
 
-    public..final..javaClass(
-        "I1FNNested",
-        packageName,
-        srcFolder,
-        srcSet
-    ) {
+    public..final..javaClass("I1FNNested", packageName, "$srcFolder/$srcSet") {
 
-        javaClass(
-            "NestedClass"
-        ) {
+        javaClass("NestedClass") {
 
-            file(
-                "test",
-                "",
-
-                body = "return null;"
-            )
+            file("test") {
+                +"return null;"
+            }
 
         }
 

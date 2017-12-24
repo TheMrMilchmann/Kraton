@@ -34,35 +34,15 @@ package com.github.themrmilchmann.kraton.lang.jvm
  *
  * @since 1.0.0
  */
-@JvmField
 val void = object : AbstractJvmType("void") {
-
-    override fun nullable() =
-        object : AbstractJvmType("void") {
-            override val isNullable = true
-            override fun nullable() = this
-        }
-
+    override val nullable = this
 }
 
-/**
- * The `void` type.
- *
- * @since 1.0.0
- */
-@JvmField val void_t = void
-
 /** The `boolean` type.
  *
  * @since 1.0.0
  */
-@JvmField val boolean = JvmPrimitiveType("Boolean", "false", -1)
-
-/** The `boolean` type.
- *
- * @since 1.0.0
- */
-@JvmField val boolean_t = boolean
+val boolean = JvmPrimitiveType("Boolean", "false", -1)
 
 /**
  * The `byte` type.
@@ -70,95 +50,52 @@ val void = object : AbstractJvmType("void") {
  * @since 1.0.0
  */
 @JvmField val byte = JvmPrimitiveType("Byte", "0", 8)
-@JvmField val byte_t = byte
 
 /**
  * The `short` type.
  *
  * @since 1.0.0
  */
-@JvmField val short = JvmPrimitiveType("Short", "0", 16)
-
-/**
- * The `short` type.
- *
- * @since 1.0.0
- */
-@JvmField val short_t = short
+val short = JvmPrimitiveType("Short", "0", 16)
 
 /**
  * The `char` type.
  *
  * @since 1.0.0
  */
-@JvmField val char = JvmPrimitiveType("Character", "'\\u0000'", 32, "Char")
-
-/**
- * The `char` type.
- *
- * @since 1.0.0
- */
-@JvmField val char_t = char
+val char = JvmPrimitiveType("Character", "'\\u0000'", 32, "Char")
 
 /**
  * The `int` type.
  *
  * @since 1.0.0
  */
-@JvmField val int = JvmPrimitiveType("Integer", "0", 32, "Int")
-
-/**
- * The `int` type.
- *
- * @since 1.0.0
- */
-@JvmField val int_t = int
+val int = JvmPrimitiveType("Integer", "0", 32, "Int")
 
 /**
  * The `float` type.
  *
  * @since 1.0.0
  */
-@JvmField val float = JvmPrimitiveType("Float", "0F", 32)
-
-/**
- * The `float` type.
- *
- * @since 1.0.0
- */
-@JvmField val float_t = float
+val float = JvmPrimitiveType("Float", "0F", 32)
 
 /**
  * The `long` type.
  *
  * @since 1.0.0
  */
-@JvmField val long = JvmPrimitiveType("Long", "0L", 64)
-
-/**
- * The `long` type.
- *
- * @since 1.0.0
- */
-@JvmField val long_t = long
+val long = JvmPrimitiveType("Long", "0L", 64)
 
 /**
  * The `double` type.
  *
  * @since 1.0.0
  */
-@JvmField val double = JvmPrimitiveType("Double", "0D", 64)
-
-/**
- * The `double` type.
- *
- * @since 1.0.0
- */
-@JvmField val double_t = double
+val double = JvmPrimitiveType("Double", "0D", 64)
 
 /**
  * The `String` type.
  *
  * @since 1.0.0
  */
-@JvmField val string = JvmTypeReference("String", "java.lang")
+val string = JvmTypeReference("String", "java.lang")

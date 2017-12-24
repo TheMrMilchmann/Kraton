@@ -207,7 +207,7 @@ interface IJvmType {
      *
      * @since 1.0.0
      */
-    fun nullable(): IJvmType
+    val nullable: IJvmType
 
 }
 
@@ -246,7 +246,7 @@ open class JvmTypeReference(
     nullable: Boolean = false
 ) : AbstractJvmType(className, typeParameters, nullable) {
 
-    override fun nullable() =
+    override val nullable =
         if (isNullable)
             this
         else
@@ -288,7 +288,7 @@ class JvmArrayType(
     override val isNullable: Boolean = type.isNullable
 ) : IJvmType by type {
 
-    override fun nullable() =
+    override val nullable =
         if (isNullable)
             this
         else
@@ -308,7 +308,7 @@ class JvmGenericType(
     override val isNullable: Boolean = false
 ) : AbstractJvmType(name) {
 
-    override fun nullable() =
+    override val nullable =
         if (isNullable)
             this
         else
@@ -342,7 +342,7 @@ class JvmPrimitiveType private constructor(
 
     override val packageName = "java.lang"
 
-    override fun nullable() =
+    override val nullable =
         if (isNullable)
             this
         else
@@ -364,7 +364,7 @@ class JvmPrimitiveBoxType private constructor(
 
     constructor(name: String) : this(name, false)
 
-    override fun nullable() =
+    override val nullable =
         if (isNullable)
             this
         else

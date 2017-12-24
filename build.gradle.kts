@@ -5,28 +5,31 @@
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- *  Redistributions of source code must retain the above copyright notice, this
- *   list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
  *
- *  Redistributions in binary form must reproduce the above copyright notice,
- *   this list of conditions and the following disclaimer in the documentation
- *   and/or other materials provided with the distribution.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
  *
- *  Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from
- *   this software without specific prior written permission.
+ * 3. Neither the name of the copyright holder nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
+import com.github.themrmilchmann.kraton.build.config.*
+import com.github.themrmilchmann.kraton.build.plugins.*
 import org.gradle.api.tasks.bundling.*
 import org.jetbrains.dokka.gradle.*
 
@@ -41,185 +44,31 @@ buildscript {
 }
 
 allprojects {
-    group = kraton()
+    group = "com.github.themrmilchmann.kraton"
     version = kratonVersion
 
     evaluationDependsOnChildren()
 
     repositories {
         mavenCentral()
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
-
-project(":modules").subprojects {
-    if (!this@subprojects.name.startsWith("internal")) {
-        val isBase = this.name == "base"
-        val artifactId = if (this@subprojects === project(":modules:base"))
-            "kraton"
-        else
-            "kraton-${this@subprojects.name.replace('.', '-')}"
-
-        val java = the<JavaPluginConvention>()
-        val signing = the<SigningExtension>()
-
-        artifacts {
-            fun artifactNotation(artifact: String, classifier: String? = null) =
-                if (classifier == null) {
-                    mapOf(
-                        "file" to File(buildDir, "libs/$artifact-$version.jar"),
-                        "name" to artifact,
-                        "type" to "jar"
-                    )
-                } else {
-                    mapOf(
-                        "file" to File(buildDir, "libs/$artifact-$version-$classifier.jar"),
-                        "name" to artifact,
-                        "type" to "jar",
-                        "classifier" to classifier
-                    )
-                }
-
-            add("archives", artifactNotation(artifactId))
-
-            add("archives", artifactNotation(artifactId, "sources"))
-            add("archives", artifactNotation(artifactId, "javadoc"))
-        }
-
-        configure<SigningExtension> {
-            isRequired = deployment.type == BuildType.RELEASE
-
-            sign(configurations["archives"])
-        }
-
-        val gradlePlugin = gradle.includedBuild("kraton-gradle")
-
-        tasks {
-            "jar"(Jar::class) {
-                dependsOn(gradlePlugin.task(":$name"))
-
-                baseName = artifactId
-            }
-
-            val sourcesJar = "sourcesJar"(Jar::class) {
-                dependsOn(gradlePlugin.task(":$name"))
-
-                baseName = artifactId
-                classifier = "sources"
-                from(java.sourceSets["main"].allSource)
-            }
-
-            val dokka = "dokka"(DokkaTask::class) {
-                dependsOn(gradlePlugin.task(":$name"))
-
-                outputFormat = "javadoc"
-                outputDirectory = "$buildDir/javadoc"
-            }
-
-            val javadocJar = "javadocJar"(Jar::class) {
-                dependsOn(dokka, gradlePlugin.task(":$name"))
-
-                baseName = artifactId
-                classifier = "javadoc"
-                from(File(buildDir, "javadoc"))
-            }
-
-            "signArchives" {
-                dependsOn(sourcesJar, javadocJar, gradlePlugin.task(":$name"))
-            }
-
-            "uploadArchives"(Upload::class) {
-                dependsOn(gradlePlugin.task(":$name"))
-
-                repositories {
-                    withConvention(MavenRepositoryHandlerConvention::class) {
-                        mavenDeployer {
-                            withGroovyBuilder {
-                                "repository"("url" to deployment.repo) {
-                                    "authentication"(
-                                        "userName" to deployment.user,
-                                        "password" to deployment.password
-                                    )
-                                }
-                            }
-
-                            beforeDeployment {
-                                if (deployment.type === BuildType.RELEASE) signing.signPom(this)
-                            }
-
-                            pom.project {
-                                withGroovyBuilder {
-                                    "artifactId"(artifactId)
-
-                                    "name"("Kraton")
-                                    "description"("A type-safe code generation tool.")
-                                    "packaging"("jar")
-                                    "url"("https://github.com/TheMrMilchmann/Kraton")
-
-                                    "licenses" {
-                                        "license" {
-                                            "name"("BSD-3-Clause")
-                                            "url"("https://github.com/TheMrMilchmann/Kraton/LICENSE.md")
-                                            "distribution"("repo")
-                                        }
-                                    }
-
-                                    "developers" {
-                                        "developer" {
-                                            "id"("TheMrMilchmann")
-                                            "name"("Leon Linhart")
-                                            "email"("themrmilchmann@gmail.com")
-                                            "url"("https://github.com/TheMrMilchmann")
-                                        }
-                                    }
-
-                                    "scm" {
-                                        "connection"("scm:git:git://github.com/TheMrMilchmann/Kraton.git")
-                                        "developerConnection"("scm:git:git://github.com/TheMrMilchmann/Kraton.git")
-                                        "url"("https://github.com/TheMrMilchmann/Kraton.git")
-                                    }
-
-                                    if (!isBase) {
-                                        "dependencies" {
-                                            "dependency" {
-                                                "groupId"(project.group)
-                                                "artifactId"("kraton")
-                                                "version"(project.version)
-                                                "scope"("compile")
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-val sourceProjects = listOf(
-    project(":modules:base"),
-    project(":modules:lang-java"),
-    project(":modules:lang-jvm-base")
-)
 
 tasks {
-    "aggregateDocs"(DokkaTask::class) {
+    "buildDocumentation"(DokkaTask::class) {
         outputFormat = "html"
         outputDirectory = File(rootProject.buildDir, "docs/html").absolutePath
 
         impliedPlatforms = mutableListOf("JVM")
-        jdkVersion = 8
+        jdkVersion = 9
 
-        kotlinTasks(KotlinClosure0({ sourceProjects.map { it.tasks["compileKotlin"] } }))
-
-        sourceProjects.forEach {
-            val srcPath = File(it.projectDir, "src/main/kotlin")
+        subprojects.filter { it == project(":base") || it.plugins.hasPlugin(KratonLangModule::class.java) }.forEach { project ->
+            val srcPath = File(project.projectDir, "src/main/kotlin")
 
             linkMappings.add(LinkMapping().apply {
                 dir = srcPath.absolutePath
-                url = "https://github.com/TheMrMilchmann/Kraton/blob/master/modules/${it.name}/src/main/kotlin"
+                url = "https://github.com/TheMrMilchmann/Kraton/blob/master/modules/${project.name}/src/main/kotlin"
                 suffix = "#L"
             })
         }
