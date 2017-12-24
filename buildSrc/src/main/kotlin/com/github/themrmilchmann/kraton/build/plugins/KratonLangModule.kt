@@ -45,17 +45,6 @@ class KratonLangModule : Plugin<Project> {
             pluginManager.apply(KotlinDelegate::class.java)
             pluginManager.apply(DeploymentDelegate::class.java)
 
-            configureUploadTask {
-                "dependencies" {
-                    "dependency" {
-                        "groupId"(project.group)
-                        "artifactId"("kraton")
-                        "version"(project.version)
-                        "scope"("compile")
-                    }
-                }
-            }
-
             configure<KotlinProjectExtension> {
                 experimental.coroutines = Coroutines.ENABLE
             }

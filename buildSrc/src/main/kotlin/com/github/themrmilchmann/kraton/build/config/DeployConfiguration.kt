@@ -57,7 +57,7 @@ fun Project.configureUploadTask(init: (GroovyBuilderScope.() -> Unit)? = null) {
 
                         pom.project {
                             withGroovyBuilder {
-                                "artifactId"("kraton-tools")
+                                "artifactId"("kraton-${project.name}")
 
                                 "name"("Kraton")
                                 "description"("A type-safe code generation tool.")

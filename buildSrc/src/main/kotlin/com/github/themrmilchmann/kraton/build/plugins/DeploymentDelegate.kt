@@ -48,26 +48,28 @@ class DeploymentDelegate : Plugin<Project> {
             pluginManager.apply(MavenPlugin::class.java)
             pluginManager.apply(SigningPlugin::class.java)
 
+            configureUploadTask()
+
             artifacts {
                 fun artifactNotation(artifact: String, classifier: String? = null) =
                     if (classifier == null) {
                         mapOf(
-                            "file" to File(buildDir, "libs/$artifact-$version.jar"),
+                            "file" to File(buildDir, "libs/$artifact-$kratonVersion.jar"),
                             "name" to artifact,
                             "type" to "jar"
                         )
                     } else {
                         mapOf(
-                            "file" to File(buildDir, "libs/$artifact-$version-$classifier.jar"),
+                            "file" to File(buildDir, "libs/$artifact-$kratonVersion-$classifier.jar"),
                             "name" to artifact,
                             "type" to "jar",
                             "classifier" to classifier
                         )
                     }
 
-                add("archives", artifactNotation(project.name))
-                add("archives", artifactNotation(project.name, "sources"))
-                add("archives", artifactNotation(project.name, "javadoc"))
+                add("archives", artifactNotation("kraton-${project.name}"))
+                add("archives", artifactNotation("kraton-${project.name}", "sources"))
+                add("archives", artifactNotation("kraton-${project.name}", "javadoc"))
             }
 
             configure<SigningExtension> {
@@ -82,11 +84,11 @@ class DeploymentDelegate : Plugin<Project> {
     private fun Project.setupTasks() {
         tasks {
             "jar"(Jar::class) {
-                baseName = project.name
+                baseName = "kraton-${project.name}"
             }
 
             val sourcesJar = "sourcesJar"(Jar::class) {
-                baseName = project.name
+                baseName = "kraton-${project.name}"
                 classifier = "sources"
                 from(java.sourceSets["main"].allSource)
             }
@@ -97,13 +99,13 @@ class DeploymentDelegate : Plugin<Project> {
             }
 
             "javadoc" {
-                dependsOn(dokka)
+                //dependsOn(dokka)
             }
 
             val javadocJar = "javadocJar"(Jar::class) {
-                dependsOn(dokka)
+               // dependsOn(dokka)
 
-                baseName = project.name
+                baseName = "kraton-${project.name}"
                 classifier = "javadoc"
                 from(File(buildDir, "javadoc"))
             }
