@@ -36,26 +36,12 @@ import java.util.*
 
 const val IMPORT_WILDCARD = "*"
 
-abstract class BodyMemberDeclaration {
-
-    internal abstract fun JavaPrinter.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?)
-
-}
+abstract class BodyMemberDeclaration
 
 internal open class GroupDeclaration(
     open val sortingRule: Comparator<BodyMemberDeclaration>?,
     open val bodyMembers: MutableList<BodyMemberDeclaration>
-) : BodyMemberDeclaration() {
-
-    override fun JavaPrinter.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
-        if (bodyMembers.isNotEmpty()) {
-            bodyMembers.mapIndexed { i, it -> (if (i == 0) null else bodyMembers[i - 1]) to it }
-                .mapIndexed { i, it -> it to (if (i ==  bodyMembers.size - 1) null else bodyMembers[i + 1]) }
-                .forEach { it.first.second.apply { this@print.print(scope, it.first.first, it.second) } }
-        }
-    }
-
-}
+) : BodyMemberDeclaration()
 
 internal abstract class CompilationUnit
 
@@ -106,20 +92,6 @@ internal class OrdinaryCompilationUnit(
         }
     }
 
-    fun JavaPrinter.print() {
-        packageDeclaration?.apply {
-            this@print.print()
-            println()
-        }
-        importDeclarations
-            .values
-            .flatMap { it.values }
-            .sortedWith(Comparator { a, b -> "${a.container}.${a.member}".compareTo("${b.container}.${b.member}") })
-            .forEach { if (!it.isImplicit) it.apply { this@print.print() } }
-        if (importDeclarations.any { it.value.any { !it.value.isImplicit } }) println()
-        typeDeclaration.apply { this@print.print(this@OrdinaryCompilationUnit, null, null) }
-    }
-
 }
 
 internal abstract class TypeDeclaration(
@@ -135,12 +107,6 @@ internal class PackageDeclaration(
 
     fun equalsPackage(type: IJvmType) =
         identifiers.toQualifiedString() == type.packageName
-
-    fun JavaPrinter.print() {
-        printI("package ")
-        print(identifiers.toQualifiedString())
-        println(";")
-    }
 
 }
 
@@ -167,37 +133,6 @@ internal class NormalClassDeclaration(
 
     override var documentation = Documentation()
 
-    override fun JavaPrinter.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
-        documentation.apply { this@print.print(scope) }
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
-        printI(modifiers.toModifierString())
-        if (modifiers.isNotEmpty()) print(" ")
-        print("class ")
-        print(identifier)
-        typeParameters.print(scope)
-        superClass?.let {
-            print(" extends ")
-            print(it.asString(scope))
-        }
-        if (superInterfaces.isNotEmpty()) {
-            print(" implements ")
-            print(superInterfaces.joinAsString(scope))
-        }
-        print(" {")
-        if (bodyMembers.isNotEmpty()) {
-            println()
-            println()
-            incIndent()
-            bodyMembers.mapIndexed { i, it -> (if (i == 0) null else bodyMembers[i - 1]) to it }
-                .mapIndexed { i, it -> it to (if (i ==  bodyMembers.size - 1) null else bodyMembers[i + 1]) }
-                .forEach { it.first.second.apply { this@print.print(scope, it.first.first, it.second) } }
-            decIndent()
-            print(indent)
-        }
-        print("}")
-        if (scope.typeDeclaration !== this@NormalClassDeclaration) println("$ln")
-    }
-
 }
 
 internal abstract class InterfaceDeclaration(
@@ -222,33 +157,6 @@ internal class NormalInterfaceDeclaration(
 
     override var documentation = Documentation()
 
-    override fun JavaPrinter.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
-        documentation.apply { this@print.print(scope) }
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
-        printI(modifiers.toModifierString())
-        if (modifiers.isNotEmpty()) print(" ")
-        print("interface ")
-        print(identifier)
-        typeParameters.print(scope)
-        if (superInterfaces.isNotEmpty()) {
-            print(" extends ")
-            print(superInterfaces.joinAsString(scope))
-        }
-        print(" {")
-        if (bodyMembers.isNotEmpty()) {
-            println()
-            println()
-            incIndent()
-            bodyMembers.mapIndexed { i, it -> (if (i == 0) null else bodyMembers[i - 1]) to it }
-                .mapIndexed { i, it -> it to (if (i ==  bodyMembers.size - 1) null else bodyMembers[i + 1]) }
-                .forEach { it.first.second.apply { this@print.print(scope, it.first.first, it.second) } }
-            decIndent()
-            print(indent)
-        }
-        print("}")
-        if (scope.typeDeclaration !== this@NormalInterfaceDeclaration) println("$ln")
-    }
-
 }
 
 internal class FieldDeclaration(
@@ -260,24 +168,6 @@ internal class FieldDeclaration(
 
     override var documentation = Documentation()
 
-    override fun JavaPrinter.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
-        documentation.apply { this@print.print(scope) }
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
-        printI(modifiers.toModifierString())
-        if (modifiers.isNotEmpty()) print(" ")
-        print(type.asString(scope))
-        print(" ")
-
-        if (entries.size > 1) {
-            // TODO impl
-        } else {
-            print(entries.entries.first().key)
-            entries.entries.first().value?.let { print(" = $it") }
-        }
-        println(";")
-        if (next === null) println()
-    }
-
 }
 
 internal class ImportDeclaration(
@@ -286,15 +176,7 @@ internal class ImportDeclaration(
     var mode: ImportType? = null,
     var isStatic: Boolean = false,
     var isImplicit: Boolean = false
-) {
-
-    fun JavaPrinter.print() {
-        printI("import ")
-        if (isStatic) print("static ")
-        println("$container.$member;")
-    }
-
-}
+)
 
 internal class TypeParameter(
     var documentation: String?,
@@ -320,9 +202,9 @@ internal class MethodDeclaration(
     val annotations: MutableList<Annotation>,
     val modifiers: MutableList<Modifiers>,
     val typeParameters: MutableList<TypeParameter>,
-    private val result: IJvmType,
-    private val identifier: String,
-    private val parameters: MutableList<FormalParameter>,
+    val result: IJvmType,
+    val identifier: String,
+    val parameters: MutableList<FormalParameter>,
     val exceptions: MutableList<IJvmType>,
     var body: String?
 ) : BodyMemberDeclaration(), DocumentedDeclaration {
@@ -332,44 +214,14 @@ internal class MethodDeclaration(
 
     override val documentation = Documentation()
 
-    override fun JavaPrinter.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
-        if (prev is FieldDeclaration) println()
-
-        documentation.apply { this@print.print(scope) }
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
-        printI(modifiers.toModifierString())
-        if (modifiers.isNotEmpty()) print(" ")
-        typeParameters.print(scope)
-        if (typeParameters.isNotEmpty()) print(" ")
-        print(result.asString(scope))
-        print(" ")
-        print(identifier)
-        print("(")
-        print(parameters.joinAsString(scope))
-        print(")")
-        if (exceptions.isNotEmpty()) {
-            print(" throws ")
-            print(exceptions.joinAsString(scope))
-        }
-        body?.let {
-            print(" {")
-            if (it.isNotEmpty()) {
-                printMethodBody(it)
-                print(indent)
-            }
-            println("}")
-        } ?: println(";")
-        println()
-    }
-
 }
 
 internal class ConstructorDeclaration(
     val annotations: MutableList<Annotation>,
     val modifiers: MutableList<Modifiers>,
     val typeParameters: MutableList<TypeParameter>,
-    private val identifier: String,
-    private val parameters: MutableList<FormalParameter>,
+    val identifier: String,
+    val parameters: MutableList<FormalParameter>,
     val exceptions: MutableList<IJvmType>,
     var body: String?
 ) : BodyMemberDeclaration() {
@@ -378,34 +230,6 @@ internal class ConstructorDeclaration(
         this(mutableListOf(), mutableListOf(), mutableListOf(), identifier, parameters, mutableListOf(), null)
 
     val documentation = Documentation()
-
-    override fun JavaPrinter.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
-        if (prev is FieldDeclaration) println()
-
-        documentation.apply { this@print.print(scope) }
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
-        printI(modifiers.toModifierString())
-        if (modifiers.isNotEmpty()) print(" ")
-        typeParameters.print(scope)
-        if (typeParameters.isNotEmpty()) print(" ")
-        print(identifier)
-        print("(")
-        print(parameters.joinAsString(scope))
-        print(")")
-        if (exceptions.isNotEmpty()) {
-            print(" throws ")
-            print(exceptions.joinAsString(scope))
-        }
-        body?.let {
-            print(" {")
-            if (it.isNotEmpty()) {
-                printMethodBody(it)
-                print(indent)
-            }
-            println("}")
-        } ?: println(";")
-        println()
-    }
 
 }
 

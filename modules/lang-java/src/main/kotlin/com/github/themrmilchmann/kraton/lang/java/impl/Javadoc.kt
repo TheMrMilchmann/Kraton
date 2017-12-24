@@ -44,72 +44,6 @@ internal class Documentation {
     val see: MutableList<String> = mutableListOf()
     var since: String? = null
 
-    fun JavaPrinter.print(scope: OrdinaryCompilationUnit?) {
-        if (authors.isNotEmpty()
-            || params.any { it.value.isNotEmpty() }
-            || typeParams.any { it.value.isNotEmpty() }
-            || content !== null
-            || returnDoc !== null
-            || exceptions.any { it.value.isNotEmpty() }
-            || see.isNotEmpty()
-            || since !== null) {
-            print(StringBuilder().apply {
-                content?.let { append(it.cleanup("$indent * ")) }
-
-                if (typeParams.any { it.value.isNotEmpty() }) {
-                    if (isNotEmpty()) append("$ln$indent *")
-                    typeParams.filter { it.value.isNotEmpty() }.forEach { key, value ->
-                        if (isNotEmpty()) append("$ln$indent * ")
-                        append("@param <${key.identifier}> $value")
-                    }
-                }
-
-                if (params.any { it.value.isNotEmpty() }) {
-                    if (isNotEmpty()) append("$ln$indent *")
-                    params.filter { it.value.isNotEmpty() }.forEach { key, value ->
-                        if (isNotEmpty()) append("$ln$indent * ")
-                        append("@param <${key.name}> $value")
-                    }
-                }
-
-                returnDoc?.let {
-                    if (isNotEmpty()) append("$ln$indent *$ln$indent *")
-                    append("@return $it")
-                }
-
-                if (exceptions.any { it.value.isNotEmpty() }) {
-                    if (isNotEmpty()) append("$ln$indent *")
-                    typeParams.filter { it.value.isNotEmpty() }.forEach { key, value ->
-                        if (isNotEmpty()) append("$ln$indent * ")
-                        append("@throws ${key.identifier} $value")
-                    }
-                }
-
-                if (see.isNotEmpty()) {
-                    if (isNotEmpty()) append("$ln$indent *")
-                    see.forEach {
-                        if (isNotEmpty()) append("$ln$indent * ")
-                        append("@see $it$")
-                    }
-                }
-
-                since?.let {
-                    if (isNotEmpty()) append("$ln$indent *$ln$indent * ")
-                    append("@since $it")
-                }
-
-                if (authors.isNotEmpty()) {
-                    if (isNotEmpty()) append("$ln$indent *")
-                    authors.forEach {
-                        if (isNotEmpty()) append("$ln$indent * ")
-                        append("@author $it")
-                    }
-                }
-            }.toString().layoutJavadoc(indent) + ln)
-        }
-
-    }
-
 }
 
 /*
@@ -144,7 +78,7 @@ private val CHILD_NODE = "<(?:tr|thead|tfoot|tbody|li|dt|dd)>".toRegex()
 private val PARAGRAPH_PATTERN = "\\n\\n(?:\\n?[ \\t]*[\\S][^\\n]*)+".toRegex(RegexOption.MULTILINE)
 private val PREFIX_PATTERN = "^(?:\uFFFF|[ \t]++(?![*]))".toRegex(RegexOption.MULTILINE)
 
-private fun String.cleanup(linePrefix: String = "$FOUR_SPACES * "): String {
+internal fun String.cleanup(linePrefix: String = "$FOUR_SPACES * "): String {
     val dom = trim().replace(REDUNDANT_WHITESPACE, "")
     return StringBuilder(dom.length)
         .layoutDOM(dom, linePrefix)
@@ -227,7 +161,7 @@ private fun StringBuilder.appendParagraph(linePrefix: String, text: String, star
     append("</p>")
 }
 
-private fun String.layoutJavadoc(indentation: String = FOUR_SPACES): String {
+internal fun String.layoutJavadoc(indentation: String = FOUR_SPACES): String {
     return if (this.indexOf('\n') == -1)
         "$indentation/** $this */"
     else
