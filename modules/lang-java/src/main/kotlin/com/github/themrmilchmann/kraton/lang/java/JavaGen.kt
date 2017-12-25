@@ -93,7 +93,12 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
     fun isImported(type: IJvmType) = compilationUnit.isImported(type)
 
     /**
-     * TODO doc
+     * Returns whether or not the given `type` is resolved for this compilation
+     * unit, that is, the type may be referenced by it's simple name.
+     *
+     * @param type the type to look up
+     *
+     * @return whether or not the given `type` is resolved
      *
      * @since 1.0.0
      */

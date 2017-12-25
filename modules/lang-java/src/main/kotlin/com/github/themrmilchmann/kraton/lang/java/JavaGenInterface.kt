@@ -34,10 +34,32 @@ import com.github.themrmilchmann.kraton.lang.*
 import com.github.themrmilchmann.kraton.lang.java.impl.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
+/**
+ * Creates, registers and returns a new [JavaInterfaceScope] object.
+ *
+ * Unless a [sortingRule] is specified, all members are generated in the order
+ * in which they have been registered.
+ *
+ * @receiver the template file that serves as wrapper for this interface
+ *
+ * @param name          the name for the interface
+ * @param packageName   the package the interface is to be placed in
+ * @param outputDir     the output directory for the interface (Note that this
+ *                      should not be the absolute directory, but relative from
+ *                      the `output-root` directory that is given to the
+ *                      generator.)
+ * @param sortingRule   the `Comparator` that will be used to sort this scope's
+ *                      members
+ * @param init          initialize the interface
+ *
+ * @return the newly created and registered `JavaInterfaceScope` object
+ *
+ * @since 1.0.0
+ */
 fun TemplateFile.javaInterface(
     name: String,
     packageName: String,
-    outputSourceSet: String,
+    outputDir: String,
     sortingRule: Comparator<BodyMemberDeclaration>? = null,
     init: JavaInterfaceScope.() -> Unit
 ) : JavaInterfaceScope {
@@ -47,9 +69,26 @@ fun TemplateFile.javaInterface(
 
     return JavaInterfaceScope(ordinaryCompilationUnit, normalInterfaceDeclaration, sortingRule)
         .also(init)
-        .also { Template(JAVA_ADAPTER, outputSourceSet, "$packageName/$name.java", { beginOrdinaryCompilationUnit(ordinaryCompilationUnit) }).reg() }
+        .also { Template(JAVA_ADAPTER, outputDir, "$packageName/$name.java", { beginOrdinaryCompilationUnit(ordinaryCompilationUnit) }).reg() }
 }
 
+/**
+ * Creates, registers and returns a new [JavaInterfaceScope] object.
+ *
+ * Unless a [sortingRule] is specified, all members are generated in the order
+ * in which they have been registered.
+ *
+ * @receiver the enclosing type for the interface
+ *
+ * @param name          the name for the interface
+ * @param sortingRule   the `Comparator` that will be used to sort this scope's
+ *                      members
+ * @param init          initialize the interface
+ *
+ * @return the newly created and registered `JavaInterfaceScope` object
+ *
+ * @since 1.0.0
+ */
 fun JavaOrdinaryCompilationUnitScope<*>.javaInterface(
     name: String,
     sortingRule: Comparator<BodyMemberDeclaration>? = null,
@@ -167,18 +206,33 @@ class JavaInterfaceScope internal constructor(
             }
         }
 
-    override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaInterfaceScope.() -> Unit): JavaInterfaceScope {
-        return if (this.sortingRule == null) {
-            init.invoke(this)
+    /**
+     * Creates, registers and returns a new [JavaInterfaceScope] object.
+     *
+     * A scope created by this method serves as a logical group to structure the
+     * members of the scope it was created in.
+     *
+     * Unless a [sortingRule] is specified, all members are generated in the
+     * order in which they have been registered.
+     *
+     * If a sorting rule has been specified for the current scope, this function
+     * is a no-op and may be used to structure template sources only.
+     *
+     * @param sortingRule   the `Comparator` that will be used to sort this
+     *                      scope's members
+     * @param init          initialize the group
+     *
+     * @return
+     *
+     * @since 1.0.0
+     */
+    override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaInterfaceScope.() -> Unit): JavaInterfaceScope =
+        this.sortingRule?.let {
+            GroupDeclaration(sortingRule).let {
+                bodyMembers.add(it)
 
-            this
-        } else {
-            val groupDeclaration = GroupDeclaration(sortingRule, mutableListOf())
-
-            JavaInterfaceScope(compilationUnit, declaration, sortingRule, groupDeclaration.bodyMembers)
-                .also(init)
-                .also { bodyMembers.add(groupDeclaration) }
-        }
-    }
+                JavaInterfaceScope(compilationUnit, declaration, sortingRule, it.bodyMembers).also(init)
+            }
+        } ?: apply(init)
 
 }

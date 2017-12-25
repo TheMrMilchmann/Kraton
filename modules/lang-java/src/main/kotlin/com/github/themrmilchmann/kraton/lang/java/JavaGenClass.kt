@@ -37,10 +37,19 @@ import com.github.themrmilchmann.kraton.lang.jvm.*
 /**
  * Creates, registers and returns a new [JavaClassScope] object.
  *
+ * Unless a [sortingRule] is specified, all members are generated in the order
+ * in which they have been registered.
+ *
  * @receiver the template file that serves as wrapper for this class
  *
  * @param name          the name for the class
  * @param packageName   the package the class is to be placed in
+ * @param outputDir     the output directory for the class (Note that this
+ *                      should not be the absolute directory, but relative from
+ *                      the `output-root` directory that is given to the
+ *                      generator.)
+ * @param sortingRule   the `Comparator` that will be used to sort this scope's
+ *                      members
  * @param init          initialize the class
  *
  * @return the newly created and registered `JavaClassScope` object
@@ -50,7 +59,7 @@ import com.github.themrmilchmann.kraton.lang.jvm.*
 fun TemplateFile.javaClass(
     name: String,
     packageName: String,
-    outputSourceSet: String,
+    outputDir: String,
     sortingRule: Comparator<BodyMemberDeclaration>? = null,
     init: JavaClassScope.() -> Unit
 ) : JavaClassScope {
@@ -60,16 +69,21 @@ fun TemplateFile.javaClass(
 
     return JavaClassScope(ordinaryCompilationUnit, normalClassDeclaration, sortingRule)
         .also(init)
-        .also { Template(JAVA_ADAPTER, outputSourceSet, "$packageName/$name.java", { beginOrdinaryCompilationUnit(ordinaryCompilationUnit) }).reg() }
+        .also { Template(JAVA_ADAPTER, outputDir, "$packageName/$name.java", { beginOrdinaryCompilationUnit(ordinaryCompilationUnit) }).reg() }
 }
 
 /**
  * Creates, registers and returns a new [JavaClassScope] object.
  *
+ * Unless a [sortingRule] is specified, all members are generated in the order
+ * in which they have been registered.
+ *
  * @receiver the enclosing type for the class
  *
- * @param name the name for the class
- * @param init initialize the class
+ * @param name          the name for the class
+ * @param sortingRule   the `Comparator` that will be used to sort this scope's
+ *                      members
+ * @param init          initialize the class
  *
  * @return the newly created and registered `JavaClassScope` object
  *
@@ -87,14 +101,6 @@ fun JavaOrdinaryCompilationUnitScope<*>.javaClass(
         .also { bodyMembers.add(normalClassDeclaration) }
 }
 
-/**
- * TODO doc
- *
- * @param compilationUnit
- * @param declaration
- *
- * @since 1.0.0
- */
 class JavaClassScope internal constructor(
     compilationUnit: OrdinaryCompilationUnit,
     override val declaration: NormalClassDeclaration,
@@ -255,24 +261,32 @@ class JavaClassScope internal constructor(
         }
 
     /**
-     * TODO doc
+     * Creates, registers and returns a new [JavaClassScope] object.
+     *
+     * A scope created by this method serves as a logical group to structure the
+     * members of the scope it was created in.
+     *
+     * Unless a [sortingRule] is specified, all members are generated in the
+     * order in which they have been registered.
+     *
+     * If a sorting rule has been specified for the current scope, this function
+     * is a no-op and may be used to structure template sources only.
+     *
+     * @param sortingRule   the `Comparator` that will be used to sort this
+     *                      scope's members
+     * @param init          initialize the group
      *
      * @return
      *
      * @since 1.0.0
      */
-    override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaClassScope.() -> Unit): JavaClassScope {
-        return if (this.sortingRule == null) {
-            init.invoke(this)
+    override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaClassScope.() -> Unit): JavaClassScope =
+        this.sortingRule?.let {
+            GroupDeclaration(sortingRule).let {
+                bodyMembers.add(it)
 
-            this
-        } else {
-            val groupDeclaration = GroupDeclaration(sortingRule, mutableListOf())
-
-            JavaClassScope(compilationUnit, declaration, sortingRule, groupDeclaration.bodyMembers)
-                .also(init)
-                .also { bodyMembers.add(groupDeclaration) }
-        }
-    }
+                JavaClassScope(compilationUnit, declaration, sortingRule, it.bodyMembers).also(init)
+            }
+        } ?: apply(init)
 
 }

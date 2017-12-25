@@ -40,7 +40,7 @@ abstract class BodyMemberDeclaration
 
 internal open class GroupDeclaration(
     open val sortingRule: Comparator<BodyMemberDeclaration>?,
-    open val bodyMembers: MutableList<BodyMemberDeclaration>
+    open val bodyMembers: MutableList<BodyMemberDeclaration> = mutableListOf()
 ) : BodyMemberDeclaration()
 
 internal abstract class CompilationUnit
