@@ -28,11 +28,44 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+import com.github.themrmilchmann.kraton.build.config.*
+import com.github.themrmilchmann.kraton.build.config.BuildType
+
 plugins {
     `kotlin-delegate`
     `deployment-delegate`
     `java-gradle-plugin`
     `kotlin-dsl`
+
+    id("com.gradle.plugin-publish") version gradlePluginPublishVersion
+}
+
+gradlePlugin {
+    (plugins) {
+        "com.github.themrmilchmann.kraton" {
+            id = "com.github.themrmilchmann.kraton"
+            implementationClass = "com.github.themrmilchmann.kraton.gradle.KratonGradle"
+        }
+    }
+}
+
+pluginBundle {
+    website = "https://github.com/TheMrMilchmann/Kraton"
+    vcsUrl = website
+
+    (plugins) {
+        "com.github.themrmilchmann.kraton" {
+            id = "com.github.themrmilchmann.kraton"
+            displayName = "Kraton Gradle Plugin"
+            description = "Kraton Gradle Plugin"
+            tags = listOf("Kraton")
+        }
+    }
+}
+
+tasks {
+    val uploadArchives by tasks.getting
+    if (deployment.type == BuildType.RELEASE) uploadArchives.dependsOn("publishPlugins")
 }
 
 dependencies {
