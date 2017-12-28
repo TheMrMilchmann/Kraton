@@ -39,7 +39,7 @@ class JavaTypeParameterScope internal constructor(
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
             if (it is Annotate)
-                typeParameter.annotations.add(it.type)
+                typeParameter.annotations.add(Annotation(it.type, it.params))
         }
     }
 }

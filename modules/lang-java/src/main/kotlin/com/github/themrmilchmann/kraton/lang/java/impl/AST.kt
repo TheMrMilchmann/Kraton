@@ -180,7 +180,7 @@ internal class ImportDeclaration(
 
 internal class TypeParameter(
     var documentation: String?,
-    val annotations: MutableList<IJvmType>,
+    val annotations: MutableList<Annotation>,
     val identifier: String,
     val bounds: MutableList<IJvmType>,
     var upperBounds: Boolean
