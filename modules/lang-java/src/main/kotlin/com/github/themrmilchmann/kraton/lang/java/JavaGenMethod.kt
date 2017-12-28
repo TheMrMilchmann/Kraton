@@ -36,12 +36,10 @@ import com.github.themrmilchmann.kraton.lang.jvm.*
 class JavaMethodScope internal constructor(internal val declaration: MethodDeclaration): JavaModifierTarget() {
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
-            if (it is JavaLanguageModifier)
-                declaration.modifiers.add(it.mod)
-            else if (it is Annotate)
-                declaration.annotations.add(Annotation(it.type, it.params))
-            else if (it is JavaDocumentationScope) {
-                declaration.documentation.run {
+            when (it) {
+                is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
+                is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
+                is JavaDocumentationScope -> declaration.documentation.run {
                     authors.addAll(it.declaration.authors)
                     exceptions.putAll(it.declaration.exceptions)
                     see.addAll(it.declaration.see)
@@ -49,6 +47,7 @@ class JavaMethodScope internal constructor(internal val declaration: MethodDecla
                     returnDoc = it.declaration.returnDoc
                     since = it.declaration.since
                 }
+                else -> throw IllegalArgumentException("Modifier $it may not be applied to method")
             }
         }
     }
@@ -84,12 +83,10 @@ class JavaMethodScope internal constructor(internal val declaration: MethodDecla
 class JavaConstructorScope internal constructor(internal val declaration: ConstructorDeclaration): JavaModifierTarget() {
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
-            if (it is JavaLanguageModifier)
-                declaration.modifiers.add(it.mod)
-            else if (it is Annotate)
-                declaration.annotations.add(Annotation(it.type, it.params))
-            else if (it is JavaDocumentationScope) {
-                declaration.documentation.run {
+            when (it) {
+                is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
+                is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
+                is JavaDocumentationScope -> declaration.documentation.run {
                     authors.addAll(it.declaration.authors)
                     exceptions.putAll(it.declaration.exceptions)
                     see.addAll(it.declaration.see)
@@ -97,6 +94,7 @@ class JavaConstructorScope internal constructor(internal val declaration: Constr
                     returnDoc = it.declaration.returnDoc
                     since = it.declaration.since
                 }
+                else -> throw IllegalArgumentException("Modifier $it may not be applied to constructor")
             }
         }
     }
@@ -137,10 +135,11 @@ class JavaParameterScope internal constructor(
 ): JavaModifierTarget() {
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
-            if (it is JavaLanguageModifier)
-                declaration.modifiers.add(it.mod)
-            else if (it is Annotate)
-                declaration.annotations.add(Annotation(it.type, it.params))
+            when (it) {
+                is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
+                is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
+                else -> throw IllegalArgumentException("Modifier $it may not be applied to parameters")
+            }
         }
     }
 }

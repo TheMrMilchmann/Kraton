@@ -36,12 +36,10 @@ class JavaFieldScope internal constructor(internal val declaration: FieldDeclara
 
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
-            if (it is JavaLanguageModifier)
-                declaration.modifiers.add(it.mod)
-            else if (it is Annotate)
-                declaration.annotations.add(Annotation(it.type, it.params))
-            else if (it is JavaDocumentationScope) {
-                declaration.documentation.run {
+            when (it) {
+                is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
+                is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
+                is JavaDocumentationScope -> declaration.documentation.run {
                     authors.addAll(it.declaration.authors)
                     exceptions.putAll(it.declaration.exceptions)
                     see.addAll(it.declaration.see)
@@ -49,6 +47,7 @@ class JavaFieldScope internal constructor(internal val declaration: FieldDeclara
                     returnDoc = it.declaration.returnDoc
                     since = it.declaration.since
                 }
+                else -> throw IllegalArgumentException("Modifier $it may not be applied to field")
             }
         }
     }

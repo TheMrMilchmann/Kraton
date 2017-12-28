@@ -38,8 +38,10 @@ class JavaTypeParameterScope internal constructor(
 
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
-            if (it is Annotate)
-                typeParameter.annotations.add(Annotation(it.type, it.params))
+            when (it) {
+                is Annotate -> typeParameter.annotations.add(Annotation(it.type, it.params))
+                else -> throw IllegalArgumentException("Modifier $it may not be applied to type parameter")
+            }
         }
     }
 }
