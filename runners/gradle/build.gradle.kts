@@ -28,6 +28,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+import com.github.jengelman.gradle.plugins.shadow.tasks.*
 import com.github.themrmilchmann.kraton.build.config.*
 import com.github.themrmilchmann.kraton.build.config.BuildType
 
@@ -38,7 +39,10 @@ plugins {
     `kotlin-dsl`
 
     id("com.gradle.plugin-publish") version gradlePluginPublishVersion
+    id("com.github.johnrengelman.shadow") version shadowPluginVersion
 }
+
+val bundleJar by configurations.creating
 
 gradlePlugin {
     (plugins) {
@@ -64,11 +68,38 @@ pluginBundle {
 }
 
 tasks {
+    val jar: Jar by tasks.getting
+
+    val shadowJar = "shadowJar"(ShadowJar::class) {
+        baseName = jar.baseName
+        classifier = ""
+
+        configurations = listOf(bundleJar)
+    }
+
+    "signArchives" {
+        dependsOn(shadowJar)
+    }
+
     val uploadArchives by tasks.getting
     if (deployment.type == BuildType.RELEASE) uploadArchives.dependsOn("publishPlugins")
 }
 
 dependencies {
-    compile(project(":tools"))
-    allprojects.forEach { if (it.name.startsWith("lang-")) runtime(it) }
+    operator fun Configuration.rangeTo(it: Dependency) = it.also { this(it) }
+    fun <T : ModuleDependency> DependencyHandler.bundleJar(
+        dependency: T,
+        dependencyConfiguration: T.() -> Unit
+    ): T = add("bundleJar", dependency, dependencyConfiguration)
+
+    bundleJar..compileOnly(project(":base")) { isTransitive = false }
+    bundleJar..compileOnly("com.github.themrmilchmann.kopt:kopt:$koptVersion") { isTransitive = false }
+
+    bundleJar..compile(project(":tools")) { isTransitive = false }
+    rootProject.allprojects.forEach {
+        if (it.name.startsWith("lang-")) {
+            bundleJar(project(it.path)) { isTransitive = false }
+            runtime(it)
+        }
+    }
 }
