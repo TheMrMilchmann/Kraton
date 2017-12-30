@@ -119,7 +119,7 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
         isImplicit: Boolean = false
     ) = type.packageName?.let { compilationUnit.import("$it.$type", member, forceMode, true, isImplicit) }
 
-    abstract fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: S.() -> Unit) : S
+    abstract fun group(sortingRule: Comparator<BodyMemberDeclaration>? = null, init: S.() -> Unit) : S
 
     infix fun JavaTypeParameterScope.extends(type: IJvmType) {
         if (typeParameter.bounds.isNotEmpty() && !typeParameter.upperBounds)
