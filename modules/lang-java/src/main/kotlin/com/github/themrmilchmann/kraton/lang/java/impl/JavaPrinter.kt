@@ -64,6 +64,12 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         }
     }
 
+    private fun List<BodyMemberDeclaration>.print(scope: OrdinaryCompilationUnit, sortingRule: Comparator<BodyMemberDeclaration>?) {
+        (sortingRule?.let { sortedWith(sortingRule) } ?: this).mapIndexed { i, it -> (if (i == 0) null else this[i - 1]) to it }
+            .mapIndexed { i, it -> it to (if (i == size - 1) null else this[i + 1]) }
+            .forEach { it.first.second.print(scope, it.first.first, it.second) }
+    }
+
     private fun TypeDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         when (this) {
             is NormalClassDeclaration -> print(scope, prev, next)
@@ -72,11 +78,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
     }
 
     private fun GroupDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
-        if (bodyMembers.isNotEmpty()) {
-            bodyMembers.mapIndexed { i, it -> (if (i == 0) null else bodyMembers[i - 1]) to it }
-                .mapIndexed { i, it -> it to (if (i == bodyMembers.size - 1) null else bodyMembers[i + 1]) }
-                .forEach { it.first.second.print(scope, it.first.first, it.second) }
-        }
+        if (bodyMembers.isNotEmpty()) bodyMembers.print(scope, sortingRule)
     }
 
     private fun OrdinaryCompilationUnit.print() {
@@ -127,9 +129,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             println()
             println()
             incIndent()
-            bodyMembers.mapIndexed { i, it -> (if (i == 0) null else bodyMembers[i - 1]) to it }
-                .mapIndexed { i, it -> it to (if (i ==  bodyMembers.size - 1) null else bodyMembers[i + 1]) }
-                .forEach { it.first.second.print(scope, it.first.first, it.second) }
+            bodyMembers.print(scope, sortingRule)
             decIndent()
             print(indent)
         }
@@ -154,9 +154,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             println()
             println()
             incIndent()
-            bodyMembers.mapIndexed { i, it -> (if (i == 0) null else bodyMembers[i - 1]) to it }
-                .mapIndexed { i, it -> it to (if (i ==  bodyMembers.size - 1) null else bodyMembers[i + 1]) }
-                .forEach { it.first.second.print(scope, it.first.first, it.second) }
+            bodyMembers.print(scope, sortingRule)
             decIndent()
             print(indent)
         }
