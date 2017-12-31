@@ -103,6 +103,19 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
      */
     fun isResolved(type: IJvmType) = compilationUnit.isResolved(type)
 
+    /**
+     * Returns the name for the given type as seen from the current compilation
+     * unit.
+     *
+     * The returned name may be used in documentation or method bodies.
+     *
+     * @return the name for the given type as seen from the current compilation
+     *         unit
+     *
+     * @since 1.0.0
+     */
+    val IJvmType.resolvedName: String get() = asString(compilationUnit)
+
     fun import(type: String, isStatic: Boolean = false, isImplicit: Boolean = false) =
         compilationUnit.import(type, IMPORT_WILDCARD, ImportType.WILDCARD, isStatic, isImplicit)
 
