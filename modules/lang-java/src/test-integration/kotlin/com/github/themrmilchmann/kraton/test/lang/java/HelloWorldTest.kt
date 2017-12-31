@@ -51,14 +51,14 @@ val HelloWorld = TemplateFile {
 
     }
 
-    doc {
-        +"""A slightly more complex "Hello World" sample for showing off more of Kraton's capabilities."""
-
-        since("1.0.0")
-
-        author("Leon Linhart <themrmilchmann@gmail.com>")
-    }..
     public..final..javaClass("HelloWorld2", packageName, "$srcFolder/$srcSet") {
+        doc {
+            +"""A slightly more complex "Hello World" sample for showing off more of Kraton's capabilities."""
+
+            since = "1.0.0"
+
+            authors("Leon Linhart <themrmilchmann@gmail.com>")
+        }
 
         public..static..void(
             "main",

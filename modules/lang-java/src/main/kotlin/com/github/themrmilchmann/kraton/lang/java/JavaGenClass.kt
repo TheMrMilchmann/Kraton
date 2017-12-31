@@ -213,7 +213,7 @@ class JavaClassScope internal constructor(
             exceptions?.forEach {
                 import(it.first)
                 declaration.exceptions.add(it.first)
-                it.second?.apply {documentation.declaration.exceptions[it.first] = this }
+                it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }
         }
 
@@ -251,12 +251,12 @@ class JavaClassScope internal constructor(
             import(this@invoke)
             parameters.forEach {
                 import(it.declaration.type)
-                documentation.declaration.params[it.declaration] = it.doc
+                declaration.documentation.params[it.declaration] = it.doc
             }
             exceptions?.forEach {
                 import(it.first)
                 declaration.exceptions.add(it.first)
-                it.second?.apply {documentation.declaration.exceptions[it.first] = this }
+                it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }
         }
 

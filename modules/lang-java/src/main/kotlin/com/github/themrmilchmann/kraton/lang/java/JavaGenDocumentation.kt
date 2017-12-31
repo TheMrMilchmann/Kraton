@@ -30,39 +30,37 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
-import com.github.themrmilchmann.kraton.lang.java.impl.Documentation
+import com.github.themrmilchmann.kraton.lang.java.impl.*
 
 /**
- * TODO doc
+ * The `{@inheritDoc}` tag.
  *
  * @since 1.0.0
  */
 const val inheritDoc = "{@inheritDoc}"
 
-fun doc(init: JavaDocumentationScope.() -> Unit) =
-    JavaDocumentationScope(Documentation())
-        .also(init)
+interface JavaDocumentedScope {
 
-class JavaDocumentationScope internal constructor(internal val declaration: Documentation) : JavaModifier {
+    val documentation: JavaDocumentationScope
 
-    fun author(str: String) {
-        declaration.authors.add(str)
+    fun doc(init: JavaDocumentationScope.() -> Unit) {
+        documentation.also(init)
     }
 
-    operator fun String.unaryPlus() {
-        declaration.content = declaration.content?.let { "$it\n$this" } ?: this
-    }
+}
 
-    fun returnDoc(str: String) {
-        declaration.returnDoc = str
-    }
+class JavaDocumentationScope internal constructor(private val decl: Documentation) {
 
-    fun see(str: String) {
-        declaration.see.add(str)
-    }
+    var returnDoc: String?
+        get() = decl.returnDoc
+        set(value) { decl.returnDoc = value }
 
-    fun since(str: String) {
-        declaration.since = str
-    }
+    var since: String?
+        get() = decl.since
+        set(value) { decl.since = value }
+
+    operator fun String.unaryPlus() { decl.content = decl.content?.let { "$it\n\n$this" } ?: this }
+    fun see(vararg values: String) { decl.see.addAll(values) }
+    fun authors(vararg values: String) { decl.authors.addAll(values) }
 
 }

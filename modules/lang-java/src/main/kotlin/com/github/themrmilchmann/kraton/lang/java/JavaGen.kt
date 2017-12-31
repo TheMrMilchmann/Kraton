@@ -38,7 +38,7 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
     internal val compilationUnit: OrdinaryCompilationUnit,
     internal open val declaration: TypeDeclaration,
     internal val bodyMembers: MutableList<BodyMemberDeclaration>
-) : JavaModifierTarget(), IJvmType {
+) : JavaModifierTarget(), JavaDocumentedScope, IJvmType {
 
     override val nullable by lazy { JvmTypeReference(className, packageName, nullable = true) }
 
@@ -47,14 +47,6 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
             when (it) {
                 is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
                 is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
-                is JavaDocumentationScope -> declaration.documentation.run {
-                    authors.addAll(it.declaration.authors)
-                    exceptions.putAll(it.declaration.exceptions)
-                    see.addAll(it.declaration.see)
-                    content = it.declaration.content
-                    returnDoc = it.declaration.returnDoc
-                    since = it.declaration.since
-                }
                 else -> throw IllegalArgumentException("Modifier $it may not be applied to top-level type")
             }
         }
@@ -65,7 +57,7 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
      *
      * @since 1.0.0
      */
-    val documentation: JavaDocumentationScope
+    override val documentation: JavaDocumentationScope
         get() = JavaDocumentationScope(declaration.documentation)
 
     init {

@@ -202,7 +202,7 @@ class JavaInterfaceScope internal constructor(
             exceptions?.forEach {
                 import(it.first)
                 declaration.exceptions.add(it.first)
-                it.second?.apply {documentation.declaration.exceptions[it.first] = this }
+                it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }
         }
 

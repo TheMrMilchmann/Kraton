@@ -33,20 +33,18 @@ package com.github.themrmilchmann.kraton.lang.java
 import com.github.themrmilchmann.kraton.lang.java.impl.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
-class JavaMethodScope internal constructor(internal val declaration: MethodDeclaration): JavaModifierTarget() {
+class JavaMethodScope internal constructor(
+    internal val declaration: MethodDeclaration
+): JavaModifierTarget(), JavaDocumentedScope {
+
+    override val documentation: JavaDocumentationScope
+        get() = JavaDocumentationScope(declaration.documentation)
+
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
             when (it) {
                 is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
                 is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
-                is JavaDocumentationScope -> declaration.documentation.run {
-                    authors.addAll(it.declaration.authors)
-                    exceptions.putAll(it.declaration.exceptions)
-                    see.addAll(it.declaration.see)
-                    content = it.declaration.content
-                    returnDoc = it.declaration.returnDoc
-                    since = it.declaration.since
-                }
                 else -> throw IllegalArgumentException("Modifier $it may not be applied to method")
             }
         }
@@ -80,20 +78,18 @@ class JavaMethodScope internal constructor(internal val declaration: MethodDecla
 
 }
 
-class JavaConstructorScope internal constructor(internal val declaration: ConstructorDeclaration): JavaModifierTarget() {
+class JavaConstructorScope internal constructor(
+    internal val declaration: ConstructorDeclaration
+): JavaModifierTarget(), JavaDocumentedScope {
+
+    override val documentation: JavaDocumentationScope
+        get() = JavaDocumentationScope(declaration.documentation)
+
     override fun setModifiers(vararg mods: JavaModifier) {
         mods.forEach {
             when (it) {
                 is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
                 is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
-                is JavaDocumentationScope -> declaration.documentation.run {
-                    authors.addAll(it.declaration.authors)
-                    exceptions.putAll(it.declaration.exceptions)
-                    see.addAll(it.declaration.see)
-                    content = it.declaration.content
-                    returnDoc = it.declaration.returnDoc
-                    since = it.declaration.since
-                }
                 else -> throw IllegalArgumentException("Modifier $it may not be applied to constructor")
             }
         }
