@@ -38,6 +38,7 @@ val protected = Modifiers.PROTECTED.jlm
 val private = Modifiers.PRIVATE.jlm
 val static = Modifiers.STATIC.jlm
 val abstract = Modifiers.ABSTRACT.jlm
+val default = Modifiers.DEFAULT.jlm
 val synchronized = Modifiers.SYNCHRONIZED.jlm
 val transient = Modifiers.TRANSIENT.jlm
 val volatile = Modifiers.VOLATILE.jlm

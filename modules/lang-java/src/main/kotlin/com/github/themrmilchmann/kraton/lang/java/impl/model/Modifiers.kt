@@ -38,6 +38,7 @@ internal enum class Modifiers {
     PRIVATE,
     STATIC,
     ABSTRACT,
+    DEFAULT,
     SYNCHRONIZED,
     TRANSIENT,
     VOLATILE,
