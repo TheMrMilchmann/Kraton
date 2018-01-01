@@ -46,6 +46,10 @@ val final = Modifiers.FINAL.jlm
 val native = Modifiers.NATIVE.jlm
 val strictfp = Modifiers.STRICTFP.jlm
 
+// Modifiers for modules
+val open = Modifiers.OPEN.jlm
+val transitive = Modifiers.TRANSITIVE.jlm
+
 val Override = Annotate(java.lang.Override::class.asType)
 
 open class Annotate(internal val type: IJvmType, internal val params: String? = null): JavaModifier

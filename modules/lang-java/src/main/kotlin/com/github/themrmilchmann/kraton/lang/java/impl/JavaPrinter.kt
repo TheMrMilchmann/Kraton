@@ -41,7 +41,11 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         decl.print()
     }
 
-    fun List<TypeParameter>.print(scope: OrdinaryCompilationUnit?) {
+    fun beginModularCompilationUnit(decl: ModularCompilationUnit) {
+        decl.print()
+    }
+
+    private fun List<TypeParameter>.print(scope: CompilationUnit?) {
         if (isNotEmpty()) {
             print("<")
             print(joinToString(", ") {
@@ -55,29 +59,35 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     // Printer DSL for the AST
 
-    private fun BodyMemberDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun BodyMemberDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         when (this) {
-            is TypeDeclaration -> print(scope, prev, next)
-            is FieldDeclaration -> print(scope, prev, next)
-            is MethodDeclaration -> print(scope, prev, next)
-            is ConstructorDeclaration -> print(scope, prev, next)
+            is TypeDeclaration              -> print(scope, prev, next, false)
+            is GroupDeclaration             -> print(scope, prev, next)
+            is FieldDeclaration             -> print(scope, prev, next)
+            is MethodDeclaration            -> print(scope, prev, next)
+            is ConstructorDeclaration       -> print(scope, prev, next)
+            is ModuleRequiresDeclaration    -> print(scope, prev, next)
+            is ModuleExportsDeclaration     -> print(scope, prev, next)
+            is ModuleOpensDeclaration       -> print(scope, prev, next)
+            is ModuleUsesDeclaration        -> print(scope, prev, next)
+            is ModuleProvidesDeclaration    -> print(scope, prev, next)
         }
     }
 
-    private fun List<BodyMemberDeclaration>.print(scope: OrdinaryCompilationUnit, sortingRule: Comparator<BodyMemberDeclaration>?) {
+    private fun List<BodyMemberDeclaration>.print(scope: CompilationUnit, sortingRule: Comparator<BodyMemberDeclaration>?) {
         (sortingRule?.let { sortedWith(sortingRule) } ?: this).mapIndexed { i, it -> (if (i == 0) null else this[i - 1]) to it }
             .mapIndexed { i, it -> it to (if (i == size - 1) null else this[i + 1]) }
             .forEach { it.first.second.print(scope, it.first.first, it.second) }
     }
 
-    private fun TypeDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun TypeDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         when (this) {
-            is NormalClassDeclaration -> print(scope, prev, next)
-            is NormalInterfaceDeclaration -> print(scope, prev, next)
+            is NormalClassDeclaration -> print(scope, prev, next, isRoot)
+            is NormalInterfaceDeclaration -> print(scope, prev, next, isRoot)
         }
     }
 
-    private fun GroupDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun GroupDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         if (bodyMembers.isNotEmpty()) bodyMembers.print(scope, sortingRule)
     }
 
@@ -92,7 +102,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             .sortedWith(Comparator { a, b -> "${a.container}.${a.member}".compareTo("${b.container}.${b.member}") })
             .forEach { if (!it.isImplicit) it.print() }
         if (importDeclarations.any { it.value.any { !it.value.isImplicit } }) println()
-        typeDeclaration.print(this@print, null, null)
+        typeDeclaration.print(this@print, null, null, true)
     }
 
     private fun PackageDeclaration.print() {
@@ -101,14 +111,13 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         println(";")
     }
 
-    fun ImportDeclaration.print() {
+    private fun ImportDeclaration.print() {
         printI("import ")
         if (isStatic) print("static ")
         println("$container.$member;")
     }
 
-
-    private fun NormalClassDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun NormalClassDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         documentation.print(scope)
         if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
@@ -134,10 +143,10 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             print(indent)
         }
         print("}")
-        if (scope.typeDeclaration !== this) println("$ln")
+        if (!isRoot) println("$ln")
     }
 
-    private fun NormalInterfaceDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun NormalInterfaceDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         documentation.print(scope)
         if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
@@ -159,10 +168,10 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             print(indent)
         }
         print("}")
-        if (scope.typeDeclaration !== this) println("$ln")
+        if (!isRoot) println("$ln")
     }
 
-    private fun FieldDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun FieldDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         documentation.print(scope)
         if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
@@ -180,7 +189,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         if (next === null) println()
     }
 
-    private fun MethodDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun MethodDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         if (prev is FieldDeclaration) println()
 
         documentation.print(scope)
@@ -210,7 +219,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         println()
     }
 
-    private fun ConstructorDeclaration.print(scope: OrdinaryCompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+    private fun ConstructorDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         if (prev is FieldDeclaration) println()
 
         documentation.print(scope)
@@ -238,7 +247,54 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         println()
     }
 
-    fun Documentation.print(scope: OrdinaryCompilationUnit?) {
+    private fun ModularCompilationUnit.print() {
+        importDeclarations
+            .values
+            .flatMap { it.values }
+            .sortedWith(Comparator { a, b -> "${a.container}.${a.member}".compareTo("${b.container}.${b.member}") })
+            .forEach { if (!it.isImplicit) it.print() }
+        if (importDeclarations.any { it.value.any { !it.value.isImplicit } }) println()
+        printI("module $name {")
+        if (bodyMembers.isNotEmpty()) {
+            println()
+            println()
+            incIndent()
+            bodyMembers.print(this, sortingRule)
+            decIndent()
+            print(indent)
+        }
+        print("}")
+    }
+
+    private fun ModuleRequiresDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+        printIln("requires $module;") // TODO static or transitive
+    }
+
+    private fun ModuleExportsDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+        printI("exports $pack")
+        if (toModules.isNotEmpty()) {
+            print(" to ${toModules.joinToString()}")
+        }
+        println(";")
+    }
+
+    private fun ModuleOpensDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+        printI("opens $pack")
+        if (toModules.isNotEmpty()) {
+            print(" to ${toModules.joinToString()}")
+        }
+        println(";")
+    }
+
+    private fun ModuleUsesDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+        printIln("uses ${service.asString(scope)};")
+    }
+
+    private fun ModuleProvidesDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+        printIln("provides ${service.asString(scope)} with ${impls.joinAsString(scope)};")
+    }
+
+    private fun Documentation.print(scope: CompilationUnit?) {
         if (authors.isNotEmpty()
             || params.any { it.value.isNotEmpty() }
             || typeParams.any { it.value.isNotEmpty() }

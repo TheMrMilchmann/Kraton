@@ -43,24 +43,32 @@ internal open class GroupDeclaration(
     open val bodyMembers: MutableList<BodyMemberDeclaration> = mutableListOf()
 ) : BodyMemberDeclaration()
 
-internal abstract class CompilationUnit
+internal abstract class CompilationUnit {
+
+    abstract val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>>
+
+    fun isImported(type: IJvmType) =
+        importDeclarations[type.packageName]?.any { it.value.member === IMPORT_WILDCARD || it.value.member == type.className } ?: false
+
+    abstract fun isResolved(type: IJvmType): Boolean
+
+    abstract fun import(container: String, member: String, mode: ImportType?, isStatic: Boolean, isImplicit: Boolean)
+
+}
 
 internal class OrdinaryCompilationUnit(
     val packageDeclaration: PackageDeclaration?,
-    val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>>,
+    override val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>>,
     val typeDeclaration: TypeDeclaration
 ) : CompilationUnit() {
 
     constructor(packageDeclaration: PackageDeclaration, typeDeclaration: TypeDeclaration):
         this(packageDeclaration, mutableMapOf(), typeDeclaration)
 
-    fun isImported(type: IJvmType) =
-        importDeclarations[type.packageName]?.any { it.value.member === IMPORT_WILDCARD || it.value.member == type.className } ?: false
-
-    fun isResolved(type: IJvmType) =
+    override fun isResolved(type: IJvmType) =
         isImported(type) || (packageDeclaration!!.equalsPackage(type))
 
-    fun import(
+    override fun import(
         container: String,
         member: String,
         mode: ImportType?,
@@ -233,12 +241,81 @@ internal class ConstructorDeclaration(
 
 }
 
+internal class ModularCompilationUnit(
+    val name: String,
+    val annotations: MutableList<Annotation> = mutableListOf(),
+    val modifiers: MutableList<Modifiers> = mutableListOf(),
+    override val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>> = mutableMapOf(),
+    val sortingRule: Comparator<BodyMemberDeclaration>?,
+    val bodyMembers: MutableList<BodyMemberDeclaration> = mutableListOf()
+): CompilationUnit() {
+
+    val documentation = Documentation()
+
+    override fun isResolved(type: IJvmType) = isImported(type)
+
+    override fun import(
+        container: String,
+        member: String,
+        mode: ImportType?,
+        isStatic: Boolean,
+        isImplicit: Boolean
+    ) {
+        if (mode == null) {
+            if (importDeclarations.flatMap { it.value.values }.map { "${it.container}.${it.member}" }.any { it == "$container.$member" || it == "$container.*" }) return
+        }
+
+        if (member != IMPORT_WILDCARD && importDeclarations.any { it.value.any { it.key == member } }) return
+
+        val containerImports = importDeclarations.getOrPut(container, ::mutableMapOf)
+        if (member in containerImports && mode === null) return
+
+        val factory = { mem: String -> ImportDeclaration(container, mem, mode, isStatic, isImplicit) }
+
+        if (mode === ImportType.QUALIFIED) {
+            containerImports[member] = factory.invoke(member)
+        } else if (IMPORT_WILDCARD !in containerImports) {
+            val filteredImports = containerImports.filter { it.value.mode === null }
+
+            if (filteredImports.size >= 2 || mode === ImportType.WILDCARD) {
+                filteredImports.forEach { containerImports.remove(it.key) }
+                containerImports[IMPORT_WILDCARD] = factory.invoke(IMPORT_WILDCARD)
+            } else
+                containerImports[member] = factory.invoke(member)
+        }
+    }
+
+}
+
+internal class ModuleRequiresDeclaration(
+    val module: String
+) : BodyMemberDeclaration()
+
+internal class ModuleExportsDeclaration(
+    val pack: String,
+    val toModules: MutableList<String> = mutableListOf()
+) : BodyMemberDeclaration()
+
+internal class ModuleOpensDeclaration(
+    val pack: String,
+    val toModules: MutableList<String> = mutableListOf()
+) : BodyMemberDeclaration()
+
+internal class ModuleUsesDeclaration(
+    val service: IJvmType
+) : BodyMemberDeclaration()
+
+internal class ModuleProvidesDeclaration(
+    val service: IJvmType,
+    val impls: List<IJvmType>
+) : BodyMemberDeclaration()
+
 internal class Annotation(
     val type: IJvmType,
     val params: String? = null
 )
 
-internal fun List<FormalParameter>.joinAsString(scope: OrdinaryCompilationUnit?) =
+internal fun List<FormalParameter>.joinAsString(scope: CompilationUnit?) =
     joinToString(", ") { StringBuilder().run {
         if (it.annotations.isNotEmpty()) append(it.annotations.joinAsString(scope)).append(" ")
         if (it.modifiers.isNotEmpty()) append(it.modifiers.toModifierString()).append(" ")

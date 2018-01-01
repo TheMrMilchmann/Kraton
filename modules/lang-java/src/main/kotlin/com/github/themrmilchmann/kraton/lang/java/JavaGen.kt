@@ -34,36 +34,10 @@ import com.github.themrmilchmann.kraton.lang.java.impl.*
 import com.github.themrmilchmann.kraton.lang.java.impl.model.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
-abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitScope<S>> internal constructor(
-    internal val compilationUnit: OrdinaryCompilationUnit,
-    internal open val declaration: TypeDeclaration,
+abstract class JavaCompilationUnitScope<S : JavaCompilationUnitScope<S>> internal constructor(
+    internal open val compilationUnit: CompilationUnit,
     internal val bodyMembers: MutableList<BodyMemberDeclaration>
-) : JavaModifierTarget(), JavaDocumentedScope, IJvmType {
-
-    override val nullable by lazy { JvmTypeReference(className, packageName, nullable = true) }
-
-    override fun setModifiers(vararg mods: JavaModifier) {
-        mods.forEach {
-            when (it) {
-                is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
-                is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
-                else -> throw IllegalArgumentException("Modifier $it may not be applied to top-level type")
-            }
-        }
-    }
-
-    /**
-     * TODO doc
-     *
-     * @since 1.0.0
-     */
-    override val documentation: JavaDocumentationScope
-        get() = JavaDocumentationScope(declaration.documentation)
-
-    init {
-        /* Always import `java.lang.*` implicitly. It might be a good idea to move this to the AST. */
-        import("java.lang", isImplicit = true)
-    }
+): JavaModifierTarget(), JavaDocumentedScope {
 
     /**
      * TODO doc
@@ -125,6 +99,39 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
     ) = type.packageName?.let { compilationUnit.import("$it.$type", member, forceMode, true, isImplicit) }
 
     abstract fun group(sortingRule: Comparator<BodyMemberDeclaration>? = null, init: S.() -> Unit) : S
+
+}
+
+abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitScope<S>> internal constructor(
+    override val compilationUnit: OrdinaryCompilationUnit,
+    internal open val declaration: TypeDeclaration,
+    bodyMembers: MutableList<BodyMemberDeclaration>
+) : JavaCompilationUnitScope<S>(compilationUnit, bodyMembers), JavaDocumentedScope, IJvmType {
+
+    init {
+        /* Always import `java.lang.*` implicitly. It might be a good idea to move this to the AST. */
+        import("java.lang", isImplicit = true)
+    }
+
+    /**
+     * TODO doc
+     *
+     * @since 1.0.0
+     */
+    override val documentation: JavaDocumentationScope
+        get() = JavaDocumentationScope(declaration.documentation)
+
+    override val nullable by lazy { JvmTypeReference(className, packageName, nullable = true) }
+
+    override fun setModifiers(vararg mods: JavaModifier) {
+        mods.forEach {
+            when (it) {
+                is JavaLanguageModifier -> declaration.modifiers.add(it.mod)
+                is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
+                else -> throw IllegalArgumentException("Modifier $it may not be applied to top-level type")
+            }
+        }
+    }
 
     infix fun JavaTypeParameterScope.extends(type: IJvmType) {
         if (typeParameter.bounds.isNotEmpty() && !typeParameter.upperBounds)

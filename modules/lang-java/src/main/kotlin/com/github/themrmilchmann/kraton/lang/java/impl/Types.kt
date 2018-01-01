@@ -33,18 +33,18 @@ package com.github.themrmilchmann.kraton.lang.java.impl
 import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.util.*
 
-internal fun Collection<IJvmType>.joinAsString(compilationUnit: OrdinaryCompilationUnit?, delimiter: String = ", ") = StringJoiner(delimiter).run {
+internal fun Collection<IJvmType>.joinAsString(compilationUnit: CompilationUnit?, delimiter: String = ", ") = StringJoiner(delimiter).run {
     this@joinAsString.forEach { add(it.asString(compilationUnit)) }
     toString()
 }
 
 @JvmName("joinAnnotationsAsString")
-internal fun List<Annotation>.joinAsString(compilationUnit: OrdinaryCompilationUnit?, delimiter: String = " ") = StringJoiner(delimiter).run {
+internal fun List<Annotation>.joinAsString(compilationUnit: CompilationUnit?, delimiter: String = " ") = StringJoiner(delimiter).run {
     this@joinAsString.forEach { add("@${it.type.asString(compilationUnit)}${it.params?.let { "($it)"} ?: ""}") }
     toString()
 }
 
-internal fun IJvmType.asString(from: OrdinaryCompilationUnit?): String = when {
+internal fun IJvmType.asString(from: CompilationUnit?): String = when {
     this is JvmArrayType        -> stringValueOfJvmArrayType(from)
     this is JvmGenericType      -> stringValueOfJvmGenericType(from)
     this is JvmPrimitiveType    -> stringValueOfPrimitiveType()
@@ -53,13 +53,13 @@ internal fun IJvmType.asString(from: OrdinaryCompilationUnit?): String = when {
     else                        -> stringValueOfIJvmType(from)
 }
 
-private fun JvmArrayType.stringValueOfJvmArrayType(from: OrdinaryCompilationUnit?) =
+private fun JvmArrayType.stringValueOfJvmArrayType(from: CompilationUnit?) =
     type.asString(from) + StringBuilder().run {
         for (i in 0 until dimensions) append("[]")
         toString()
     }
 
-private fun JvmGenericType.stringValueOfJvmGenericType(from: OrdinaryCompilationUnit?) =
+private fun JvmGenericType.stringValueOfJvmGenericType(from: CompilationUnit?) =
     className + StringBuilder().run {
         if (bounds.isNotEmpty()) {
             append(" ${if (upperBounds) "extends" else "super"} ")
@@ -96,7 +96,7 @@ private fun JvmPrimitiveBoxType.stringValueOfPrimitiveBoxType() = when (this) {
     else        -> throw UnsupportedOperationException()
 }
 
-private fun AbstractJvmType.stringValueOfAbstractJvmType(from: OrdinaryCompilationUnit?): String {
+private fun AbstractJvmType.stringValueOfAbstractJvmType(from: CompilationUnit?): String {
     val typeParameters = this.typeParameters
     val superString = stringValueOfIJvmType(from)
 
@@ -115,7 +115,7 @@ private fun AbstractJvmType.stringValueOfAbstractJvmType(from: OrdinaryCompilati
         }
 }
 
-private fun IJvmType.stringValueOfIJvmType(from: OrdinaryCompilationUnit?) =
+private fun IJvmType.stringValueOfIJvmType(from: CompilationUnit?) =
     if (from != null && from.isResolved(this)) {
         memberName
     } else {

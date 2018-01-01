@@ -276,7 +276,7 @@ class JavaClassScope internal constructor(
      *                      scope's members
      * @param init          initialize the group
      *
-     * @return
+     * @return the group's scope representation
      *
      * @since 1.0.0
      */

@@ -44,7 +44,10 @@ internal enum class Modifiers {
     VOLATILE,
     FINAL,
     NATIVE,
-    STRICTFP
+    STRICTFP,
+
+    OPEN,
+    TRANSITIVE
 }
 
 internal fun List<Modifiers>.toModifierString() = StringJoiner(" ").run {
