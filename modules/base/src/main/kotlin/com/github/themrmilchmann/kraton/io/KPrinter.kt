@@ -53,6 +53,9 @@ abstract class KPrinter(private val writer: BufferedWriter) : AutoCloseable by w
         }
     }
 
+    fun printHeader(str: String) {
+        println(str)
+    }
 
     fun printI(str: String) {
         print("$indent$str")

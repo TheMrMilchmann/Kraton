@@ -47,13 +47,17 @@ class TemplateFile(init: TemplateFile.() -> Unit) {
 
 class Template<P: KPrinter>(
     private val adapter: LanguageService<P>,
-    val outputSourceset: String,
+    val outputSourceSet: String,
     val outputFile: String,
+    private val fileHeader: String?,
     private val init: P.() -> Unit
 ) {
 
     fun print(output: BufferedWriter) {
-        adapter.createPrinter(output).use(init)
+        adapter.createPrinter(output).use {
+            fileHeader?.run { it.printHeader(fileHeader) }
+            init.invoke(it)
+        }
     }
 
 }

@@ -48,6 +48,7 @@ import com.github.themrmilchmann.kraton.lang.jvm.*
  *                      should not be the absolute directory, but relative from
  *                      the `output-root` directory that is given to the
  *                      generator.)
+ * @param fileHeader    the content that is generated at the top of the file
  * @param sortingRule   the `Comparator` that will be used to sort this scope's
  *                      members
  * @param init          initialize the class
@@ -60,6 +61,7 @@ fun TemplateFile.javaClass(
     name: String,
     packageName: String,
     outputDir: String,
+    fileHeader: String? = null,
     sortingRule: Comparator<BodyMemberDeclaration>? = null,
     init: JavaClassScope.() -> Unit
 ) : JavaClassScope {
@@ -69,7 +71,7 @@ fun TemplateFile.javaClass(
 
     return JavaClassScope(ordinaryCompilationUnit, normalClassDeclaration, sortingRule)
         .also(init)
-        .also { Template(JAVA_ADAPTER, outputDir, "$packageName/$name.java", { beginOrdinaryCompilationUnit(ordinaryCompilationUnit) }).reg() }
+        .also { Template(JAVA_ADAPTER, outputDir, "$packageName/$name.java", fileHeader, { beginOrdinaryCompilationUnit(ordinaryCompilationUnit) }).reg() }
 }
 
 /**

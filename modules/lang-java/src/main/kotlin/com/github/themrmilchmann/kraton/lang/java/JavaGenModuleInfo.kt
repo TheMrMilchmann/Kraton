@@ -37,6 +37,7 @@ import com.github.themrmilchmann.kraton.lang.jvm.*
 fun TemplateFile.javaModuleInfo(
     name: String,
     outputDir: String,
+    fileHeader: String? = null,
     sortingRule: Comparator<BodyMemberDeclaration>? = null,
     init: JavaModuleInfoScope.() -> Unit
 ) : JavaModuleInfoScope {
@@ -44,7 +45,7 @@ fun TemplateFile.javaModuleInfo(
 
     return JavaModuleInfoScope(cu, sortingRule)
         .also(init)
-        .also { Template(JAVA_ADAPTER, outputDir, "module-info.java", { beginModularCompilationUnit(cu) }).reg() }
+        .also { Template(JAVA_ADAPTER, outputDir, "module-info.java", fileHeader, { beginModularCompilationUnit(cu) }).reg() }
 }
 
 class JavaModuleInfoScope internal constructor(

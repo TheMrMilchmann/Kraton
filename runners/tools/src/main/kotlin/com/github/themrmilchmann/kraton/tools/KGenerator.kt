@@ -128,7 +128,7 @@ class KGenerator(override val logger: ILoggingService) : AbstractTool<KGenerator
             this.substringBeforeLast('.').replace('.', '/') + "." + this.substringAfterLast('.')
 
         templates.forEach {
-            val outputFile = Paths.get("${config.outputRoot}/${it.outputSourceset}/${it.outputFile}".toFilepath())
+            val outputFile = Paths.get("${config.outputRoot}/${it.outputSourceSet}/${it.outputFile}".toFilepath())
             outputFile.parent.let {
                 if (!Files.isDirectory(it)) {
                     Files.createDirectories(it)
