@@ -1,6 +1,5 @@
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/TheMrMilchmann/Kraton/blob/master/LICENSE.md)
 [![Build Status](https://travis-ci.org/TheMrMilchmann/Kraton.svg?branch=master)](https://travis-ci.org/TheMrMilchmann/Kraton)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.themrmilchmann.kopt/kopt/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.themrmilchmann.kopt/kopt)
 
 Kraton
 ======
