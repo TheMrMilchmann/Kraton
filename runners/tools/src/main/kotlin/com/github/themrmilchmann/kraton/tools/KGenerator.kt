@@ -49,11 +49,11 @@ class KGenerator(override val logger: ILoggingService) : AbstractTool<KGenerator
             method.parameterTypes.isEmpty()
 
     override val optionPool: Pair<OptionPool, (OptionSet) -> Configuration> by lazy {
-        val outputRoot = Argument.Builder<Path> { Paths.get(it) }.create()
-        val sourceClasses = Argument.Builder<String>(Parser.STRING).create()
+        val outputRoot = Argument.Builder { Paths.get(it) }.create()
+        val sourceClasses = Argument.Builder(Parser.STRING).create()
 
-        val isWerror = Option.Builder<Boolean>("isWerror", Parser.BOOLEAN).create()
-        val nThreads = Option.Builder<Int>("isWerror", Parser.INT).create()
+        val isWerror = Option.Builder("Werror", Parser.BOOLEAN).withDefaultValue(false).withMarkerValue(true, true).create()
+        val nThreads = Option.Builder("nThreads", Parser.INT).withDefaultValue(4).create()
 
         OptionPool.Builder()
             .withVararg(sourceClasses)
@@ -62,8 +62,8 @@ class KGenerator(override val logger: ILoggingService) : AbstractTool<KGenerator
             .create() to { set: OptionSet ->
             Configuration(
                 outputRoot = set[outputRoot]!!,
-                isWerror = set[isWerror]!!,
-                nThreads = set[nThreads]!!,
+                isWerror = set.getOrDefault(isWerror)!!,
+                nThreads = set.getOrDefault(nThreads)!!,
                 templates = set.getVarargValues(sourceClasses).map {
                     try {
                         Class.forName(it)
