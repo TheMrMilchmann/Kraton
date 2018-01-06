@@ -31,6 +31,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.*
 import com.github.themrmilchmann.kraton.build.config.*
 import com.github.themrmilchmann.kraton.build.config.BuildType
+import org.gradle.api.internal.*
+import org.jetbrains.kotlin.gradle.plugin.*
+
+import java.io.*
+import java.util.*
 
 plugins {
     `kotlin-delegate`
@@ -67,7 +72,41 @@ pluginBundle {
     }
 }
 
+(the<JavaPluginConvention>().sourceSets["main"] as HasConvention).convention.getPlugin(KotlinSourceSet::class.java).kotlin.apply {
+    srcDir(File("src/main-generated/kotlin"))
+}
+
+fun String.toComment(indent: String = "") =
+    if (lines().size == 1)
+        "$indent/* $this */"
+    else
+        "$indent/*\n${StringBuilder().apply {
+            this@toComment.lines().forEach { appendln("$indent * $it") }
+        }}$indent */"
+
 tasks {
+    val generatePropertyConstants = "generatePropertyConstants" {
+        doLast {
+            File(projectDir, "src/main-generated/kotlin/com/github/themrmilchmann/kraton/gradle/KratonDependencyExtensions.kt").apply {
+                parentFile.mkdirs()
+                createNewFile()
+
+                writeText(
+                    """${File(rootProject.projectDir, ".ci/resources/LICENSE_HEADER_GEN.txt").readText().toComment()}
+package com.github.themrmilchmann.kraton.gradle
+
+import org.gradle.api.artifacts.dsl.*
+
+fun DependencyHandler.kraton(module: String, version: String? = null): Any =
+    ${"\"com.github.themrmilchmann.kraton:kraton-\$module:\${version?.let { it } ?: \"$kratonVersion\"}\""}""")
+            }
+        }
+    }
+
+    "compileKotlin" {
+        dependsOn(generatePropertyConstants)
+    }
+
     val jar: Jar by tasks.getting
 
     val shadowJar = "shadowJar"(ShadowJar::class) {
