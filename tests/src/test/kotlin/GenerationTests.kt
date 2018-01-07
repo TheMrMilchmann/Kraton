@@ -70,7 +70,7 @@ fun testGeneration(rootDir: String): Array<Any> {
                 Class.forName(dTemplateFile.toString().replace(File.separatorChar, '.').removeSuffix(".kt") + "Kt")
                     .methods.filter(::filterTemplateMethods)
                     .map { { it.invoke(null) } as () -> TemplateFile }
-                    .map { it.invoke().let { GenerationTest(generator, dRoot, dTemplateFile, dModule, it, it.templates.map { it.outputSourceset to it.outputFile }) } }
+                    .map { it.invoke().let { GenerationTest(generator, dRoot, dTemplateFile, dModule, it, it.templates.map { it.outputSourceSet to it.outputFile }) } }
             } catch (t: Throwable) {
                 listOf(EarlyFailure(dTemplateFile, dModule, t))
             }).stream()
