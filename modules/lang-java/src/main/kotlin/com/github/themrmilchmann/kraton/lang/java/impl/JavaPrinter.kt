@@ -82,8 +82,9 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun TypeDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         when (this) {
-            is NormalClassDeclaration -> print(scope, prev, next, isRoot)
-            is NormalInterfaceDeclaration -> print(scope, prev, next, isRoot)
+            is NormalClassDeclaration       -> print(scope, prev, next, isRoot)
+            is EnumClassDeclaration         -> print(scope, prev, next, isRoot)
+            is NormalInterfaceDeclaration   -> print(scope, prev, next, isRoot)
         }
     }
 
@@ -139,6 +140,51 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             println()
             incIndent()
             bodyMembers.print(scope, sortingRule)
+            decIndent()
+            print(indent)
+        }
+        print("}")
+        if (!isRoot) println("$ln")
+    }
+
+    private fun EnumClassDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
+        documentation.print(scope)
+        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
+        printI(modifiers.toModifierString())
+        if (modifiers.isNotEmpty()) print(" ")
+        print("enum ")
+        print(identifier)
+        if (superInterfaces.isNotEmpty()) {
+            print(" implements ")
+            print(superInterfaces.joinAsString(scope))
+        }
+        print(" {")
+        if (values.isNotEmpty() || bodyMembers.isNotEmpty()) {
+            println()
+            incIndent()
+            if (values.isNotEmpty()) {
+                var count = 0
+
+                for (value in values) {
+                    if (++count > 1) print(",$ln$indent")
+                    value.documentation.print(scope)
+                    printI(StringBuilder().run {
+                        append(value.name)
+                        value.constructorCall?.let { append("($it)") }
+                        value.body?.let { append("{") }
+                        toString()
+                    })
+                }
+            } else {
+                print(indent)
+            }
+            if (bodyMembers.isNotEmpty()) {
+                println(";")
+                println()
+                bodyMembers.print(scope, sortingRule)
+            } else {
+                println()
+            }
             decIndent()
             print(indent)
         }

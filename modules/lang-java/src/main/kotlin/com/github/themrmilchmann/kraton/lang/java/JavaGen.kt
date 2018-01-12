@@ -108,11 +108,6 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
     bodyMembers: MutableList<BodyMemberDeclaration>
 ) : JavaCompilationUnitScope<S>(compilationUnit, bodyMembers), JavaDocumentedScope, IJvmType {
 
-    init {
-        /* Always import `java.lang.*` implicitly. It might be a good idea to move this to the AST. */
-        import("java.lang", isImplicit = true)
-    }
-
     /**
      * TODO doc
      *
@@ -167,6 +162,28 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
         types.forEach { import(it) }
         typeParameter.bounds.addAll(types)
         typeParameter.upperBounds = false
+    }
+
+}
+
+abstract class AbstractJavaClassScope<S : AbstractJavaClassScope<S>> internal constructor(
+    override val compilationUnit: OrdinaryCompilationUnit,
+    override val declaration: ClassDeclaration,
+    bodyMembers: MutableList<BodyMemberDeclaration>
+) : JavaOrdinaryCompilationUnitScope<S>(compilationUnit, declaration, bodyMembers) {
+
+    /**
+     * TODO doc
+     *
+     * @param types
+     *
+     * @since 1.0.0
+     */
+    fun implements(vararg types: IJvmType) {
+        types.forEach {
+            import(it)
+            declaration.superInterfaces.add(it)
+        }
     }
 
 }

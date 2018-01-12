@@ -62,6 +62,10 @@ internal class OrdinaryCompilationUnit(
     val typeDeclaration: TypeDeclaration
 ) : CompilationUnit() {
 
+    init {
+        importDeclarations.put("java.lang", mutableMapOf("*" to ImportDeclaration("java.lang", "*", isImplicit = true)))
+    }
+
     constructor(packageDeclaration: PackageDeclaration, typeDeclaration: TypeDeclaration):
         this(packageDeclaration, mutableMapOf(), typeDeclaration)
 
@@ -122,6 +126,7 @@ internal abstract class ClassDeclaration(
     annotations: MutableList<Annotation>,
     modifiers: MutableList<Modifiers>,
     sortingRule: Comparator<BodyMemberDeclaration>?,
+    val superInterfaces: MutableList<IJvmType>,
     bodyMembers: MutableList<BodyMemberDeclaration>
 ) : TypeDeclaration(annotations, modifiers, sortingRule, bodyMembers)
 
@@ -131,15 +136,32 @@ internal class NormalClassDeclaration(
     val identifier: String,
     val typeParameters: MutableList<TypeParameter>,
     var superClass: IJvmType?,
-    val superInterfaces: MutableList<IJvmType>,
+    superInterfaces: MutableList<IJvmType>,
     override val sortingRule: Comparator<BodyMemberDeclaration>?,
     override val bodyMembers: MutableList<BodyMemberDeclaration>
-) : ClassDeclaration(annotations, modifiers, sortingRule, bodyMembers), DocumentedDeclaration {
+) : ClassDeclaration(annotations, modifiers, sortingRule, superInterfaces, bodyMembers), DocumentedDeclaration {
 
     constructor(identifier: String):
         this(mutableListOf(), mutableListOf(), identifier, mutableListOf(), null, mutableListOf(), null, mutableListOf())
 
-    override var documentation = Documentation()
+    override val documentation = Documentation()
+
+}
+
+internal class EnumClassDeclaration(
+    annotations: MutableList<Annotation>,
+    modifiers: MutableList<Modifiers>,
+    val identifier: String,
+    superInterfaces: MutableList<IJvmType>,
+    val values: MutableList<EnumConstant>,
+    override val sortingRule: Comparator<BodyMemberDeclaration>?,
+    override val bodyMembers: MutableList<BodyMemberDeclaration>
+) : ClassDeclaration(annotations, modifiers, sortingRule, superInterfaces, bodyMembers) {
+
+    constructor(identifier: String):
+        this(mutableListOf(), mutableListOf(), identifier, mutableListOf(), mutableListOf(), null, mutableListOf())
+
+    override val documentation = Documentation()
 
 }
 
@@ -163,18 +185,7 @@ internal class NormalInterfaceDeclaration(
     constructor(identifier: String):
         this(mutableListOf(), mutableListOf(), identifier, mutableListOf(), mutableListOf(), null, mutableListOf())
 
-    override var documentation = Documentation()
-
-}
-
-internal class FieldDeclaration(
-    val annotations: MutableList<Annotation>,
-    val modifiers: MutableList<Modifiers>,
-    val type: IJvmType,
-    val entries: MutableMap<String, String?>
-) : BodyMemberDeclaration(), DocumentedDeclaration {
-
-    override var documentation = Documentation()
+    override val documentation = Documentation()
 
 }
 
@@ -196,6 +207,31 @@ internal class TypeParameter(
 
     constructor(documentation: String?, identifier: String):
         this(documentation, mutableListOf(), identifier, mutableListOf(), true)
+
+}
+
+internal class EnumConstant(
+    val annotations: MutableList<Annotation>,
+    val name: String,
+    val constructorCall: String?,
+    var body: String?
+) : DocumentedDeclaration {
+
+    constructor(name: String, constructorCall: String?):
+        this(mutableListOf(), name, constructorCall, null)
+
+    override val documentation = Documentation()
+
+}
+
+internal class FieldDeclaration(
+    val annotations: MutableList<Annotation>,
+    val modifiers: MutableList<Modifiers>,
+    val type: IJvmType,
+    val entries: MutableMap<String, String?>
+) : BodyMemberDeclaration(), DocumentedDeclaration {
+
+    override val documentation = Documentation()
 
 }
 

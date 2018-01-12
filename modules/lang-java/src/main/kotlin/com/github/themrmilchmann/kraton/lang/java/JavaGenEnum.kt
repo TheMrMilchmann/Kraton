@@ -35,7 +35,7 @@ import com.github.themrmilchmann.kraton.lang.java.impl.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
 /**
- * Creates, registers and returns a new [JavaClassScope] object.
+ * Creates, registers and returns a new [JavaEnumScope] object.
  *
  * Unless a [sortingRule] is specified, all members are generated in the order
  * in which they have been registered.
@@ -44,107 +44,84 @@ import com.github.themrmilchmann.kraton.lang.jvm.*
  *
  * @param name          the name for the class
  * @param packageName   the package the class is to be placed in
- * @param outputDir     the output directory for the class (Note that this
+ * @param outputDir     the output directory for the enum class (Note that this
  *                      should not be the absolute directory, but relative from
  *                      the `output-root` directory that is given to the
  *                      generator.)
  * @param fileHeader    the content that is generated at the top of the file
  * @param sortingRule   the `Comparator` that will be used to sort this scope's
  *                      members
- * @param init          initialize the class
+ * @param init          initialize the enum class
  *
- * @return the newly created and registered `JavaClassScope` object
+ * @return the newly created and registered `JavaEnumScope` object
  *
  * @since 1.0.0
  */
-fun TemplateFile.javaClass(
+fun TemplateFile.javaEnum(
     name: String,
     packageName: String,
     outputDir: String,
     fileHeader: String? = null,
     sortingRule: Comparator<BodyMemberDeclaration>? = null,
-    init: JavaClassScope.() -> Unit
-) : JavaClassScope {
+    init: JavaEnumScope.() -> Unit
+) : JavaEnumScope {
     val packageDeclaration = PackageDeclaration(mutableListOf(packageName))
-    val normalClassDeclaration = NormalClassDeclaration(name)
-    val ordinaryCompilationUnit = OrdinaryCompilationUnit(packageDeclaration, normalClassDeclaration)
+    val decl = EnumClassDeclaration(name)
+    val cu = OrdinaryCompilationUnit(packageDeclaration, decl)
 
-    return JavaClassScope(ordinaryCompilationUnit, normalClassDeclaration, sortingRule)
+    return JavaEnumScope(cu, decl, sortingRule)
         .also(init)
-        .also { Template(JAVA_ADAPTER, outputDir, "$packageName/$name.java", fileHeader, { beginOrdinaryCompilationUnit(ordinaryCompilationUnit) }).reg() }
+        .also { Template(JAVA_ADAPTER, outputDir, "$packageName/$name.java", fileHeader, { beginOrdinaryCompilationUnit(cu) }).reg() }
 }
 
 /**
- * Creates, registers and returns a new [JavaClassScope] object.
+ * Creates, registers and returns a new [JavaEnumScope] object.
  *
  * Unless a [sortingRule] is specified, all members are generated in the order
  * in which they have been registered.
  *
- * @receiver the enclosing type for the class
+ * @receiver the enclosing type for the enum class
  *
- * @param name          the name for the class
+ * @param name          the name for the enum class
  * @param sortingRule   the `Comparator` that will be used to sort this scope's
  *                      members
- * @param init          initialize the class
+ * @param init          initialize the enum class
  *
- * @return the newly created and registered `JavaClassScope` object
+ * @return the newly created and registered `JavaEnumScope` object
  *
  * @since 1.0.0
  */
-fun JavaOrdinaryCompilationUnitScope<*>.javaClass(
+fun JavaOrdinaryCompilationUnitScope<*>.javaEnum(
     name: String,
     sortingRule: Comparator<BodyMemberDeclaration>? = null,
-    init: JavaClassScope.() -> Unit
-) : JavaClassScope {
-    val normalClassDeclaration = NormalClassDeclaration(name)
+    init: JavaEnumScope.() -> Unit
+) : JavaEnumScope {
+    val decl = EnumClassDeclaration(name)
 
-    return JavaClassScope(compilationUnit, normalClassDeclaration, sortingRule)
+    return JavaEnumScope(compilationUnit, decl, sortingRule)
         .also(init)
-        .also { bodyMembers.add(normalClassDeclaration) }
+        .also { bodyMembers.add(decl) }
 }
 
-class JavaClassScope internal constructor(
+class JavaEnumScope internal constructor(
     compilationUnit: OrdinaryCompilationUnit,
-    override val declaration: NormalClassDeclaration,
+    override val declaration: EnumClassDeclaration,
     private val sortingRule: Comparator<BodyMemberDeclaration>?,
     bodyMembers: MutableList<BodyMemberDeclaration> = declaration.bodyMembers
-) : AbstractJavaClassScope<JavaClassScope>(compilationUnit, declaration, bodyMembers) {
+) : AbstractJavaClassScope<JavaEnumScope>(compilationUnit, declaration, bodyMembers) {
 
     override val className get() = declaration.identifier
 
     /**
      * TODO doc
      *
-     * Each time this function is called the previously stored supertype is
-     * overwritten.
-     *
-     * @param type the supertype for this class
-     *
      * @since 1.0.0
      */
-    fun extends(type: IJvmType?) {
-        if (type != null) import(type)
-        declaration.superClass = type
-    }
-
-    /**
-     * Creates, registers and returns a new [JavaTypeParameterScope] object.
-     *
-     * @receiver the name for the type-parameter
-     *
-     * @param doc the documentation for the type-parameter or `null`
-     *
-     * @return the newly created and registered `JavaTypeParameterScope` object
-     *
-     * @since 1.0.0
-     */
-    fun String.typeParam(
-        doc: String? = null
-    ) = JavaTypeParameterScope(TypeParameter(doc, this))
-        .also {
-            doc?.apply { this@JavaClassScope.declaration.documentation.typeParams[it.typeParameter] = this }
-            declaration.typeParameters.add(it.typeParameter)
-        }
+    operator fun String.invoke(
+        constructorCall: String? = null,
+        init: (JavaEnumConstantScope.() -> Unit)? = null
+    ) = JavaEnumConstantScope(EnumConstant(this, constructorCall).also { declaration.values.add(it) })
+        .apply { init?.invoke(this) }
 
     /**
      * Creates, registers and returns a new [JavaFieldScope] object.
@@ -249,7 +226,7 @@ class JavaClassScope internal constructor(
         }
 
     /**
-     * Creates, registers and returns a new [JavaClassScope] object.
+     * Creates, registers and returns a new [JavaEnumScope] object.
      *
      * A scope created by this method serves as a logical group to structure the
      * members of the scope it was created in.
@@ -268,13 +245,38 @@ class JavaClassScope internal constructor(
      *
      * @since 1.0.0
      */
-    override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaClassScope.() -> Unit): JavaClassScope =
+    override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaEnumScope.() -> Unit): JavaEnumScope =
         this.sortingRule?.let {
             GroupDeclaration(sortingRule).let {
                 bodyMembers.add(it)
 
-                JavaClassScope(compilationUnit, declaration, sortingRule, it.bodyMembers).also(init)
+                JavaEnumScope(compilationUnit, declaration, sortingRule, it.bodyMembers).also(init)
             }
         } ?: apply(init)
+
+}
+
+class JavaEnumConstantScope internal constructor(
+    private val declaration: EnumConstant
+) : JavaModifierTarget(), JavaDocumentedScope {
+
+    override val documentation: JavaDocumentationScope
+        get() = JavaDocumentationScope(declaration.documentation)
+
+    override fun setModifiers(vararg mods: JavaModifier) {
+        mods.forEach {
+            when (it) {
+                is Annotate -> declaration.annotations.add(Annotation(it.type, it.params))
+                else -> throw IllegalArgumentException("Modifier $it may not be applied to method")
+            }
+        }
+    }
+
+    operator fun String.unaryPlus() {
+        declaration.body = if (declaration.body === null)
+            this
+        else
+            declaration.body + "\n" + this
+    }
 
 }
