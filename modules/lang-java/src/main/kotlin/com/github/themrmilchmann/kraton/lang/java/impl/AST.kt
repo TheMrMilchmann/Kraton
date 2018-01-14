@@ -351,6 +351,49 @@ internal class Annotation(
     val params: String? = null
 )
 
+internal class PackageInfo(
+    val name: String,
+    val annotations: MutableList<Annotation> = mutableListOf(),
+    override val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>> = mutableMapOf()
+) : CompilationUnit() {
+
+    val documentation = Documentation()
+
+    override fun isResolved(type: IJvmType) = isImported(type)
+
+    override fun import(
+        container: String,
+        member: String,
+        mode: ImportType?,
+        isStatic: Boolean,
+        isImplicit: Boolean
+    ) {
+        if (mode == null) {
+            if (importDeclarations.flatMap { it.value.values }.map { "${it.container}.${it.member}" }.any { it == "$container.$member" || it == "$container.*" }) return
+        }
+
+        if (member != IMPORT_WILDCARD && importDeclarations.any { it.value.any { it.key == member } }) return
+
+        val containerImports = importDeclarations.getOrPut(container, ::mutableMapOf)
+        if (member in containerImports && mode === null) return
+
+        val factory = { mem: String -> ImportDeclaration(container, mem, mode, isStatic, isImplicit) }
+
+        if (mode === ImportType.QUALIFIED) {
+            containerImports[member] = factory.invoke(member)
+        } else if (IMPORT_WILDCARD !in containerImports) {
+            val filteredImports = containerImports.filter { it.value.mode === null }
+
+            if (filteredImports.size >= 2 || mode === ImportType.WILDCARD) {
+                filteredImports.forEach { containerImports.remove(it.key) }
+                containerImports[IMPORT_WILDCARD] = factory.invoke(IMPORT_WILDCARD)
+            } else
+                containerImports[member] = factory.invoke(member)
+        }
+    }
+
+}
+
 internal fun List<FormalParameter>.joinAsString(scope: CompilationUnit?) =
     joinToString(", ") { StringBuilder().run {
         if (it.annotations.isNotEmpty()) append(it.annotations.joinAsString(scope)).append(" ")

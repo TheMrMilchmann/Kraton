@@ -54,11 +54,6 @@ class JavaModuleInfoScope internal constructor(
     bodyMembers: MutableList<BodyMemberDeclaration> = compilationUnit.bodyMembers
 ) : JavaCompilationUnitScope<JavaModuleInfoScope>(compilationUnit, bodyMembers) {
 
-    init {
-        /* Always import `java.lang.*` implicitly. It might be a good idea to move this to the AST. */
-        import("java.lang", isImplicit = true)
-    }
-
     /**
      * TODO doc
      *

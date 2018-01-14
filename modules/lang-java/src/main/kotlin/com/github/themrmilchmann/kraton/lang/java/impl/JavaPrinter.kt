@@ -45,6 +45,10 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         decl.print()
     }
 
+    fun beginPackageInfo(decl: PackageInfo) {
+        decl.print()
+    }
+
     private fun List<TypeParameter>.print(scope: CompilationUnit?) {
         if (isNotEmpty()) {
             print("<")
@@ -300,6 +304,8 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             .sortedWith(Comparator { a, b -> "${a.container}.${a.member}".compareTo("${b.container}.${b.member}") })
             .forEach { if (!it.isImplicit) it.print() }
         if (importDeclarations.any { it.value.any { !it.value.isImplicit } }) println()
+        documentation.print(this)
+        if (annotations.isNotEmpty()) println(annotations.joinAsString(this, "\n$indent"))
         printI("module $name {")
         if (bodyMembers.isNotEmpty()) {
             println()
@@ -338,6 +344,21 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun ModuleProvidesDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         printIln("provides ${service.asString(scope)} with ${impls.joinAsString(scope)};")
+    }
+
+    private fun PackageInfo.print() {
+        documentation.print(this)
+        if (annotations.isNotEmpty()) println(annotations.joinAsString(this, "\n$indent"))
+        printI("package $name;")
+        if (importDeclarations.isNotEmpty()) {
+            println()
+            println()
+            importDeclarations
+                .values
+                .flatMap { it.values }
+                .sortedWith(Comparator { a, b -> "${a.container}.${a.member}".compareTo("${b.container}.${b.member}") })
+                .forEach { if (!it.isImplicit) it.print() }
+        }
     }
 
     private fun Documentation.print(scope: CompilationUnit?) {
