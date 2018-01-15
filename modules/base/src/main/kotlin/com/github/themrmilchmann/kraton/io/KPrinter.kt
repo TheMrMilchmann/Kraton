@@ -46,11 +46,10 @@ abstract class KPrinter(private val writer: BufferedWriter) : AutoCloseable by w
         while (body.startsWith(ln)) body = body.removePrefix("$ln")
         while (body.endsWith(ln)) body = body.removeSuffix("$ln")
 
+        incIndent()
         println()
-        body.lineSequence().forEach {
-            print(indent + FOUR_SPACES)
-            println(it)
-        }
+        body.lineSequence().forEach(::printIln)
+        decIndent()
     }
 
     fun printHeader(str: String) {

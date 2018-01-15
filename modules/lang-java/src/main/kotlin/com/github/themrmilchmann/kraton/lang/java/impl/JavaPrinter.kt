@@ -67,6 +67,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         when (this) {
             is TypeDeclaration              -> print(scope, prev, next, false)
             is GroupDeclaration             -> print(scope, prev, next)
+            is Initializer                  -> print(scope, prev, next)
             is FieldDeclaration             -> print(scope, prev, next)
             is MethodDeclaration            -> print(scope, prev, next)
             is ConstructorDeclaration       -> print(scope, prev, next)
@@ -219,6 +220,15 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         }
         print("}")
         if (!isRoot) println("$ln")
+    }
+
+    private fun Initializer.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+        if (isStatic)
+            printI("static {")
+        else
+            printI("{")
+        printMethodBody(body)
+        printIln("}$ln")
     }
 
     private fun FieldDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {

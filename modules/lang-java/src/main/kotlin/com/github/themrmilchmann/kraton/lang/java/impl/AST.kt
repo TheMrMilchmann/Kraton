@@ -224,6 +224,11 @@ internal class EnumConstant(
 
 }
 
+internal class Initializer(
+    val isStatic: Boolean,
+    var body: String = ""
+) : BodyMemberDeclaration()
+
 internal class FieldDeclaration(
     val annotations: MutableList<Annotation>,
     val modifiers: MutableList<Modifiers>,

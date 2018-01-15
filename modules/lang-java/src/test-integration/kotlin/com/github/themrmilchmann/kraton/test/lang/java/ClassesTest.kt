@@ -50,7 +50,13 @@ val Classes = TemplateFile {
 
         public..javaClass(
             "PublicClass"
-        ) {}
+        ) {
+
+            clinit(isStatic = true) {
+                +"System.err.println(\"Hello, ClassLoader!\");"
+            }
+
+        }
 
     }
 

@@ -186,4 +186,27 @@ abstract class AbstractJavaClassScope<S : AbstractJavaClassScope<S>> internal co
         }
     }
 
+    /**
+     * Adds an initializer to the current class scope.
+     *
+     * @param isStatic  whether or not the initializer is static
+     * @param init      populate the initializer
+     *
+     * @since 1.0.0
+     */
+    fun clinit(isStatic: Boolean, init: JavaClassInitializerScope.() -> Unit) {
+        bodyMembers.add(Initializer(isStatic).also { JavaClassInitializerScope(it).also(init) })
+    }
+
+}
+
+class JavaClassInitializerScope internal constructor(
+    private val initializer: Initializer
+) {
+
+    operator fun String.unaryPlus() {
+        if (initializer.body.isNotEmpty()) initializer.body += "\n"
+        initializer.body += this
+    }
+
 }
