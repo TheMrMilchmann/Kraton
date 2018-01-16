@@ -134,11 +134,11 @@ dependencies {
     bundleJar..compileOnly(project(":base")) { isTransitive = false }
     bundleJar..compileOnly("com.github.themrmilchmann.kopt:kopt:$koptVersion") { isTransitive = false }
 
-    bundleJar..compile(project(":tools")) { isTransitive = false }
+    bundleJar..compileOnly(project(":tools")) { isTransitive = false }
     rootProject.allprojects.forEach {
         if (it.name.startsWith("lang-")) {
             bundleJar(project(it.path)) { isTransitive = false }
-            runtime(it)
+            compileOnly(it)
         }
     }
 }
