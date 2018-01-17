@@ -35,7 +35,7 @@ import java.io.*
 import java.util.*
 import org.jetbrains.kotlin.gradle.plugin.*
 
-val kotlinVersion = "1.2.10"
+val kotlinVersion = "1.2.20"
 val dokkaVersion = "0.9.15"
 
 plugins {
