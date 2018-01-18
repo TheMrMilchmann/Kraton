@@ -131,6 +131,8 @@ dependencies {
         dependencyConfiguration: T.() -> Unit
     ): T = add("bundleJar", dependency, dependencyConfiguration)
 
+    bundleJar(project(":cli"))
+
     bundleJar..compileOnly(project(":base")) { isTransitive = false }
     bundleJar..compileOnly("com.github.themrmilchmann.kopt:kopt:$koptVersion") { isTransitive = false }
 
