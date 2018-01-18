@@ -56,6 +56,7 @@ class KGenerator(override val logger: ILoggingService) : AbstractTool<KGenerator
         val nThreads = Option.Builder("nThreads", Parser.INT).withDefaultValue(4).create()
 
         OptionPool.Builder()
+            .withArg(outputRoot)
             .withVararg(sourceClasses)
             .withOption(isWerror)
             .withOption(nThreads)
@@ -163,8 +164,7 @@ class KGenerator(override val logger: ILoggingService) : AbstractTool<KGenerator
         val outputRoot: Path,
         val isWerror: Boolean,
         val nThreads: Int,
-        val templates: List<() -> TemplateFile>,
-        internal val reporter: (() -> Unit)? = null
+        val templates: List<() -> TemplateFile>
     )
 
 }

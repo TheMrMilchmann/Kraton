@@ -31,35 +31,53 @@
 package com.github.themrmilchmann.kraton.gradle.tasks
 
 import com.github.themrmilchmann.kraton.gradle.*
-import com.github.themrmilchmann.kraton.gradle.tasks.utils.*
-import com.github.themrmilchmann.kraton.tools.*
-import org.gradle.api.*
+import org.gradle.api.file.*
+import org.gradle.api.internal.file.*
+import org.gradle.api.internal.file.collections.*
 import org.gradle.api.tasks.*
 import java.nio.file.*
 
-open class Generate internal constructor(): DefaultTask() {
+open class Generate internal constructor(): SourceTask() {
 
-    @Input
-    var source: TaskSource = NO_SOURCE
-
-    @InputDirectory
+    @get:InputDirectory
     lateinit var outputRoot: Path
 
     var isWerror: Boolean = false
     var nThreads: Int = 4
 
+    private val fileResolver: FileResolver = IdentityFileResolver()
+
+    @get:Classpath
+    private var classpath: FileCollection = DefaultConfigurableFileCollection(fileResolver, null)
+
     @TaskAction
     fun doRun() {
-        val generator = KGenerator(project.loggerDelegate)
+        val res = project.javaexec {
+            main = "com.github.themrmilchmann.kraton.cli.KratonCLI"
+            val launchArgs = mutableListOf(
+                "generate",
+                outputRoot.toString()
+            )
+            getSource().files.forEach { launchArgs.add(it.absolutePath) }
+            if (isWerror) launchArgs.add("--Werror")
+            launchArgs.add("--nThreads=$nThreads")
 
-        val cfg = KGenerator.Configuration(
-            outputRoot = outputRoot,
-            isWerror = isWerror,
-            nThreads = nThreads,
-            templates = source.templates
-        )
+            args = launchArgs
+            classpath = project.files(KratonGradle::class.java.protectionDomain.codeSource.location.path) + this@Generate.classpath
+        }
 
-        if (generator.exec(cfg) < 0) throw TaskExecutionException(this, Exception("Unexpected error code"))
+        res.assertNormalExitValue()
+        res.rethrowFailure()
+    }
+
+    fun classpath(vararg paths: Any): Generate {
+        classpath += fileResolver.resolveFiles(paths)
+        return this
+    }
+
+    fun setClasspath(classpath: FileCollection): Generate {
+        this.classpath = classpath
+        return this
     }
 
 }
