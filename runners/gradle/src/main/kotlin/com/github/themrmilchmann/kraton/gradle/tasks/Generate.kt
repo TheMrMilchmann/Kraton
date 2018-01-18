@@ -59,7 +59,7 @@ open class Generate internal constructor(): SourceTask() {
                 "generate",
                 outputRoot.toString()
             )
-            getSource().files.forEach { launchArgs.add(it.absolutePath) }
+            getSource().files.forEach { launchArgs.add("\"${it.absolutePath.replace('\\', '/')}\"") }
             if (isWerror) launchArgs.add("--Werror")
             launchArgs.add("--nThreads=$nThreads")
 
