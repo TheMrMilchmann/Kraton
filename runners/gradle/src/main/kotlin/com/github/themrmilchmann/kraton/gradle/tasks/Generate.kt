@@ -35,6 +35,7 @@ import org.gradle.api.file.*
 import org.gradle.api.internal.file.*
 import org.gradle.api.internal.file.collections.*
 import org.gradle.api.tasks.*
+import org.gradle.kotlin.dsl.*
 import java.nio.file.*
 
 open class Generate internal constructor(): SourceTask() {
@@ -63,7 +64,7 @@ open class Generate internal constructor(): SourceTask() {
             launchArgs.add("--nThreads=$nThreads")
 
             args = launchArgs
-            classpath = project.files(KratonGradle::class.java.protectionDomain.codeSource.location.path) + this@Generate.classpath
+            classpath = project.files(KratonGradle::class.java.protectionDomain.codeSource.location.path) + this@Generate.classpath + project.configurations["kraton"]
         }
 
         res.assertNormalExitValue()

@@ -31,9 +31,19 @@
 package com.github.themrmilchmann.kraton.gradle
 
 import org.gradle.api.*
+import org.gradle.kotlin.dsl.*
 
 open class KratonGradle internal constructor(): Plugin<Project> {
 
-    override fun apply(project: Project) {}
+    override fun apply(project: Project) {
+        with(project) {
+            val confKraton = configurations.create("kraton")
+
+            val confCompile = configurations.findByName("compile")
+            if(confCompile !== null) confKraton.extendsFrom(confCompile)
+
+            confKraton.exclude(group = "com.github.themrmilchmann.kraton")
+        }
+    }
 
 }
