@@ -45,7 +45,13 @@ fun main(args: Array<String>) {
     val res: Int = when (args[0]) {
         "generator", "generate" -> KGenerator(logger)
         else -> null
-    }.let { it?.resolveAndExec(args) ?: toolLaunchError(args[0]) }
+    }.let {
+        it?.resolveAndExec(args.let {
+            Array(args.size - 1) {
+                args[it + 1]
+            }
+        }) ?: toolLaunchError(args[0])
+    }
 
     exitProcess(res)
 }
