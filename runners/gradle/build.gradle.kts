@@ -112,6 +112,12 @@ fun DependencyHandler.kraton(module: String, version: String? = null): Any =
     val shadowJar = "shadowJar"(ShadowJar::class) {
         baseName = jar.baseName
         classifier = ""
+        relocate("com.github.themrmilchmann.kopt", "com.github.themrmilchmann.kraton.gradle.impl.kopt")
+        relocate("kotlin", "com.github.themrmilchmann.kraton.gradle.impl.kotlin")
+        relocate("org.intellij", "com.github.themrmilchmann.kraton.gradle.impl.org.intellij")
+        relocate("org.jetbrains", "com.github.themrmilchmann.kraton.gradle.impl.org.jetbrains") {
+            exclude("org.jetbrains.kotlin.gradle.*")
+        }
 
         configurations = listOf(bundleJar)
     }
@@ -130,6 +136,8 @@ dependencies {
         dependency: T,
         dependencyConfiguration: T.() -> Unit
     ): T = add("bundleJar", dependency, dependencyConfiguration)
+
+    shadow("org.jetbrains.kotlin:kotlin-gradle-plugin:[1.1.0,)")
 
     bundleJar(project(":cli"))
 
