@@ -125,7 +125,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun NormalClassDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         documentation.print(scope)
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
+        if (annotations.isNotEmpty()) printIln(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
         if (modifiers.isNotEmpty()) print(" ")
         print("class ")
@@ -154,7 +154,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun EnumClassDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         documentation.print(scope)
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
+        if (annotations.isNotEmpty()) printIln(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
         if (modifiers.isNotEmpty()) print(" ")
         print("enum ")
@@ -199,7 +199,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun NormalInterfaceDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         documentation.print(scope)
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
+        if (annotations.isNotEmpty()) printIln(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
         if (modifiers.isNotEmpty()) print(" ")
         print("interface ")
@@ -233,7 +233,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun FieldDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         documentation.print(scope)
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
+        if (annotations.isNotEmpty()) printIln(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
         if (modifiers.isNotEmpty()) print(" ")
         print(type.asString(scope))
@@ -253,7 +253,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         if (prev is FieldDeclaration) println()
 
         documentation.print(scope)
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
+        if (annotations.isNotEmpty()) printIln(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
         if (modifiers.isNotEmpty()) print(" ")
         typeParameters.print(scope)
@@ -283,7 +283,7 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
         if (prev is FieldDeclaration) println()
 
         documentation.print(scope)
-        if (annotations.isNotEmpty()) println(annotations.joinAsString(scope, "\n$indent"))
+        if (annotations.isNotEmpty()) printIln(annotations.joinAsString(scope, "\n$indent"))
         printI(modifiers.toModifierString())
         if (modifiers.isNotEmpty()) print(" ")
         typeParameters.print(scope)
