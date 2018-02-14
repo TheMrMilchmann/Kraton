@@ -298,14 +298,14 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
             print(" throws ")
             print(exceptions.joinAsString(scope))
         }
-        body?.let {
+        body.let {
             print(" {")
-            if (it.isNotEmpty()) {
+            if (it != null && it.isNotEmpty()) {
                 printMethodBody(it)
                 print(indent)
             }
             println("}")
-        } ?: println(";")
+        }
         println()
     }
 
