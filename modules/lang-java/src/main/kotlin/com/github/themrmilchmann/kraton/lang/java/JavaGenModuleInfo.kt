@@ -48,6 +48,7 @@ fun TemplateFile.javaModuleInfo(
         .also { Template(JAVA_ADAPTER, outputDir, "module-info.java", fileHeader, { beginModularCompilationUnit(cu) }).reg() }
 }
 
+@KratonDSL
 class JavaModuleInfoScope internal constructor(
     override val compilationUnit: ModularCompilationUnit,
     private val sortingRule: Comparator<BodyMemberDeclaration>?,
@@ -77,7 +78,7 @@ class JavaModuleInfoScope internal constructor(
     fun opens(pack: String): JavaOpensScope = JavaOpensScope(ModuleOpensDeclaration(pack).also { bodyMembers.add(it) })
 
     fun uses(service: IJvmType): JavaUsesScope = JavaUsesScope(ModuleUsesDeclaration(service).also { bodyMembers.add(it) })
-        .apply { import(service) }
+        .apply { this@JavaModuleInfoScope.import(service) }
 
     fun provides(service: IJvmType, vararg impls: IJvmType): JavaProvidesScope {
         if (impls.isEmpty()) throw IllegalArgumentException()
@@ -124,8 +125,8 @@ class JavaModuleInfoScope internal constructor(
 
 }
 
-class JavaRequiresScope internal constructor(internal val decl: ModuleRequiresDeclaration)
-class JavaExportsScope internal constructor(internal val decl: ModuleExportsDeclaration)
-class JavaOpensScope internal constructor(internal val decl: ModuleOpensDeclaration)
-class JavaUsesScope internal constructor(internal val decl: ModuleUsesDeclaration)
-class JavaProvidesScope internal constructor(internal val decl: ModuleProvidesDeclaration)
+@KratonDSL class JavaRequiresScope internal constructor(internal val decl: ModuleRequiresDeclaration)
+@KratonDSL class JavaExportsScope internal constructor(internal val decl: ModuleExportsDeclaration)
+@KratonDSL class JavaOpensScope internal constructor(internal val decl: ModuleOpensDeclaration)
+@KratonDSL class JavaUsesScope internal constructor(internal val decl: ModuleUsesDeclaration)
+@KratonDSL class JavaProvidesScope internal constructor(internal val decl: ModuleProvidesDeclaration)

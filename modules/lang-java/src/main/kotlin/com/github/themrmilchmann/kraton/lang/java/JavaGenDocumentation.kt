@@ -30,6 +30,7 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.*
 import com.github.themrmilchmann.kraton.lang.java.impl.*
 
 /**
@@ -39,6 +40,7 @@ import com.github.themrmilchmann.kraton.lang.java.impl.*
  */
 const val inheritDoc = "{@inheritDoc}"
 
+@KratonDSL
 interface JavaDocumentedScope {
 
     val documentation: JavaDocumentationScope
@@ -49,6 +51,7 @@ interface JavaDocumentedScope {
 
 }
 
+@KratonDSL
 class JavaDocumentationScope internal constructor(private val decl: Documentation) {
 
     var returnDoc: String?

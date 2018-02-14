@@ -30,9 +30,11 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.*
 import com.github.themrmilchmann.kraton.lang.java.impl.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
+@KratonDSL
 class JavaMethodScope internal constructor(
     internal val declaration: MethodDeclaration
 ): JavaModifierTarget(), JavaDocumentedScope {
@@ -78,6 +80,7 @@ class JavaMethodScope internal constructor(
 
 }
 
+@KratonDSL
 class JavaConstructorScope internal constructor(
     internal val declaration: ConstructorDeclaration
 ): JavaModifierTarget(), JavaDocumentedScope {
@@ -125,6 +128,7 @@ class JavaConstructorScope internal constructor(
 
 fun IJvmType.param(name: String, doc: String) = JavaParameterScope(FormalParameter(mutableListOf(), mutableListOf(), this, name), doc)
 
+@KratonDSL
 class JavaParameterScope internal constructor(
     internal val declaration: FormalParameter,
     internal val doc: String

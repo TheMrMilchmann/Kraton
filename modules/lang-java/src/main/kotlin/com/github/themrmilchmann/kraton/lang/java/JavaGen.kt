@@ -30,10 +30,12 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.*
 import com.github.themrmilchmann.kraton.lang.java.impl.*
 import com.github.themrmilchmann.kraton.lang.java.impl.model.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
+@KratonDSL
 abstract class JavaCompilationUnitScope<S : JavaCompilationUnitScope<S>> internal constructor(
     internal open val compilationUnit: CompilationUnit,
     internal val bodyMembers: MutableList<BodyMemberDeclaration>
@@ -102,6 +104,7 @@ abstract class JavaCompilationUnitScope<S : JavaCompilationUnitScope<S>> interna
 
 }
 
+@KratonDSL
 abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitScope<S>> internal constructor(
     override val compilationUnit: OrdinaryCompilationUnit,
     internal open val declaration: TypeDeclaration,
@@ -132,7 +135,7 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
         if (typeParameter.bounds.isNotEmpty() && !typeParameter.upperBounds)
             throw IllegalStateException()
 
-        import(type)
+        this@JavaOrdinaryCompilationUnitScope.import(type)
         typeParameter.bounds.add(type)
         typeParameter.upperBounds = true
     }
@@ -141,7 +144,7 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
         if (typeParameter.bounds.isNotEmpty() && !typeParameter.upperBounds)
             throw IllegalStateException()
 
-        types.forEach { import(it) }
+        types.forEach { this@JavaOrdinaryCompilationUnitScope.import(it) }
         typeParameter.bounds.addAll(types)
         typeParameter.upperBounds = true
     }
@@ -150,7 +153,7 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
         if (typeParameter.bounds.isNotEmpty() && typeParameter.upperBounds)
             throw IllegalStateException()
 
-        import(type)
+        this@JavaOrdinaryCompilationUnitScope.import(type)
         typeParameter.bounds.add(type)
         typeParameter.upperBounds = false
     }
@@ -159,13 +162,14 @@ abstract class JavaOrdinaryCompilationUnitScope<S : JavaOrdinaryCompilationUnitS
         if (typeParameter.bounds.isNotEmpty() && typeParameter.upperBounds)
             throw IllegalStateException()
 
-        types.forEach { import(it) }
+        types.forEach { this@JavaOrdinaryCompilationUnitScope.import(it) }
         typeParameter.bounds.addAll(types)
         typeParameter.upperBounds = false
     }
 
 }
 
+@KratonDSL
 abstract class AbstractJavaClassScope<S : AbstractJavaClassScope<S>> internal constructor(
     override val compilationUnit: OrdinaryCompilationUnit,
     override val declaration: ClassDeclaration,
@@ -200,6 +204,7 @@ abstract class AbstractJavaClassScope<S : AbstractJavaClassScope<S>> internal co
 
 }
 
+@KratonDSL
 class JavaClassInitializerScope internal constructor(
     private val initializer: Initializer
 ) {

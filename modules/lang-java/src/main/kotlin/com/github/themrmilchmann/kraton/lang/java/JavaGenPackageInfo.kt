@@ -46,6 +46,7 @@ fun TemplateFile.javaPackageInfo(
         .also { Template(JAVA_ADAPTER, outputDir, "$name/package-info.java", fileHeader, { beginPackageInfo(packageInfo) }).reg() }
 }
 
+@KratonDSL
 class JavaPackageInfoScope internal constructor(
     override val compilationUnit: PackageInfo
 ) : JavaCompilationUnitScope<JavaPackageInfoScope>(compilationUnit, mutableListOf()) {

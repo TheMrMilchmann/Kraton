@@ -30,8 +30,10 @@
  */
 package com.github.themrmilchmann.kraton.lang.java
 
+import com.github.themrmilchmann.kraton.lang.*
 import com.github.themrmilchmann.kraton.lang.java.impl.*
 
+@KratonDSL
 class JavaFieldScope internal constructor(
     internal val declaration: FieldDeclaration
 ): JavaModifierTarget(), JavaDocumentedScope {

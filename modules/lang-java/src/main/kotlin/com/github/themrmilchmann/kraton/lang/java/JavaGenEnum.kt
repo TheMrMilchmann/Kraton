@@ -103,6 +103,7 @@ fun JavaOrdinaryCompilationUnitScope<*>.javaEnum(
         .also { bodyMembers.add(decl) }
 }
 
+@KratonDSL
 class JavaEnumScope internal constructor(
     compilationUnit: OrdinaryCompilationUnit,
     override val declaration: EnumClassDeclaration,
@@ -172,11 +173,11 @@ class JavaEnumScope internal constructor(
         .apply {
             init?.invoke(this)
             parameters.forEach {
-                import(it.declaration.type)
+                this@JavaEnumScope.import(it.declaration.type)
                 declaration.documentation.params[it.declaration] = it.doc
             }
             exceptions?.forEach {
-                import(it.first)
+                this@JavaEnumScope.import(it.first)
                 declaration.exceptions.add(it.first)
                 it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }
@@ -213,13 +214,13 @@ class JavaEnumScope internal constructor(
     ) = JavaMethodScope(MethodDeclaration(this, name, parameters.mapTo(mutableListOf()) { it.declaration }).also { bodyMembers.add(it) })
         .apply {
             init?.invoke(this)
-            import(this@invoke)
+            this@JavaEnumScope.import(this@invoke)
             parameters.forEach {
-                import(it.declaration.type)
+                this@JavaEnumScope.import(it.declaration.type)
                 declaration.documentation.params[it.declaration] = it.doc
             }
             exceptions?.forEach {
-                import(it.first)
+                this@JavaEnumScope.import(it.first)
                 declaration.exceptions.add(it.first)
                 it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }
@@ -256,6 +257,7 @@ class JavaEnumScope internal constructor(
 
 }
 
+@KratonDSL
 class JavaEnumConstantScope internal constructor(
     private val declaration: EnumConstant
 ) : JavaModifierTarget(), JavaDocumentedScope {

@@ -103,6 +103,7 @@ fun JavaOrdinaryCompilationUnitScope<*>.javaClass(
         .also { bodyMembers.add(normalClassDeclaration) }
 }
 
+@KratonDSL
 class JavaClassScope internal constructor(
     compilationUnit: OrdinaryCompilationUnit,
     override val declaration: NormalClassDeclaration,
@@ -195,11 +196,11 @@ class JavaClassScope internal constructor(
         .apply {
             init?.invoke(this)
             parameters.forEach {
-                import(it.declaration.type)
+                this@JavaClassScope.import(it.declaration.type)
                 declaration.documentation.params[it.declaration] = it.doc
             }
             exceptions?.forEach {
-                import(it.first)
+                this@JavaClassScope.import(it.first)
                 declaration.exceptions.add(it.first)
                 it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }
@@ -236,13 +237,13 @@ class JavaClassScope internal constructor(
     ) = JavaMethodScope(MethodDeclaration(this, name, parameters.mapTo(mutableListOf()) { it.declaration }).also { bodyMembers.add(it) })
         .apply {
             init?.invoke(this)
-            import(this@invoke)
+            this@JavaClassScope.import(this@invoke)
             parameters.forEach {
-                import(it.declaration.type)
+                this@JavaClassScope.import(it.declaration.type)
                 declaration.documentation.params[it.declaration] = it.doc
             }
             exceptions?.forEach {
-                import(it.first)
+                this@JavaClassScope.import(it.first)
                 declaration.exceptions.add(it.first)
                 it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }

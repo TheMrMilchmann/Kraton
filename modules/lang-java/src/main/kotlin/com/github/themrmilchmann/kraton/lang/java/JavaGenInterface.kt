@@ -103,6 +103,7 @@ fun JavaOrdinaryCompilationUnitScope<*>.javaInterface(
         .also { bodyMembers.add(normalInterfaceDeclaration) }
 }
 
+@KratonDSL
 class JavaInterfaceScope internal constructor(
     compilationUnit: OrdinaryCompilationUnit,
     override val declaration: NormalInterfaceDeclaration,
@@ -196,13 +197,13 @@ class JavaInterfaceScope internal constructor(
     ) = JavaMethodScope(MethodDeclaration(this, name, parameters.mapTo(mutableListOf()) { it.declaration }).also { bodyMembers.add(it) })
         .apply {
             init?.invoke(this)
-            import(this@invoke)
+            this@JavaInterfaceScope.import(this@invoke)
             parameters.forEach {
-                import(it.declaration.type)
+                this@JavaInterfaceScope.import(it.declaration.type)
                 declaration.documentation.params[it.declaration] = it.doc
             }
             exceptions?.forEach {
-                import(it.first)
+                this@JavaInterfaceScope.import(it.first)
                 declaration.exceptions.add(it.first)
                 it.second?.apply { declaration.documentation.exceptions[it.first] = this }
             }
