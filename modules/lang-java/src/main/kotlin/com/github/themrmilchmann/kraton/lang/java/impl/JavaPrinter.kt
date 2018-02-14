@@ -223,6 +223,8 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
     }
 
     private fun Initializer.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
+        if (prev is FieldDeclaration) println()
+
         if (isStatic)
             printI("static {")
         else
