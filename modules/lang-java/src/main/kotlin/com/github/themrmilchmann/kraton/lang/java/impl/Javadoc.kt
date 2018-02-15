@@ -31,6 +31,8 @@
 package com.github.themrmilchmann.kraton.lang.java.impl
 
 import com.github.themrmilchmann.kraton.io.*
+import com.github.themrmilchmann.kraton.lang.java.ast.FormalParameter
+import com.github.themrmilchmann.kraton.lang.java.ast.TypeParameter
 import com.github.themrmilchmann.kraton.lang.jvm.IJvmType
 
 internal class Documentation {

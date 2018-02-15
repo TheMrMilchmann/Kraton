@@ -31,6 +31,9 @@
 package com.github.themrmilchmann.kraton.lang.java
 
 import com.github.themrmilchmann.kraton.lang.*
+import com.github.themrmilchmann.kraton.lang.java.ast.Annotation
+import com.github.themrmilchmann.kraton.lang.java.ast.BodyMemberDeclaration
+import com.github.themrmilchmann.kraton.lang.java.ast.PackageInfo
 import com.github.themrmilchmann.kraton.lang.java.impl.*
 
 fun TemplateFile.javaPackageInfo(

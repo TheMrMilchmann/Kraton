@@ -31,6 +31,7 @@
 package com.github.themrmilchmann.kraton.lang.java.impl
 
 import com.github.themrmilchmann.kraton.io.*
+import com.github.themrmilchmann.kraton.lang.java.ast.*
 import com.github.themrmilchmann.kraton.lang.java.impl.model.toModifierString
 import java.io.*
 
@@ -65,17 +66,17 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun BodyMemberDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?) {
         when (this) {
-            is TypeDeclaration              -> print(scope, prev, next, false)
-            is GroupDeclaration             -> print(scope, prev, next)
-            is Initializer                  -> print(scope, prev, next)
-            is FieldDeclaration             -> print(scope, prev, next)
-            is MethodDeclaration            -> print(scope, prev, next)
-            is ConstructorDeclaration       -> print(scope, prev, next)
-            is ModuleRequiresDeclaration    -> print(scope, prev, next)
-            is ModuleExportsDeclaration     -> print(scope, prev, next)
-            is ModuleOpensDeclaration       -> print(scope, prev, next)
-            is ModuleUsesDeclaration        -> print(scope, prev, next)
-            is ModuleProvidesDeclaration    -> print(scope, prev, next)
+            is TypeDeclaration -> print(scope, prev, next, false)
+            is GroupDeclaration -> print(scope, prev, next)
+            is Initializer -> print(scope, prev, next)
+            is FieldDeclaration -> print(scope, prev, next)
+            is MethodDeclaration -> print(scope, prev, next)
+            is ConstructorDeclaration -> print(scope, prev, next)
+            is ModuleRequiresDeclaration -> print(scope, prev, next)
+            is ModuleExportsDeclaration -> print(scope, prev, next)
+            is ModuleOpensDeclaration -> print(scope, prev, next)
+            is ModuleUsesDeclaration -> print(scope, prev, next)
+            is ModuleProvidesDeclaration -> print(scope, prev, next)
         }
     }
 
@@ -87,9 +88,9 @@ internal class JavaPrinter(writer: BufferedWriter) : KPrinter(writer) {
 
     private fun TypeDeclaration.print(scope: CompilationUnit, prev: BodyMemberDeclaration?, next: BodyMemberDeclaration?, isRoot: Boolean) {
         when (this) {
-            is NormalClassDeclaration       -> print(scope, prev, next, isRoot)
-            is EnumClassDeclaration         -> print(scope, prev, next, isRoot)
-            is NormalInterfaceDeclaration   -> print(scope, prev, next, isRoot)
+            is NormalClassDeclaration -> print(scope, prev, next, isRoot)
+            is EnumClassDeclaration -> print(scope, prev, next, isRoot)
+            is NormalInterfaceDeclaration -> print(scope, prev, next, isRoot)
         }
     }
 

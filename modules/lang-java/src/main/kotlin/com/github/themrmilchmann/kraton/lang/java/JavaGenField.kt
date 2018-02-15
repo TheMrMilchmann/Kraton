@@ -31,7 +31,8 @@
 package com.github.themrmilchmann.kraton.lang.java
 
 import com.github.themrmilchmann.kraton.lang.*
-import com.github.themrmilchmann.kraton.lang.java.impl.*
+import com.github.themrmilchmann.kraton.lang.java.ast.Annotation
+import com.github.themrmilchmann.kraton.lang.java.ast.FieldDeclaration
 
 @KratonDSL
 class JavaFieldScope internal constructor(

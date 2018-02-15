@@ -31,7 +31,11 @@
 package com.github.themrmilchmann.kraton.lang.java
 
 import com.github.themrmilchmann.kraton.lang.*
-import com.github.themrmilchmann.kraton.lang.java.impl.*
+import com.github.themrmilchmann.kraton.lang.java.ast.Annotation
+import com.github.themrmilchmann.kraton.lang.java.ast.ConstructorDeclaration
+import com.github.themrmilchmann.kraton.lang.java.ast.FormalParameter
+import com.github.themrmilchmann.kraton.lang.java.ast.MethodDeclaration
+import com.github.themrmilchmann.kraton.lang.java.ast.TypeParameter
 import com.github.themrmilchmann.kraton.lang.jvm.*
 
 @KratonDSL

@@ -30,6 +30,8 @@
  */
 package com.github.themrmilchmann.kraton.lang.java.impl
 
+import com.github.themrmilchmann.kraton.lang.java.ast.Annotation
+import com.github.themrmilchmann.kraton.lang.java.ast.CompilationUnit
 import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.util.*
 

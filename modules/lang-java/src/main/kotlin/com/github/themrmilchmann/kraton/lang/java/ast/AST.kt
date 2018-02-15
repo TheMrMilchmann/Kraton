@@ -28,8 +28,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.themrmilchmann.kraton.lang.java.impl
+package com.github.themrmilchmann.kraton.lang.java.ast
 
+import com.github.themrmilchmann.kraton.lang.java.impl.*
 import com.github.themrmilchmann.kraton.lang.java.impl.model.*
 import com.github.themrmilchmann.kraton.lang.jvm.*
 import java.util.*
@@ -47,13 +48,6 @@ internal abstract class CompilationUnit {
 
     abstract val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>>
 
-    fun isImported(type: IJvmType) =
-        importDeclarations[type.packageName]?.any { it.value.member === IMPORT_WILDCARD || it.value.member == type.className } ?: false
-
-    abstract fun isResolved(type: IJvmType): Boolean
-
-    abstract fun import(container: String, member: String, mode: ImportType?, isStatic: Boolean, isImplicit: Boolean)
-
 }
 
 internal class OrdinaryCompilationUnit(
@@ -68,41 +62,6 @@ internal class OrdinaryCompilationUnit(
 
     constructor(packageDeclaration: PackageDeclaration, typeDeclaration: TypeDeclaration):
         this(packageDeclaration, mutableMapOf(), typeDeclaration)
-
-    override fun isResolved(type: IJvmType) =
-        isImported(type) || (packageDeclaration!!.equalsPackage(type))
-
-    override fun import(
-        container: String,
-        member: String,
-        mode: ImportType?,
-        isStatic: Boolean,
-        isImplicit: Boolean
-    ) {
-        if (mode == null) {
-            if (container == packageDeclaration!!.identifiers.toQualifiedString()) return
-            if (importDeclarations.flatMap { it.value.values }.map { "${it.container}.${it.member}" }.any { it == "$container.$member" || it == "$container.*" }) return
-        }
-
-        if (member != IMPORT_WILDCARD && importDeclarations.any { it.value.any { it.key == member } }) return
-
-        val containerImports = importDeclarations.getOrPut(container, ::mutableMapOf)
-        if (member in containerImports && mode === null) return
-
-        val factory = { mem: String -> ImportDeclaration(container, mem, mode, isStatic, isImplicit) }
-
-        if (mode === ImportType.QUALIFIED) {
-            containerImports[member] = factory.invoke(member)
-        } else if (IMPORT_WILDCARD !in containerImports) {
-            val filteredImports = containerImports.filter { it.value.mode === null }
-
-            if (filteredImports.size >= 2 || mode === ImportType.WILDCARD) {
-                filteredImports.forEach { containerImports.remove(it.key) }
-                containerImports[IMPORT_WILDCARD] = factory.invoke(IMPORT_WILDCARD)
-            } else
-                containerImports[member] = factory.invoke(member)
-        }
-    }
 
 }
 
@@ -293,39 +252,6 @@ internal class ModularCompilationUnit(
 
     val documentation = Documentation()
 
-    override fun isResolved(type: IJvmType) = isImported(type)
-
-    override fun import(
-        container: String,
-        member: String,
-        mode: ImportType?,
-        isStatic: Boolean,
-        isImplicit: Boolean
-    ) {
-        if (mode == null) {
-            if (importDeclarations.flatMap { it.value.values }.map { "${it.container}.${it.member}" }.any { it == "$container.$member" || it == "$container.*" }) return
-        }
-
-        if (member != IMPORT_WILDCARD && importDeclarations.any { it.value.any { it.key == member } }) return
-
-        val containerImports = importDeclarations.getOrPut(container, ::mutableMapOf)
-        if (member in containerImports && mode === null) return
-
-        val factory = { mem: String -> ImportDeclaration(container, mem, mode, isStatic, isImplicit) }
-
-        if (mode === ImportType.QUALIFIED) {
-            containerImports[member] = factory.invoke(member)
-        } else if (IMPORT_WILDCARD !in containerImports) {
-            val filteredImports = containerImports.filter { it.value.mode === null }
-
-            if (filteredImports.size >= 2 || mode === ImportType.WILDCARD) {
-                filteredImports.forEach { containerImports.remove(it.key) }
-                containerImports[IMPORT_WILDCARD] = factory.invoke(IMPORT_WILDCARD)
-            } else
-                containerImports[member] = factory.invoke(member)
-        }
-    }
-
 }
 
 internal class ModuleRequiresDeclaration(
@@ -364,39 +290,6 @@ internal class PackageInfo(
 
     val documentation = Documentation()
 
-    override fun isResolved(type: IJvmType) = isImported(type)
-
-    override fun import(
-        container: String,
-        member: String,
-        mode: ImportType?,
-        isStatic: Boolean,
-        isImplicit: Boolean
-    ) {
-        if (mode == null) {
-            if (importDeclarations.flatMap { it.value.values }.map { "${it.container}.${it.member}" }.any { it == "$container.$member" || it == "$container.*" }) return
-        }
-
-        if (member != IMPORT_WILDCARD && importDeclarations.any { it.value.any { it.key == member } }) return
-
-        val containerImports = importDeclarations.getOrPut(container, ::mutableMapOf)
-        if (member in containerImports && mode === null) return
-
-        val factory = { mem: String -> ImportDeclaration(container, mem, mode, isStatic, isImplicit) }
-
-        if (mode === ImportType.QUALIFIED) {
-            containerImports[member] = factory.invoke(member)
-        } else if (IMPORT_WILDCARD !in containerImports) {
-            val filteredImports = containerImports.filter { it.value.mode === null }
-
-            if (filteredImports.size >= 2 || mode === ImportType.WILDCARD) {
-                filteredImports.forEach { containerImports.remove(it.key) }
-                containerImports[IMPORT_WILDCARD] = factory.invoke(IMPORT_WILDCARD)
-            } else
-                containerImports[member] = factory.invoke(member)
-        }
-    }
-
 }
 
 internal fun List<FormalParameter>.joinAsString(scope: CompilationUnit?) =
@@ -415,4 +308,4 @@ internal interface DocumentedDeclaration {
 
 }
 
-internal fun MutableList<String>.toQualifiedString() = joinToString(".")
+internal fun MutableList<String>.toQualifiedString() = joinToString("")
