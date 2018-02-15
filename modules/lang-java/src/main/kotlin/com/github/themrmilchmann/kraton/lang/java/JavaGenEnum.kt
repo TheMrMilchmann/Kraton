@@ -250,7 +250,7 @@ class JavaEnumScope internal constructor(
      */
     override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaEnumScope.() -> Unit): JavaEnumScope =
         this.sortingRule?.let {
-            GroupDeclaration(sortingRule).let {
+            VirtualGroupDeclaration(sortingRule).let {
                 bodyMembers.add(it)
 
                 JavaEnumScope(compilationUnit, declaration, sortingRule, it.bodyMembers).also(init)

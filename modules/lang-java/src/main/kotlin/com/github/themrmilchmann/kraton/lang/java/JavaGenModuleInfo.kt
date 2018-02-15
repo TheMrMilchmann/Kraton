@@ -118,7 +118,7 @@ class JavaModuleInfoScope internal constructor(
      */
     override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaModuleInfoScope.() -> Unit): JavaModuleInfoScope =
         this.sortingRule?.let {
-            GroupDeclaration(sortingRule).let {
+            VirtualGroupDeclaration(sortingRule).let {
                 bodyMembers.add(it)
 
                 JavaModuleInfoScope(compilationUnit, sortingRule, it.bodyMembers).also(init)

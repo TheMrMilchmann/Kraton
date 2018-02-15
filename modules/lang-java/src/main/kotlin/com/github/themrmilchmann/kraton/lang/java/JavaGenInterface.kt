@@ -232,7 +232,7 @@ class JavaInterfaceScope internal constructor(
      */
     override fun group(sortingRule: Comparator<BodyMemberDeclaration>?, init: JavaInterfaceScope.() -> Unit): JavaInterfaceScope =
         this.sortingRule?.let {
-            GroupDeclaration(sortingRule).let {
+            VirtualGroupDeclaration(sortingRule).let {
                 bodyMembers.add(it)
 
                 JavaInterfaceScope(compilationUnit, declaration, sortingRule, it.bodyMembers).also(init)

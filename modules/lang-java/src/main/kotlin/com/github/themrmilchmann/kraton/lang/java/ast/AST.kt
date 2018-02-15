@@ -37,20 +37,23 @@ import java.util.*
 
 const val IMPORT_WILDCARD = "*"
 
-abstract class BodyMemberDeclaration
+sealed class BodyMemberDeclaration
 
-internal open class GroupDeclaration(
-    open val sortingRule: Comparator<BodyMemberDeclaration>?,
-    open val bodyMembers: MutableList<BodyMemberDeclaration> = mutableListOf()
-) : BodyMemberDeclaration()
-
-internal abstract class CompilationUnit {
-
-    abstract val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>>
-
+internal sealed class GroupDeclaration : BodyMemberDeclaration() {
+    abstract val sortingRule: Comparator<BodyMemberDeclaration>?
+    abstract val bodyMembers: MutableList<BodyMemberDeclaration>
 }
 
-internal class OrdinaryCompilationUnit(
+internal data class VirtualGroupDeclaration(
+    override val sortingRule: Comparator<BodyMemberDeclaration>?,
+    override val bodyMembers: MutableList<BodyMemberDeclaration> = mutableListOf()
+) : GroupDeclaration()
+
+internal sealed class CompilationUnit {
+    abstract val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>>
+}
+
+internal data class OrdinaryCompilationUnit(
     val packageDeclaration: PackageDeclaration?,
     override val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>>,
     val typeDeclaration: TypeDeclaration
@@ -65,14 +68,12 @@ internal class OrdinaryCompilationUnit(
 
 }
 
-internal abstract class TypeDeclaration(
-    val annotations: MutableList<Annotation>,
-    val modifiers: MutableList<Modifiers>,
-    sortingRule: Comparator<BodyMemberDeclaration>?,
-    bodyMembers: MutableList<BodyMemberDeclaration>
-) : GroupDeclaration(sortingRule, bodyMembers), DocumentedDeclaration
+internal sealed class TypeDeclaration : GroupDeclaration(), DocumentedDeclaration {
+    abstract val annotations: MutableList<Annotation>
+    abstract val modifiers: MutableList<Modifiers>
+}
 
-internal class PackageDeclaration(
+internal data class PackageDeclaration(
     val identifiers: MutableList<String>
 ) {
 
@@ -81,24 +82,20 @@ internal class PackageDeclaration(
 
 }
 
-internal abstract class ClassDeclaration(
-    annotations: MutableList<Annotation>,
-    modifiers: MutableList<Modifiers>,
-    sortingRule: Comparator<BodyMemberDeclaration>?,
-    val superInterfaces: MutableList<IJvmType>,
-    bodyMembers: MutableList<BodyMemberDeclaration>
-) : TypeDeclaration(annotations, modifiers, sortingRule, bodyMembers)
+internal sealed class ClassDeclaration : TypeDeclaration() {
+    abstract val superInterfaces: MutableList<IJvmType>
+}
 
-internal class NormalClassDeclaration(
-    annotations: MutableList<Annotation>,
-    modifiers: MutableList<Modifiers>,
+internal data class NormalClassDeclaration(
+    override val annotations: MutableList<Annotation>,
+    override val modifiers: MutableList<Modifiers>,
     val identifier: String,
     val typeParameters: MutableList<TypeParameter>,
     var superClass: IJvmType?,
-    superInterfaces: MutableList<IJvmType>,
+    override val superInterfaces: MutableList<IJvmType>,
     override val sortingRule: Comparator<BodyMemberDeclaration>?,
     override val bodyMembers: MutableList<BodyMemberDeclaration>
-) : ClassDeclaration(annotations, modifiers, sortingRule, superInterfaces, bodyMembers), DocumentedDeclaration {
+) : ClassDeclaration(), DocumentedDeclaration {
 
     constructor(identifier: String):
         this(mutableListOf(), mutableListOf(), identifier, mutableListOf(), null, mutableListOf(), null, mutableListOf())
@@ -107,15 +104,15 @@ internal class NormalClassDeclaration(
 
 }
 
-internal class EnumClassDeclaration(
-    annotations: MutableList<Annotation>,
-    modifiers: MutableList<Modifiers>,
+internal data class EnumClassDeclaration(
+    override val annotations: MutableList<Annotation>,
+    override val modifiers: MutableList<Modifiers>,
     val identifier: String,
-    superInterfaces: MutableList<IJvmType>,
+    override val superInterfaces: MutableList<IJvmType>,
     val values: MutableList<EnumConstant>,
     override val sortingRule: Comparator<BodyMemberDeclaration>?,
     override val bodyMembers: MutableList<BodyMemberDeclaration>
-) : ClassDeclaration(annotations, modifiers, sortingRule, superInterfaces, bodyMembers) {
+) : ClassDeclaration() {
 
     constructor(identifier: String):
         this(mutableListOf(), mutableListOf(), identifier, mutableListOf(), mutableListOf(), null, mutableListOf())
@@ -124,22 +121,17 @@ internal class EnumClassDeclaration(
 
 }
 
-internal abstract class InterfaceDeclaration(
-    annotations: MutableList<Annotation>,
-    modifiers: MutableList<Modifiers>,
-    sortingRule: Comparator<BodyMemberDeclaration>?,
-    bodyMembers: MutableList<BodyMemberDeclaration>
-) : TypeDeclaration(annotations, modifiers, sortingRule, bodyMembers)
+internal sealed class InterfaceDeclaration : TypeDeclaration()
 
-internal class NormalInterfaceDeclaration(
-    annotations: MutableList<Annotation>,
-    modifiers: MutableList<Modifiers>,
+internal data class NormalInterfaceDeclaration(
+    override val annotations: MutableList<Annotation>,
+    override val modifiers: MutableList<Modifiers>,
     val identifier: String,
     val typeParameters: MutableList<TypeParameter>,
     val superInterfaces: MutableList<IJvmType>,
     override val sortingRule: Comparator<BodyMemberDeclaration>?,
     override val bodyMembers: MutableList<BodyMemberDeclaration>
-) : InterfaceDeclaration(annotations, modifiers, sortingRule, bodyMembers), DocumentedDeclaration {
+) : InterfaceDeclaration(), DocumentedDeclaration {
 
     constructor(identifier: String):
         this(mutableListOf(), mutableListOf(), identifier, mutableListOf(), mutableListOf(), null, mutableListOf())
@@ -148,7 +140,7 @@ internal class NormalInterfaceDeclaration(
 
 }
 
-internal class ImportDeclaration(
+internal data class ImportDeclaration(
     var container: String,
     var member: String,
     var mode: ImportType? = null,
@@ -156,7 +148,7 @@ internal class ImportDeclaration(
     var isImplicit: Boolean = false
 )
 
-internal class TypeParameter(
+internal data class TypeParameter(
     var documentation: String?,
     val annotations: MutableList<Annotation>,
     val identifier: String,
@@ -169,7 +161,7 @@ internal class TypeParameter(
 
 }
 
-internal class EnumConstant(
+internal data class EnumConstant(
     val annotations: MutableList<Annotation>,
     val name: String,
     val constructorCall: String?,
@@ -183,12 +175,12 @@ internal class EnumConstant(
 
 }
 
-internal class Initializer(
+internal data class Initializer(
     val isStatic: Boolean,
     var body: String = ""
 ) : BodyMemberDeclaration()
 
-internal class FieldDeclaration(
+internal data class FieldDeclaration(
     val annotations: MutableList<Annotation>,
     val modifiers: MutableList<Modifiers>,
     val type: IJvmType,
@@ -199,14 +191,14 @@ internal class FieldDeclaration(
 
 }
 
-internal class FormalParameter(
+internal data class FormalParameter(
     val annotations: MutableList<Annotation>,
     val modifiers: MutableList<Modifiers>,
     val type: IJvmType,
     val name: String
 )
 
-internal class MethodDeclaration(
+internal data class MethodDeclaration(
     val annotations: MutableList<Annotation>,
     val modifiers: MutableList<Modifiers>,
     val typeParameters: MutableList<TypeParameter>,
@@ -224,7 +216,7 @@ internal class MethodDeclaration(
 
 }
 
-internal class ConstructorDeclaration(
+internal data class ConstructorDeclaration(
     val annotations: MutableList<Annotation>,
     val modifiers: MutableList<Modifiers>,
     val typeParameters: MutableList<TypeParameter>,
@@ -241,7 +233,7 @@ internal class ConstructorDeclaration(
 
 }
 
-internal class ModularCompilationUnit(
+internal data class ModularCompilationUnit(
     val name: String,
     val annotations: MutableList<Annotation> = mutableListOf(),
     val modifiers: MutableList<Modifiers> = mutableListOf(),
@@ -254,35 +246,35 @@ internal class ModularCompilationUnit(
 
 }
 
-internal class ModuleRequiresDeclaration(
+internal data class ModuleRequiresDeclaration(
     val module: String
 ) : BodyMemberDeclaration()
 
-internal class ModuleExportsDeclaration(
+internal data class ModuleExportsDeclaration(
     val pack: String,
     val toModules: MutableList<String> = mutableListOf()
 ) : BodyMemberDeclaration()
 
-internal class ModuleOpensDeclaration(
+internal data class ModuleOpensDeclaration(
     val pack: String,
     val toModules: MutableList<String> = mutableListOf()
 ) : BodyMemberDeclaration()
 
-internal class ModuleUsesDeclaration(
+internal data class ModuleUsesDeclaration(
     val service: IJvmType
 ) : BodyMemberDeclaration()
 
-internal class ModuleProvidesDeclaration(
+internal data class ModuleProvidesDeclaration(
     val service: IJvmType,
     val impls: List<IJvmType>
 ) : BodyMemberDeclaration()
 
-internal class Annotation(
+internal data class Annotation(
     val type: IJvmType,
     val params: String? = null
 )
 
-internal class PackageInfo(
+internal data class PackageInfo(
     val name: String,
     val annotations: MutableList<Annotation> = mutableListOf(),
     override val importDeclarations: MutableMap<String, MutableMap<String, ImportDeclaration>> = mutableMapOf()
