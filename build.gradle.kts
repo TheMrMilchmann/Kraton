@@ -50,6 +50,7 @@ allprojects {
     evaluationDependsOnChildren()
 
     repositories {
+        maven("https://dl.bintray.com/cbeust/maven/") // TestNG
         mavenCentral()
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
